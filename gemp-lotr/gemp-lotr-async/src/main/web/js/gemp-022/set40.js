@@ -1,3 +1,4 @@
+// used by jCards
 var secondLocation = 'http://lotrtcg2e.club/images/premiere/';
 
 var set40 = {

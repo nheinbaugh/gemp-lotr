@@ -1,3 +1,4 @@
+// used by communication.js
 var deliveryDialogs = {};
 var deliveryGroups = {};
 

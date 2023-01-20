@@ -1,3 +1,4 @@
+// used by deckBuilder.js
 var GempLotrDeckBuildingUI = Class.extend({
     comm:null,
 

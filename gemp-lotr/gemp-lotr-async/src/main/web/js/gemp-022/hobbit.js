@@ -1,3 +1,4 @@
+// used in jCards.js
 var hobbit = {
     '30_1':  'https://i.lotrtcgpc.net/hobbit/HDG30001.jpg',
     '30_2':  'https://i.lotrtcgpc.net/hobbit/HDG30002.jpg',

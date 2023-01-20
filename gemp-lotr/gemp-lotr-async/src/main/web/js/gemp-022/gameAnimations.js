@@ -1,3 +1,4 @@
+// used by gameUi.js
 var GameAnimations = Class.extend({
     game:null,
     replaySpeed:1,

@@ -1,3 +1,4 @@
+// used by yourStats.html -> account.html -> hall.html
 var PlayerStatsUI = Class.extend({
     communication:null,
 

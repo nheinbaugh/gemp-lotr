@@ -1,3 +1,4 @@
+// used by info.html which is used in hall.html
 var StatsUI = Class.extend({
     communication:null,
     paramsDiv:null,

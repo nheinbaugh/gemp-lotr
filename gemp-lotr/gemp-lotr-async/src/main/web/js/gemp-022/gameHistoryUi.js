@@ -1,3 +1,4 @@
+// used by gameHistory.html -> account.html -> hall.html
 var GameHistoryUI = Class.extend({
     communication:null,
     itemStart:0,

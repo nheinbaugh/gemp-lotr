@@ -1,3 +1,5 @@
+// used in lotsa places
+// cardinformationdialog.js, deckbuildingui.js, deliveryService, gameUi.js, gameAnimations.js, soloDraft.js, gameHall.js
 var cardCache = {};
 var cardScale = 357 / 497;
 var fixedImages = {

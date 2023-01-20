@@ -1,3 +1,4 @@
+// used by game.js
 var GempLotrGameUI = Class.extend({
     padding: 5,
 
