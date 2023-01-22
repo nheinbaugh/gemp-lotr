@@ -1,9 +1,13 @@
 const path = require('path');
 
 module.exports = {
-    entry: './src/Merchant/merchant.js',
+    entry: {
+        merchant: './src/Merchant/merchant.js',
+        login: './src/Login/login.js'
+    },
     output: {
-        filename: 'merchant.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, 'dist')
-    }
+    },
+    mode: 'development'
 }
