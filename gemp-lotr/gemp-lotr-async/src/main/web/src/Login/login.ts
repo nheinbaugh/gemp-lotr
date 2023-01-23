@@ -1,20 +1,10 @@
 import { LogInService } from "./services/login.service";
+import { onLoginError, onLoginSuccess } from "./types/login-response.handlers";
+import { handleRegistrationError, handleRegistrationSuccess } from "./types/register-response-handlers";
 import { RegistrationInfo } from "./types/registration.interface";
 import { isValidRegistration } from "./types/validate-registration.functions";
 
 const loginService = new LogInService("/gemp-lotr-server");
-
-function register() {
-    const info = getRegistrationValues();
-    const isValid = isValidRegistration(info);
-    if (!isValid) {
-        $(".error").html("Password and Password repeated are different! Try again");
-        return;
-    }
-    loginService.register(info, () => {
-        location.href = "/gemp-lotr/hall.html";
-    });
-}
 
 const getRegistrationValues = (): RegistrationInfo => {
     const userName = $("#login").val().toString();
@@ -29,6 +19,16 @@ const getRegistrationValues = (): RegistrationInfo => {
 }
 
 function registrationScreen() {
+    function register() {
+        const info = getRegistrationValues();
+        const isValid = isValidRegistration(info);
+        if (!isValid) {
+            $(".error").html("Password and Password repeated are different! Try again");
+            return;
+        }
+        loginService.register(info, handleRegistrationSuccess, handleRegistrationError);
+    }
+
     loginService.getRegistrationForm((html: string) => {
         $(".error").html();
         $(".interaction").html(html);
@@ -36,16 +36,14 @@ function registrationScreen() {
     });
 }
 
-function login() {
-    const login = $("#login").val().toString();
-    const password = $("#password").val().toString();
-
-    loginService.login(login, password, () => {
-        location.href = "/gemp-lotr/hall.html";
-    });
-}
-
 function loginScreen() {
+    function login() {
+        const login = $("#login").val().toString();
+        const password = $("#password").val().toString();
+    
+        loginService.login(login, password, onLoginSuccess, onLoginError);
+    }
+    
     $(".interaction").html("");
     $(".interaction").append("Login below, or ");
     var registerButton = ($("<div>Register</div>") as any).button();
@@ -67,6 +65,7 @@ function loginScreen() {
 
     $(".interaction").append(loginButton);
 }
+
 
 $(document).ready(() => {
     loginScreen();
