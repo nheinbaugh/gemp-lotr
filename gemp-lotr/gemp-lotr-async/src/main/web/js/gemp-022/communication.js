@@ -347,7 +347,7 @@ var GempLotrCommunication = Class.extend({
                 ownedMin:ownedMin,
                 start:start,
                 count:count},
-            success:this.deliveryCheck(callback),
+            success:callback,
             error:this.errorCheck(errorMap),
             dataType:"xml"
         });
