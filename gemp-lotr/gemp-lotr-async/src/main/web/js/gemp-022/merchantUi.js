@@ -24,12 +24,18 @@ var GempLotrMerchantUI = Class.extend({
         this.comm = new GempLotrCommunication("/gemp-lotr-server", that.processError);
 
         this.cardFilter = new CardFilter(cardFilterElem, 
-                function(a, b, c, d, e, f) {
-                    this.comm.getMerchant(a, b, c, d, e, f)
-                },
-                this.clearList,
-                this.addCardToList,
-                this.finishList);
+            function (filter, start, count, callback) {
+                that.comm.getMerchant(filter, that.ownedMin, start, count, callback);
+            },
+            function (rootElem) {
+                that.clearList(rootElem);
+            },
+            function (elem, type, blueprintId, count) {
+                that.addCardToList(elem, type, blueprintId, count);
+            },
+            function () {
+                that.finishList();
+            });s
         this.cardFilter.setType("card");
         this.cardFilter.setFilter("type:card");
 
