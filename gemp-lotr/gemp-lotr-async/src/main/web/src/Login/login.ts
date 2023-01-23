@@ -18,7 +18,7 @@ const getRegistrationValues = (): RegistrationInfo => {
     }
 }
 
-function registrationScreen() {
+function buildRegistrationScreen() {
     function register() {
         const info = getRegistrationValues();
         const isValid = isValidRegistration(info);
@@ -36,18 +36,18 @@ function registrationScreen() {
     });
 }
 
-function loginScreen() {
+function buildLoginScreen() {
     function login() {
         const login = $("#login").val().toString();
         const password = $("#password").val().toString();
     
         loginService.login(login, password, onLoginSuccess, onLoginError);
     }
-    
+
     $(".interaction").html("");
     $(".interaction").append("Login below, or ");
     var registerButton = ($("<div>Register</div>") as any).button();
-    registerButton.click(registrationScreen);
+    registerButton.click(buildRegistrationScreen);
 
     $(".interaction").append(registerButton);
     $(".interaction").append("<br/>Login: <input id='login' type='text'><br/>Password: <input id='password' type='password'><br/>");
@@ -68,5 +68,5 @@ function loginScreen() {
 
 
 $(document).ready(() => {
-    loginScreen();
+    buildLoginScreen();
 });
