@@ -23,7 +23,7 @@ export class LogInService {
         });
     }
 
-    register(info: RegistrationInfo,successCallback: onHttpSuccess, errorCallback: onHttpError): void {
+    register(info: RegistrationInfo, successCallback: onHttpSuccess, errorCallback: onHttpError): void {
         $.ajax({
             type:"POST",
             url:this.url + "/register",
