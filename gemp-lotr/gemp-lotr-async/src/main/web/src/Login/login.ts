@@ -4,6 +4,7 @@ import { handleRegistrationError, handleRegistrationSuccess } from "./types/regi
 import { RegistrationInfo } from "./types/registration.interface";
 import { isValidRegistration } from "./types/validate-registration.functions";
 
+
 const loginService = new LogInService("/gemp-lotr-server");
 
 const getRegistrationValues = (): RegistrationInfo => {
