@@ -1,3 +1,4 @@
+// used by events.html and tournamentResults.html
 var TournamentResultsUI = Class.extend({
     communication:null,
     formatDialog:null,

@@ -1,3 +1,5 @@
+// used by deckBuildingUI.js, game-animations.js
+// NomralCardGroup is used by deliveryService.js, gameUi, merchantUI, soloDraftUI, 
 var CardGroup = Class.extend({
     container:null,
     x:null,

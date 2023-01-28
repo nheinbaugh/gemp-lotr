@@ -350,3 +350,5 @@ var GempLotrMerchantUI = Class.extend({
             alert("There was a problem during communication with server");
     }
 });
+
+export { GempLotrMerchantUI };

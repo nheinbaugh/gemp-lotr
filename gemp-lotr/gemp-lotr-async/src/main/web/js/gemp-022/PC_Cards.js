@@ -1,3 +1,4 @@
+// used by jCards
 var PCCards = {
 	
 	//fotr supplements

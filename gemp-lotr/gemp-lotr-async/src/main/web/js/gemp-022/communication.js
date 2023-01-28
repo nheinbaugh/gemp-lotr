@@ -1,3 +1,4 @@
+// used by lotsa stuff (merchant, chat, deckbuilding, hallui, gameui, leagueresults, solodraft, playerui, login, statsui)
 var GempLotrCommunication = Class.extend({
     url:null,
     failure:null,
