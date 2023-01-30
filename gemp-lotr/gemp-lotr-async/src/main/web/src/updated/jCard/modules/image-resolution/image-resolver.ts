@@ -10,7 +10,7 @@ import { Override } from "./types/override.interface";
  * the players-committee/index.ts file
  */
 
-let imageOverrides: Map<string, string> | null = null;
+let imageCache: Map<string, string> | null = null;
 
 const buildImageResolver = (): Map<string, string> => {
     const overrides = new Map<string, string>();
@@ -40,15 +40,15 @@ const addImageLocations = (overrides: Map<string, string>, newItems: Override[])
     });
 }
 
-const getImageOverrides = (): Map<string, string> => {
-    if (!imageOverrides) {
-        imageOverrides = buildImageResolver();
+const getImageCache = (): Map<string, string> => {
+    if (!imageCache) {
+        imageCache = buildImageResolver();
     }
-    return imageOverrides;
+    return imageCache;
 }
 
 export const getImageUrl = (blueprintId: string): string => {
-    const href = getImageOverrides().get(blueprintId);
+    const href = getImageCache().get(blueprintId);
 
     return href ?? undefined;
 }
