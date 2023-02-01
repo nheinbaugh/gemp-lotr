@@ -15,8 +15,10 @@ const fixedImages = {
 
 const rulesImageHref = '/gemp-lotr/images/rules.png';
 
+const mainImageLocation = 'https://i.lotrtcgpc.net/decipher/';
+
 const foilIndicator = '*';
 
 const tengwarIndicator = 'T';
 
-export { cardScale, fixedImages, rulesImageHref, foilIndicator, tengwarIndicator }
+export { mainImageLocation, cardScale, fixedImages, rulesImageHref, foilIndicator, tengwarIndicator }

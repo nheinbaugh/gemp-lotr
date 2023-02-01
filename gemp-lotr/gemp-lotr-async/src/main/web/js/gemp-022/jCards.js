@@ -245,6 +245,7 @@ var Card = Class.extend({
         }
     },
 
+    /** This turned into image-resolver.ts */
     getFixedImage: function (blueprintId) {
         var img = fixedImages[blueprintId];
         if (img != null)
@@ -401,10 +402,12 @@ var Card = Class.extend({
         return cardStr;
     },
 
+    /** this turned into jcard.constants:mainImageLocation */
     getMainLocation: function (setNo, cardNo) {
         return "https://i.lotrtcgpc.net/decipher/";
     },
 
+    /** replaced by masterwork-functions:getMasterworkOffsetBySetNumber */
     getMasterworksOffset: function (setNo) {
         if (setNo == 17)
             return 148;
@@ -413,6 +416,7 @@ var Card = Class.extend({
         return 194;
     },
 
+    /** replaced by masterwork-functions:isCardMasterwork */
     isMasterworks: function (setNo, cardNo) {
         if (setNo == 12)
             return cardNo > 194;
@@ -439,6 +443,7 @@ var Card = Class.extend({
         "18": [8, 12, 20, 25, 35, 48, 50, 55, 77, 78, 79, 80, 82, 94, 97, 133]
     },
 
+    /** This turned into buildErrataUrl but it takes a blueprint instead of setNo and cardNo */
     getErrata: function (setNo, cardNo) {
         if (this.remadeErratas["" + setNo] != null && $.inArray(cardNo, this.remadeErratas["" + setNo]) != -1)
             return "/gemp-lotr/images/erratas/LOTR" + this.formatCardNo(setNo, cardNo) + ".jpg";
