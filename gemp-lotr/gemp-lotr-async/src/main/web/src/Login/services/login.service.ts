@@ -3,6 +3,7 @@ import { onHttpError, onHttpSuccess } from "../../types/callback.types";
 import { convertjQueryErrorToHttpError } from "../../types/http-error-callback.functions";
 import { RegistrationInfo } from "../types/registration.interface";
 
+
 export class LogInService {
     constructor(private readonly url: string) {
     }

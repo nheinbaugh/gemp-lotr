@@ -1,4 +1,4 @@
 export interface CardBlueprint {
     cardNumber: number;
-    set: number;
+    set: Sets;
 }

@@ -14,5 +14,9 @@ enum Sets {
     BlackRider = 12,
     Bloodlines = 13,
     ExpandedMiddleEarth = 14,
-    Hunte
+    Hunters = 15,
+    WraithCollection = 16,
+    RiseOfSaruman = 17,
+    TreacheryAndDeceit = 18,
+    AgesEnd = 19
 }

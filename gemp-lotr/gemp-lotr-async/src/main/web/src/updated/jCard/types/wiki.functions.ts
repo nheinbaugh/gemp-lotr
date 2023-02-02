@@ -1,9 +1,10 @@
 export const getWikiLink = (blue): string => {
-    var imageUrl = getUrlByBlueprintId(blueprintId, true);
-    var afterLastSlash = imageUrl.lastIndexOf("/") + 1;
-    var countAfterLastSlash = imageUrl.length - 4 - afterLastSlash;
-    return "http://wiki.lotrtcgpc.net/wiki/" + imageUrl.substr(afterLastSlash, countAfterLastSlash);
-},
+    return '';
+    // var imageUrl = getUrlByBlueprintId(blueprintId, true);
+    // var afterLastSlash = imageUrl.lastIndexOf("/") + 1;
+    // var countAfterLastSlash = imageUrl.length - 4 - afterLastSlash;
+    // return "http://wiki.lotrtcgpc.net/wiki/" + imageUrl.substr(afterLastSlash, countAfterLastSlash);
+}
 
 const getUrlByBlueprintId = (id: string, huh: boolean): string => {
     /**

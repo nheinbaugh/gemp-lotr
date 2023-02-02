@@ -8,6 +8,13 @@ module.exports = {
     module: {
         rules: [
           {
+            test: require.resolve('jquery'),
+            loader: 'expose-loader',
+            options: {
+              exposes: ['$', 'jQuery'],
+            },
+          },
+          {
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/,
@@ -16,7 +23,7 @@ module.exports = {
       },
       resolve: {
         extensions: ['.tsx', '.ts', '.js'],
-      },
+       },
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, 'dist')

@@ -196,6 +196,7 @@ var Card = Class.extend({
     errata: null,
 
     init: function (blueprintId, zone, cardId, owner, siteNumber) {
+        console.log(blueprintId)
         this.blueprintId = blueprintId;
 
         var imageBlueprint = blueprintId;
