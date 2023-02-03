@@ -15,7 +15,7 @@ const fixedImages = {
 
 const rulesImageHref = '/gemp-lotr/images/rules.png';
 
-const mainImageLocation = 'https://i.lotrtcgpc.net/decipher/';
+const mainImageLocation = 'https://i.lotrtcgpc.net/decipher';
 
 const foilIndicator = '*';
 

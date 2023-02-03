@@ -8,13 +8,6 @@ module.exports = {
     module: {
         rules: [
           {
-            test: require.resolve('jquery'),
-            loader: 'expose-loader',
-            options: {
-              exposes: ['$', 'jQuery'],
-            },
-          },
-          {
             test: /\.tsx?$/,
             use: 'ts-loader',
             exclude: /node_modules/,

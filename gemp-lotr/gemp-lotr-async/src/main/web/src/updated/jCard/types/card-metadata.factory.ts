@@ -6,7 +6,6 @@ import { buildErrataUrl } from "./errata.functions";
 
 export const buildCardMetadata = (blueprintId: string): CardMetadata => {
     let strippedBlueprintId = blueprintId;
-    
 
     // there's a less janky way to do this, but i can't right now. The tests means we can update it later
     const isFoil = isCardFoil(strippedBlueprintId);
@@ -19,15 +18,15 @@ export const buildCardMetadata = (blueprintId: string): CardMetadata => {
     }
 
     // bring over has wiki
-
-    const imageUrl = getImageUrl(strippedBlueprintId);
-    const blueprint = getBlueprintByCardId(strippedBlueprintId);
+    const myBlueprint = getBlueprintByCardId(strippedBlueprintId);
+    
+    
     return {
-        cardBlueprint: blueprint,
+        cardBlueprint: myBlueprint,
         isFoil,
         isTengwar,
-        imageUrl,
-        errataUrl: buildErrataUrl(blueprint),
+        imageUrl: getImageUrl(strippedBlueprintId),
+        errataUrl: buildErrataUrl(myBlueprint),
         wikiUrl:''
     }
 }

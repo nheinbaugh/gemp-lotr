@@ -3,8 +3,8 @@ import { formatCardNumber, formatSetNumber, getCardNumber } from "./card-formatt
 describe('card-formatting.functions', () => {
     describe('getCardNumber', () => {
         it('should return the expected value when passed card blueprints', () => {
-            expect(getCardNumber({set: 4, cardNumber: 23})).toEqual("04023");
-            expect(getCardNumber({set: 13, cardNumber: 423})).toEqual("13423");
+            expect(getCardNumber({set: 4, cardNumber: 23, formattedCardNumber: '023', formattedSetNumber: '04'})).toEqual("04023");
+            expect(getCardNumber({set: 13, cardNumber: 423, formattedCardNumber: '423', formattedSetNumber: '13'})).toEqual("13423");
         })
     })
 

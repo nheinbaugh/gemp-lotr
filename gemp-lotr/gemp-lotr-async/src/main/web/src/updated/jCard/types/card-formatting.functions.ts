@@ -7,9 +7,14 @@ export const getBlueprintByCardId = (id: string): CardBlueprint => {
     const separator = '_';
     const sections = id.split(separator); 
 
+    const cardNumber = +sections[1];
+    const setNumber = +sections[0];
+
     return {
         set: +sections[0],
-        cardNumber: +sections[1]
+        cardNumber,
+        formattedCardNumber: formatCardNumber(cardNumber),
+        formattedSetNumber: formatSetNumber(setNumber)
     }
 }
 

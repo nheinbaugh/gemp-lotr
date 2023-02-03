@@ -342,6 +342,7 @@ var Card = Class.extend({
         return false;
     },
 
+    // this is turning into card-image.functions:getCardImage
     getUrlByBlueprintId: function (blueprintId, ignoreErrata) {
         if (this.getFixedImage(blueprintId) != null)
             return this.getFixedImage(blueprintId);

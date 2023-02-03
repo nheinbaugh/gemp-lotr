@@ -1,3 +1,4 @@
+import { getCardImage } from "../../types/card-image.functions";
 import { hobbitCards } from "./data/hobbit.list";
 import { choiceBoosters, fellowshipPacks, gempLotrPromo, holidayOverrides, postMoviePacks, randoms, returnOfTheKingPacks, setStarterPacks, specialStarters, tengwarSelections, twoTowersPacks } from "./data/image-overrides.list";
 import { playerCommitteeCards } from "./data/players-committee";
@@ -48,7 +49,10 @@ const getImageCache = (): Map<string, string> => {
 }
 
 export const getImageUrl = (blueprintId: string): string => {
-    const href = getImageCache().get(blueprintId);
-
-    return href ?? undefined;
+    const cacheValue = getImageCache().get(blueprintId);
+    if (cacheValue) {
+        return cacheValue;
+    }
+    const imageUrl = getCardImage(blueprintId)
+    return cacheValue ?? undefined;
 }

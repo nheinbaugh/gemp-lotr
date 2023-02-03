@@ -1,13 +1,20 @@
+import { isCardErrated } from "./errata.functions";
+
 export const getWikiLink = (blue): string => {
     return '';
+    // grab the image URL then remove the prefix (foobar.com/baz/) keep the middle (LOTR01_123) and pitch the suffix (.jpg)
     // var imageUrl = getUrlByBlueprintId(blueprintId, true);
     // var afterLastSlash = imageUrl.lastIndexOf("/") + 1;
     // var countAfterLastSlash = imageUrl.length - 4 - afterLastSlash;
     // return "http://wiki.lotrtcgpc.net/wiki/" + imageUrl.substr(afterLastSlash, countAfterLastSlash);
 }
 
-const getUrlByBlueprintId = (id: string, huh: boolean): string => {
+const getUrlByBlueprintId = (id: string, ignoreErrata: boolean): string => {
+    // if (!ignoreErrata) {
+    //     const errata = isCardErrated()
+    // }
     /**
+     * 
      * This likely lives in the ???? file
      * the URL returned is either from:
      *  * getFixedImage
@@ -24,4 +31,8 @@ const getUrlByBlueprintId = (id: string, huh: boolean): string => {
      * ** return "{mainLocation}LOTR{value above wrt masterworks}{affix T if Tengwar}.jpg"
      */
     return '';
+}
+
+const getTengwarWikiUrl = (): string => {
+    return ''
 }
