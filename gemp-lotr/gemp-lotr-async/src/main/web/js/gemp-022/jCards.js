@@ -29,7 +29,7 @@ var packBlueprints = {
     "(S)SH - Starter": "/gemp-lotr/images/boosters/sh_starter_selection.png",
     "(S)BR - Starter": "/gemp-lotr/images/boosters/br_starter_selection.png",
     "(S)BL - Starter": "/gemp-lotr/images/boosters/bl_starter_selection.png",
-    
+
     "(S)HU - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)RoS - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
 
@@ -142,7 +142,7 @@ var packBlueprints = {
     "Expanded": "/gemp-lotr/images/boosters/expanded.png",
     "Wraith": "/gemp-lotr/images/boosters/wraith.png",
     "AgesEnd": "/gemp-lotr/images/boosters/ages_end.png",
-    
+
     "(S)FotR Block Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
     "(S)TTT Block Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
     "(S)RotK Block Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
@@ -164,18 +164,18 @@ var packBlueprints = {
     "(S)Movie Special Choice - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)WotR Choice - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
     "(S)HU Block Choice - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
-    
+
     "(S)PC Promo Art Selection": "/gemp-lotr/images/boosters/pc_promo_selection.png",
     "(S)Masterwork Selection": "/gemp-lotr/images/boosters/masterwork_selection.png",
-    
-    
+
+
     "(S)SotP - Starter": "/gemp-lotr/images/boosters/starter_selection.png",
-    
+
     "SotP - Tales & Weather Starter": "/gemp-lotr/images/boosters/V1-starter-tales_weather.png",
     "SotP - Aragorn Signet & Twilight Starter": "/gemp-lotr/images/boosters/V1-starter-aragorn_twilight.png",
     "SotP - Gandalf's Allies & Tentacles Starter": "/gemp-lotr/images/boosters/V1-starter-gandalf_tentacles.png",
     "SotP - Frodo Signet & Sauron Starter": "/gemp-lotr/images/boosters/V1-starter-frodo_sauron.png",
-    
+
     "(R)SotP - Rare": "/gemp-lotr/images/boosters/V1-random-rare.png",
     "(R)SotP - Uncommon": "/gemp-lotr/images/boosters/V1-random-uncommon.png",
     "(R)SotP - Common": "/gemp-lotr/images/boosters/V1-random-common.png"
@@ -195,8 +195,9 @@ var Card = Class.extend({
     attachedCards: null,
     errata: null,
 
+    // this all turns intot eh constructor for jCard.ts
     init: function (blueprintId, zone, cardId, owner, siteNumber) {
-        console.log(blueprintId)
+        console.log(zone, cardId, owner, siteNumber)
         this.blueprintId = blueprintId;
 
         var imageBlueprint = blueprintId;
@@ -274,10 +275,10 @@ var Card = Class.extend({
     hasErrata: function () {
         var separator = this.blueprintId.indexOf("_");
         var setNo = parseInt(this.blueprintId.substr(0, separator));
-        
-        if(setNo >= 50 && setNo <= 89)
+
+        if (setNo >= 50 && setNo <= 89)
             return true;
-        
+
         return this.errata;
     },
 
@@ -285,6 +286,7 @@ var Card = Class.extend({
         return packBlueprints[this.blueprintId] != null;
     },
 
+    // this turned into jcards/modules/sites/types/site.functions:isCardASite
     isHorizontal: function (blueprintId) {
         var separator = blueprintId.indexOf("_");
         var setNo = parseInt(blueprintId.substr(0, separator));
@@ -370,6 +372,7 @@ var Card = Class.extend({
         return mainLocation + "LOTR" + cardStr + (this.isTengwar() ? "T" : "") + ".jpg";
     },
 
+    // this turned into the wiki.functions.ts
     getWikiLink: function () {
         var imageUrl = this.getUrlByBlueprintId(this.blueprintId, true);
         var afterLastSlash = imageUrl.lastIndexOf("/") + 1;
@@ -377,10 +380,12 @@ var Card = Class.extend({
         return "http://wiki.lotrtcgpc.net/wiki/" + imageUrl.substr(afterLastSlash, countAfterLastSlash);
     },
 
+    // this turned into the wiki.functions.ts
     hasWikiInfo: function () {
         return this.hasWiki;
     },
 
+    // this went into card.formatting.functions.ts
     formatSetNo: function (setNo) {
         var setNoStr;
         if (setNo < 10)
@@ -390,6 +395,7 @@ var Card = Class.extend({
         return setNoStr;
     },
 
+     // this went into card.formatting.functions.ts
     formatCardNo: function (setNo, cardNo) {
         var setNoStr = this.formatSetNo(setNo);
 

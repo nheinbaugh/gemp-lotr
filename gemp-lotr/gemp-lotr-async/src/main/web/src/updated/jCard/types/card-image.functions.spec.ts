@@ -1,8 +1,9 @@
 import { data } from "jquery";
+import { mainImageLocation } from "../modules/image-resolution/types/card-image.constants";
 import { CardBlueprint } from "./card-blueprint.interface";
 import { getBlueprintByCardId } from "./card-formatting.functions";
 import { getCardImage, isImageFoil, isImageTengwar } from "./card-image.functions";
-import { foilIndicator, mainImageLocation, rulesImageHref, tengwarIndicator } from "./jcard.constants";
+import { foilIndicator, rulesImageHref, tengwarIndicator } from "./jcard.constants";
 
 describe('card-image.functions', () => {
 

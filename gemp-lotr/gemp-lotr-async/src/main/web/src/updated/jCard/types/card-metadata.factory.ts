@@ -1,8 +1,10 @@
 import { getImageUrl } from "../modules/image-resolution/image-resolver";
+import { isCardASite } from "../modules/sites/types/site.functions";
 import { getBlueprintByCardId } from "./card-formatting.functions";
 import { CardMetadata } from "./card-metadata.interface";
 import { isCardFoil, isCardTengwar } from "./card-options.functions";
 import { buildErrataUrl } from "./errata.functions";
+import { getWikiLink } from "./wiki.functions";
 
 export const buildCardMetadata = (blueprintId: string): CardMetadata => {
     let strippedBlueprintId = blueprintId;
@@ -18,15 +20,18 @@ export const buildCardMetadata = (blueprintId: string): CardMetadata => {
     }
 
     // bring over has wiki
-    const myBlueprint = getBlueprintByCardId(strippedBlueprintId);
-    
+    const cardBlueprint = getBlueprintByCardId(strippedBlueprintId);
+    const imageUrl =  getImageUrl(strippedBlueprintId);
+
+    const wikiUrl = getWikiLink(cardBlueprint, imageUrl);
     
     return {
-        cardBlueprint: myBlueprint,
+        cardBlueprint,
         isFoil,
         isTengwar,
-        imageUrl: getImageUrl(strippedBlueprintId),
-        errataUrl: buildErrataUrl(myBlueprint),
-        wikiUrl:''
+        imageUrl,
+        errataUrl: buildErrataUrl(cardBlueprint),
+        wikiUrl,
+        isSite: isCardASite(cardBlueprint)
     }
 }

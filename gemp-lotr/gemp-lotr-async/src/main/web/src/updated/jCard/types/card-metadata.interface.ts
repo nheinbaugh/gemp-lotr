@@ -11,6 +11,7 @@ export interface BasicCardMetadata {
 
 export interface CardMetadata extends BasicCardMetadata {
     errataUrl: string | null;
-    wikiUrl:  string;
+    wikiUrl:  string | null;
     imageUrl: string;
+    isSite: boolean;
 }

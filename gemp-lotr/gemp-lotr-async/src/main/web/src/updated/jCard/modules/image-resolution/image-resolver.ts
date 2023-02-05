@@ -54,5 +54,9 @@ export const getImageUrl = (blueprintId: string): string => {
         return cacheValue;
     }
     const imageUrl = getCardImage(blueprintId)
-    return cacheValue ?? undefined;
+    if (imageUrl === undefined) {
+        return '';
+    }
+    getImageCache().set(blueprintId, imageUrl);
+    return imageUrl;
 }

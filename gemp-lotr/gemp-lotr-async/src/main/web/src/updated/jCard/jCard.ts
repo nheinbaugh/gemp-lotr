@@ -1,15 +1,9 @@
-import { CardBlueprint } from "./types/card-blueprint.interface";
-import { getBlueprintByCardId } from "./types/card-formatting.functions";
 import { buildCardMetadata } from "./types/card-metadata.factory";
-import { isCardFoil } from "./types/card-options.functions";
-import { buildErrataUrl } from "./types/errata.functions";
+import { CardMetadata } from "./types/card-metadata.interface";
 
 class Card {
     private attachedCards: unknown[] = [];
-    private isFoil = false;
-    private isTengwar = false;
-    private hasWiki = false;
-    private errataUrl: string | null = null;
+    private metadata: CardMetadata;
 
     constructor(
         private blueprintIdWithModifiers: string,
@@ -18,14 +12,10 @@ class Card {
         private owner: unknown,
         private siteNumber: number
         ) {
-            const metatdata = buildCardMetadata(blueprintIdWithModifiers);
+            this.metadata = buildCardMetadata(blueprintIdWithModifiers);
             // format of inputs is:
             // 3_12
             // 12_94*
             // 1_1T* (guessing on that)
-
-        // set isFoil
-        // set isTengwar
-        
     }
 }

@@ -2,9 +2,10 @@ import { getImageUrl } from "./image-resolver";
 
 describe('image-resolver', () => {
     describe('getImageUrl', () => {
-        it('should return undefined when the card has no image', () => {
+        it('should generate a URL for an unknown image based on the default config', () => {
+            // NOTE: this test basically validates that we have no guard clause for "reasonable" cards
             const input = '4000_100';
-            const expected = undefined;
+            const expected = 'https://i.lotrtcgpc.net/decipher/LOTR4000100.jpg'
 
             expect(getImageUrl(input)).toBe(expected);
         });
