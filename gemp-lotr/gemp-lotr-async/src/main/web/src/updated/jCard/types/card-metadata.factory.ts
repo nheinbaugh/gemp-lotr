@@ -3,8 +3,8 @@ import { isCardASite } from "../modules/sites/types/site.functions";
 import { getBlueprintByCardId } from "./card-formatting.functions";
 import { CardMetadata } from "./card-metadata.interface";
 import { isCardFoil, isCardTengwar } from "./card-options.functions";
-import { buildErrataUrl } from "./errata.functions";
-import { getWikiLink } from "./wiki.functions";
+import { buildErrataUrl } from "./errata/errata.functions";
+import { getWikiLink } from "./wiki/wiki.functions";
 
 export const buildCardMetadata = (blueprintId: string): CardMetadata => {
     let strippedBlueprintId = blueprintId;

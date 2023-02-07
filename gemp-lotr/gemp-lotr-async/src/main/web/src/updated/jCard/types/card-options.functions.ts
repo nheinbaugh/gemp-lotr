@@ -1,8 +1,6 @@
 const foilSuffix = '*';
 const tengwarSuffix = 'T';
 
-/// these are now duplicatd with the stuff in card-metadta
-
 export const isCardFoil = (cardId: string): boolean => {
     return checkEndOfStringMatchesPattern(foilSuffix, cardId);
 }

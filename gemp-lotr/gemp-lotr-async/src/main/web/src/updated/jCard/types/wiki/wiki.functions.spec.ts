@@ -1,6 +1,6 @@
-import { CardBlueprint } from "./card-blueprint.interface";
+import { CardBlueprint } from "../card-blueprint.interface";
 import { getWikiLink } from "./wiki.functions";
-import { DecipherSets } from '../../../types/set-numbers.enum';
+import { DecipherSets } from '../../../../types/set-numbers.enum';
 
 describe('wiki.functions', () => {
     describe('getWikiLink', () => {

@@ -458,6 +458,9 @@ var Card = Class.extend({
         return null;
     },
 
+
+    // these three functions are not getting ported over into the new jCard. These are display concerns
+    // and will get set up in a place that handles drawing the card
     getHeightForWidth: function (width) {
         if (this.horizontal)
             return Math.floor(width * cardScale);
@@ -480,6 +483,7 @@ var Card = Class.extend({
     }
 });
 
+// this turned into components/card.component.ts NOTE: no clue what tokens is doing....
 function createCardDiv(image, text, foil, tokens, noBorder, errata) {
     var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'>" + ((text != null) ? text : "") + "</div>");
 
@@ -519,6 +523,7 @@ function getFoilPresentation() {
     return result;
 }
 
+// this turned into components/full-card.component.ts
 function createFullCardDiv(image, foil, horizontal, noBorder) {
     var foilPresentation = getFoilPresentation();
 
@@ -560,6 +565,7 @@ function createFullCardDiv(image, foil, horizontal, noBorder) {
     return cardDiv;
 }
 
+// this turned into components/simple-card.component.ts
 function createSimpleCardDiv(image) {
     var cardDiv = $("<div class='card'><img src='" + image + "' width='100%' height='100%'></div>");
 
