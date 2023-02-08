@@ -1,6 +1,6 @@
-import { wikiBaseUrl } from "../modules/image-resolution/types/card-image.constants";
-import { CardBlueprint } from "./card-blueprint.interface";
-import { generateImageFileName } from "./card-image.functions";
+import { wikiBaseUrl } from "../../modules/image-resolution/types/card-image.constants";
+import { CardBlueprint } from "../card-blueprint.interface";
+import { generateImageFileName } from "../card-image.functions";
 
 const fixedImages = ['15_204', '15_205', '15_206', '15_207', 'gl_theOneRing'];
 

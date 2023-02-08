@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
     entry: {
         merchant: './src/Merchant/merchant.js',
-        login: './src/Login/login.ts'
+        login: './src/Login/login.ts',
+        sandbox: `./src/Sandbox/sandbox.ts`
     },
     module: {
         rules: [

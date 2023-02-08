@@ -1,3 +1,4 @@
+import { DecipherSets } from "src/types/set-numbers.enum";
 import { CardBlueprint } from "./card-blueprint.interface";
 
 /**
@@ -7,12 +8,12 @@ import { CardBlueprint } from "./card-blueprint.interface";
 
 export const isCardMasterwork = (blueprint: CardBlueprint): boolean => {
     switch (blueprint.set) {
-        case Sets.BlackRider:
-        case Sets.Bloodlines:
+        case DecipherSets.BlackRider:
+        case DecipherSets.Bloodlines:
           return blueprint.cardNumber > 194;
-        case Sets.RiseOfSaruman:
+        case DecipherSets.RiseOfSaruman:
             return blueprint.cardNumber > 148
-        case Sets.TreacheryAndDeceit:
+        case DecipherSets.TreacheryAndDeceit:
             return blueprint.cardNumber >  140;
         default:
             return blueprint.cardNumber > 194;
@@ -20,11 +21,11 @@ export const isCardMasterwork = (blueprint: CardBlueprint): boolean => {
     return false;
 }
 
-export const getMasterworkOffsetBySetNumber = (setNumber: Sets): number => {
+export const getMasterworkOffsetBySetNumber = (setNumber: DecipherSets): number => {
     switch (setNumber) {
-        case Sets.RiseOfSaruman:
+        case DecipherSets.RiseOfSaruman:
           return 148;
-          case Sets.TreacheryAndDeceit:
+          case DecipherSets.TreacheryAndDeceit:
             return 140;
         default:
             return 194;

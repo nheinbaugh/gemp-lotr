@@ -1,5 +1,5 @@
-import { CardBlueprint } from "./card-blueprint.interface";
-import { getCardNumber } from "./card-formatting.functions";
+import { CardBlueprint } from "../card-blueprint.interface";
+import { getCardNumber } from "../card-formatting.functions";
 import { errataCardList } from "./errata-card.list";
 
 export const isCardErrated = (card: CardBlueprint): boolean => {

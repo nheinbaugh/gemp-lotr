@@ -1,4 +1,4 @@
-import { CardBlueprint } from "./card-blueprint.interface";
+import { CardBlueprint } from "../card-blueprint.interface";
 import { isCardErrated } from "./errata.functions";
 
 describe('errata.functions', () => {
