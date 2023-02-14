@@ -1,3 +1,4 @@
+
 body {
     font-size: 12px;
 }
@@ -73,6 +74,7 @@ body {
 #filtering select {
     font-size: 100%;
 }
+
 #main {
     position: absolute;
     left: 0;
