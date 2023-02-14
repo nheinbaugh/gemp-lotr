@@ -3,6 +3,7 @@ import { hobbitCards } from "./data/hobbit.list";
 import { choiceBoosters, fellowshipPacks, gempLotrPromo, holidayOverrides, postMoviePacks, randoms, returnOfTheKingPacks, setStarterPacks, specialStarters, tengwarSelections, twoTowersPacks } from "./data/image-overrides.list";
 import { playerCommitteeCards } from "./data/players-committee";
 import { set40Cards } from "./data/set40.list";
+import { buildNotFoundUrl } from "./types/not-found-image.functions";
 import { Override } from "./types/override.interface";
 
 /**
@@ -55,7 +56,7 @@ export const getImageUrl = (blueprintId: string): string => {
     }
     const imageUrl = getCardImage(blueprintId)
     if (imageUrl === undefined) {
-        return '';
+        return buildNotFoundUrl(blueprintId);
     }
     getImageCache().set(blueprintId, imageUrl);
     return imageUrl;

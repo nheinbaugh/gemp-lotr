@@ -197,7 +197,6 @@ var Card = Class.extend({
 
     // this all turns intot eh constructor for jCard.ts
     init: function (blueprintId, zone, cardId, owner, siteNumber) {
-        console.log(zone, cardId, owner, siteNumber)
         this.blueprintId = blueprintId;
 
         var imageBlueprint = blueprintId;

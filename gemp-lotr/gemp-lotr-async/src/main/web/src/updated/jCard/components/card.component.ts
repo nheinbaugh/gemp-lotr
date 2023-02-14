@@ -22,7 +22,7 @@ export const renderCard = (imageUrl: string, text = '',  options = createCardDis
 }
 
 const createFoilOverlay = (imageUrl: string, foilPresentationMode: FoilPresentation = 'none'): string => {
-    
+    // NOTE: this may or may not be missing some behavior, but based on what was discerible in jCards.js this is right
     let imageSource = animatedFoil;
     if (foilPresentationMode === 'static') {
         imageSource = staticFoil;

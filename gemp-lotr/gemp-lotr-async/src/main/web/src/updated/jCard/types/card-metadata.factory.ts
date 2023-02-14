@@ -19,7 +19,12 @@ export const buildCardMetadata = (blueprintId: string): CardMetadata => {
         strippedBlueprintId = strippedBlueprintId.substring(0, strippedBlueprintId.length - 1);
     }
 
-    // bring over has wiki
+    // these commented lines are pulled from jCards.js and I need to implement them correctly
+    // I didn't quite understand Ketura's GH comment https://github.com/PlayersCouncil/gemp-lotr/pull/27#discussion_r1099644929
+    // although I did update the implementation of that function in masterworks.functiosn.ts
+    // if (this.isMasterworks(setNo, cardNo))
+    // cardStr = this.formatSetNo(setNo) + "O0" + (cardNo - this.getMasterworksOffset(setNo));
+
     const cardBlueprint = getBlueprintByCardId(strippedBlueprintId);
     const imageUrl =  getImageUrl(strippedBlueprintId);
 

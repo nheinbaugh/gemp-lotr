@@ -1,12 +1,11 @@
-const foilSuffix = '*';
-const tengwarSuffix = 'T';
+import { foilIndicator, tengwarIndicator } from "./jcard.constants";
 
 export const isCardFoil = (cardId: string): boolean => {
-    return checkEndOfStringMatchesPattern(foilSuffix, cardId);
+    return checkEndOfStringMatchesPattern(foilIndicator, cardId);
 }
 
 export const isCardTengwar = (cardId: string): boolean => {
-    return checkEndOfStringMatchesPattern(tengwarSuffix, cardId);
+    return checkEndOfStringMatchesPattern(tengwarIndicator, cardId);
 }
 
 const checkEndOfStringMatchesPattern = (patternToCheck: string, stringToCheck: string): boolean => {

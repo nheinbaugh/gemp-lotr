@@ -1,4 +1,4 @@
-// TODO: not sure if this is an exhaustive list, but it's what I got from jcard.js:createCardDiv
+// TODO: this list is not exhaustive and does not cover the range of cool future effects we want to implement
 
 export type FoilPresentation =  
     'animated' |
