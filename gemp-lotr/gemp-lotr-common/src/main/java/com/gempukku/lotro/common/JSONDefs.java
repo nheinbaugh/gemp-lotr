@@ -61,6 +61,16 @@ public class JSONDefs {
 
     }
 
+    public static class Set {
+        public int setId;
+        public String setName;
+        public String rarityFile;
+        public boolean originalSet = true;
+        public boolean merchantable = true;
+        public boolean needsLoading = true;
+        public boolean playable = true;
+    }
+
     public static class FullFormatReadout {
         public Map<String, Format> Formats;
         public Map<String, SealedTemplate> SealedTemplates;

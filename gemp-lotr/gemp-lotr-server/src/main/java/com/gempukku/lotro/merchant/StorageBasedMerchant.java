@@ -38,7 +38,7 @@ public class StorageBasedMerchant implements Merchant {
         _merchantDao = merchantDao;
         _merchantSetupDate = merchantSetupDate;
         for (SetDefinition setDefinition : _library.getSetDefinitions().values()) {
-            if (setDefinition.hasFlag("merchantable"))
+            if (setDefinition.Merchantable())
                 _rarity.put(setDefinition.getSetId(), setDefinition);
         }
     }

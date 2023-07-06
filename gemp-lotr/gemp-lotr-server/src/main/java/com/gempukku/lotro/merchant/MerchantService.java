@@ -33,7 +33,7 @@ public class MerchantService {
         _merchant = new RarityBasedMerchant(library);
 
         for (SetDefinition setDefinition : library.getSetDefinitions().values()) {
-            if (setDefinition.hasFlag("merchantable")) {
+            if (setDefinition.Merchantable()) {
                 for (String blueprintId : setDefinition.getAllCards()) {
                     String baseBlueprintId = library.getBaseBlueprintId(blueprintId);
                     _merchantableItems.add(new BasicCardItem(baseBlueprintId));

@@ -43,7 +43,7 @@ public class CreateCardStubs {
         Map<String, Map<String, LotroCardBlueprint>> cardsByFileName = new HashMap<>();
 
         SetDefinition setDefinition = library.getSetDefinitions().get("" + set);
-        if (setDefinition.hasFlag("needsLoading")) {
+        if (setDefinition.NeedsLoading()) {
             final Set<String> allCards = setDefinition.getAllCards();
             for (String blueprintId : allCards) {
                 blueprintId = stripBlueprintModifiers(blueprintId);

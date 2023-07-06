@@ -1,6 +1,5 @@
 package com.gempukku.lotro.game.formats;
 
-import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.common.AppConfig;
 import com.gempukku.lotro.common.JSONDefs;
 import com.gempukku.lotro.game.AdventureLibrary;
@@ -8,8 +7,6 @@ import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.league.SealedLeagueDefinition;
 import com.gempukku.util.JsonUtils;
-import org.hjson.JsonValue;
-import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -72,7 +69,6 @@ public class LotroFormatLibrary {
     private void loadTemplateFromFile(File file) {
         if (!JsonUtils.IsValidHjsonFile(file))
             return;
-        JSONParser parser = new JSONParser();
         try (Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
             var defs = JsonUtils.ConvertArray(reader, JSONDefs.SealedTemplate.class);
 
@@ -108,9 +104,7 @@ public class LotroFormatLibrary {
     public void ReloadFormats() {
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream(_formatPath), StandardCharsets.UTF_8)) {
             collectionReady.acquire();
-            String json = JsonValue.readHjson(reader).toString();
-
-            JSONDefs.Format[] formatDefs = JSON.parseObject(json, JSONDefs.Format[].class);
+            var formatDefs = JsonUtils.ConvertArray(reader, JSONDefs.Format.class);
 
             _allFormats.clear();
             _hallFormats.clear();
@@ -119,7 +113,7 @@ public class LotroFormatLibrary {
                 if (def == null)
                     continue;
 
-                DefaultLotroFormat format = new DefaultLotroFormat(_adventureLibrary, _cardLibrary, def);
+                var format = new DefaultLotroFormat(_adventureLibrary, _cardLibrary, def);
 
                 _allFormats.put(format.getCode(), format);
                 if (format.hallVisible()) {

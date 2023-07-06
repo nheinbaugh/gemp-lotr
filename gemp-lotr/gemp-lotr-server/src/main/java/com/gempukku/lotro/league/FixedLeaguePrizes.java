@@ -19,7 +19,7 @@ public class FixedLeaguePrizes implements LeaguePrizes {
 
     public FixedLeaguePrizes(LotroCardBlueprintLibrary library) {
         for (SetDefinition setDefinition : library.getSetDefinitions().values()) {
-            if (setDefinition.hasFlag("originalSet")) {
+            if (setDefinition.IsDecipherSet()) {
                 _commons.addAll(setDefinition.getCardsOfRarity("C"));
                 _uncommons.addAll(setDefinition.getCardsOfRarity("U"));
                 _rares.addAll(setDefinition.getCardsOfRarity("R"));

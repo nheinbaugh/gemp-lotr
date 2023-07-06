@@ -12,7 +12,7 @@ public class RarityBasedMerchant implements Merchant {
 
     public RarityBasedMerchant(LotroCardBlueprintLibrary library) {
         for (SetDefinition setDefinition : library.getSetDefinitions().values()) {
-            if (setDefinition.hasFlag("merchantable"))
+            if (setDefinition.Merchantable())
                 _rarity.put(setDefinition.getSetId(), setDefinition);
         }
     }

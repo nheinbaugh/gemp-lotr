@@ -17,7 +17,7 @@ public class SingleEliminationOnDemandPrizes implements TournamentPrizes{
     public SingleEliminationOnDemandPrizes(LotroCardBlueprintLibrary library, String registryRepresentation) {
         _registryRepresentation = registryRepresentation;
         for (SetDefinition setDefinition : library.getSetDefinitions().values()) {
-            if (setDefinition.hasFlag("originalSet"))
+            if (setDefinition.IsDecipherSet())
                 _promos.addAll(setDefinition.getCardsOfRarity("P"));
         }
     }

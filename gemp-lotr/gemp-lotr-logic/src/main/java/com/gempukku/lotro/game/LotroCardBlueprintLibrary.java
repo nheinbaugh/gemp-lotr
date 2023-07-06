@@ -11,7 +11,6 @@ import com.gempukku.util.JsonUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.hjson.JsonValue;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -135,34 +134,24 @@ public class LotroCardBlueprintLibrary {
         try {
             final InputStreamReader reader = new InputStreamReader(new FileInputStream(_setDefsPath), StandardCharsets.UTF_8);
             try {
-                String json = JsonValue.readHjson(reader).toString();
-                JSONParser parser = new JSONParser();
-                JSONArray object = (JSONArray) parser.parse(json);
-                for (Object setDefinitionObj : object) {
-                    JSONObject setDefinition = (JSONObject) setDefinitionObj;
+                var setDefs = JsonUtils.ConvertArray(reader, JSONDefs.Set.class);
 
-                    String setId = (String) setDefinition.get("setId");
-                    String setName = (String) setDefinition.get("setName");
-                    String rarityFile = (String) setDefinition.get("rarityFile");
+                for (JSONDefs.Set def : setDefs) {
+                    if (def == null)
+                        continue;
 
-                    Set<String> flags = new HashSet<>();
-                    determineOriginalSetFlag(setDefinition, flags);
-                    determineMerchantableFlag(setDefinition, flags);
-                    determineNeedsLoadingFlag(setDefinition, flags);
-
-                    DefaultSetDefinition rarity = new DefaultSetDefinition(setId, setName, flags);
-
-                    readSetRarityFile(rarity, setId, rarityFile);
-
-                    _allSets.put(setId, rarity);
+                    var set = new DefaultSetDefinition(def);
+                    readSetRarityFile(set, set.getSetId(), def.rarityFile);
+                    _allSets.put(set.getSetId(), set);
                 }
+
             } finally {
                 IOUtils.closeQuietly(reader);
             }
-        } catch (ParseException e) {
-            throw new RuntimeException("Unable to parse setConfig.json file");
         } catch (IOException exp) {
             throw new RuntimeException("Unable to read card rarities: " + exp);
+        } catch (Exception exp) {
+            throw new RuntimeException("Unable to parse setConfig.hjson file: " + exp);
         }
     }
 
@@ -235,20 +224,21 @@ public class LotroCardBlueprintLibrary {
     }
 
     private void cacheAllJavaBlueprints() {
-        for (SetDefinition setDefinition : _allSets.values()) {
-            if (setDefinition.hasFlag("needsLoading")) {
-                logger.debug("Loading Java cards for set " + setDefinition.getSetId());
-                final Set<String> allCards = setDefinition.getAllCards();
-                for (String blueprintId : allCards) {
-                    if (getBaseBlueprintId(blueprintId).equals(blueprintId)) {
-                        if (!_blueprints.containsKey(blueprintId)) {
-                            try {
-                                // Ensure it's loaded
-                                LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
-                                _blueprints.put(blueprintId, blueprint);
-                            } catch (CardNotFoundException exp) {
-                                throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
-                            }
+        for (var setDef : _allSets.values()) {
+            if(!setDef.NeedsLoading())
+                continue;
+
+            logger.debug("Loading Java cards for set " + setDef.getSetId());
+            final Set<String> allCards = setDef.getAllCards();
+            for (String blueprintId : allCards) {
+                if (getBaseBlueprintId(blueprintId).equals(blueprintId)) {
+                    if (!_blueprints.containsKey(blueprintId)) {
+                        try {
+                            // Ensure it's loaded
+                            LotroCardBlueprint blueprint = findJavaBlueprint(blueprintId);
+                            _blueprints.put(blueprintId, blueprint);
+                        } catch (CardNotFoundException exp) {
+                            throw new RuntimeException("Unable to start the server, due to invalid (missing) card definition - " + blueprintId);
                         }
                     }
                 }

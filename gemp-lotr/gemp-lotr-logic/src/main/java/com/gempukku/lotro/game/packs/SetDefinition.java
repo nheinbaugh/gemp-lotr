@@ -8,8 +8,9 @@ public interface SetDefinition {
 
     public String getSetId();
 
-    public boolean hasFlag(String flag);
-
+    public boolean IsDecipherSet();
+    public boolean Merchantable();
+    public boolean NeedsLoading();
     public List<String> getCardsOfRarity(String rarity);
 
     public List<String> getTengwarCards();
