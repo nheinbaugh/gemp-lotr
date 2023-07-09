@@ -150,9 +150,9 @@ var GempLotrSoloDraftUI = Class.extend({
 
         if (tar.hasClass("actionArea")) {
             var selectedCardElem = tar.closest(".card");
-            if (event.which == 1) {
+            if (event.which >= 1) {
                 if (!this.successfulDrag) {
-                    if (event.shiftKey) {
+                    if (event.shiftKey || event.which > 1) {
                         this.displayCardInfo(selectedCardElem.data("card"));
                     } else {
                         if (selectedCardElem.data("card").zone == "picks") {

@@ -62,12 +62,16 @@ public class DefaultCardCollection implements MutableCardCollection {
 
     @Override
     public synchronized void addItem(String itemId, int toAdd) {
+        addItem(itemId, toAdd, false);
+    }
+
+    public synchronized void addItem(String itemId, int toAdd, boolean recursive) {
         if (toAdd > 0) {
             Item oldCount = _counts.get(itemId);
             if (oldCount == null) {
-                _counts.put(itemId, Item.createItem(itemId, toAdd));
+                _counts.put(itemId, Item.createItem(itemId, toAdd, recursive));
             } else
-                _counts.put(itemId, Item.createItem(itemId, toAdd + oldCount.getCount()));
+                _counts.put(itemId, Item.createItem(itemId, toAdd + oldCount.getCount(), recursive));
         }
     }
 
@@ -100,6 +104,13 @@ public class DefaultCardCollection implements MutableCardCollection {
             coll.addItem(item.getBlueprintId(), item.getCount());
         }
 
+    }
+
+    public void addAndOpenPack(String packId, int count, ProductLibrary productLibrary) {
+        addItem(packId, count);
+        for(int i = 0; i < count; i++) {
+            openPack(packId, null, productLibrary);
+        }
     }
 
     @Override

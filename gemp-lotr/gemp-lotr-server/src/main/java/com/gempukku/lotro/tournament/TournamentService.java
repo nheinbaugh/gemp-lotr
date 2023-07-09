@@ -160,7 +160,7 @@ public class TournamentService implements ITournamentService {
                     tournamentId,  tournamentInfo.getTournamentName(), tournamentInfo.getTournamentFormat(),
                     tournamentInfo.getCollectionType(), tournamentInfo.getTournamentRound(), tournamentInfo.getTournamentStage(), 
                     _pairingMechanismRegistry.getPairingMechanism(tournamentInfo.getPairingMechanism()),
-                    _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, tournamentInfo.getPrizesScheme()));
+                    _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, tournamentInfo.getPrizesScheme()));
 
         } catch (Exception exp) {
             throw new RuntimeException("Unable to create Tournament", exp);

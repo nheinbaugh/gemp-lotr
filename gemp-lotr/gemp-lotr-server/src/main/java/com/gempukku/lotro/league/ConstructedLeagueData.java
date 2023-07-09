@@ -10,6 +10,7 @@ import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.LotroFormat;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ConstructedLeagueData implements LeagueData {
     // serie1 format, serie1 prize pool,
     // serie2 format, serie2 prize pool,
     // serie3 format, serie3 prize pool,
-    public ConstructedLeagueData(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, String parameters) {
+    public ConstructedLeagueData(ProductLibrary library, LotroFormatLibrary formatLibrary, String parameters) {
         _leaguePrizes = new FixedLeaguePrizes(library);
         
         String[] params = parameters.split(",");

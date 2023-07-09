@@ -71,7 +71,7 @@ var chat;
 				} else if (tar.hasClass("prizeHint")) {
 					var prizeDescription = tar.attr("value");
 
-					infoDialog.text(prizeDescription);
+					infoDialog.html(prizeDescription);
 
 					infoDialog.dialog({title:"Prizes details", width:300, height: 150});
 					infoDialog.dialog("open");

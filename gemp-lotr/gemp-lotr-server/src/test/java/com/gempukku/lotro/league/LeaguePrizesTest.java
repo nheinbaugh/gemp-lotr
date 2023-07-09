@@ -8,7 +8,7 @@ import org.junit.Test;
 public class LeaguePrizesTest extends AbstractAtTest {
     @Test
     public void test() {
-        LeaguePrizes leaguePrizes = new FixedLeaguePrizes(_cardLibrary);
+        LeaguePrizes leaguePrizes = new FixedLeaguePrizes(_productLibrary);
         CardCollection prize = leaguePrizes.getPrizeForLeagueMatchWinner(2, 2);
         for (CardCollection.Item stringIntegerEntry : prize.getAll()) {
             System.out.println(stringIntegerEntry.getBlueprintId() + ": " + stringIntegerEntry.getCount());
@@ -17,7 +17,7 @@ public class LeaguePrizesTest extends AbstractAtTest {
 
     @Test
     public void testLeaguePrize() {
-        LeaguePrizes leaguePrizes = new FixedLeaguePrizes(_cardLibrary);
+        LeaguePrizes leaguePrizes = new FixedLeaguePrizes(_productLibrary);
         for (int i = 1; i <= 32; i++) {
             System.out.println("Place "+i);
             CardCollection prize = leaguePrizes.getPrizeForLeague(i, 60, 1, 2, CollectionType.ALL_CARDS);

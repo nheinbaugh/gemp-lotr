@@ -16,6 +16,7 @@ import com.gempukku.lotro.league.LeagueService;
 import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.timing.GameResultListener;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.tournament.*;
 import org.apache.log4j.Logger;
@@ -44,6 +45,7 @@ public class HallServer extends AbstractServer {
     private final TournamentService _tournamentService;
     private final LotroCardBlueprintLibrary _library;
     private final LotroFormatLibrary _formatLibrary;
+    private final ProductLibrary _productLibrary;
     private final CollectionsManager _collectionsManager;
     private final LotroServer _lotroServer;
     private final PairingMechanismRegistry _pairingMechanismRegistry;
@@ -73,8 +75,7 @@ public class HallServer extends AbstractServer {
     private static final Logger _log = Logger.getLogger(HallServer.class);
 
     public HallServer(IgnoreDAO ignoreDAO, LotroServer lotroServer, ChatServer chatServer, LeagueService leagueService, TournamentService tournamentService, LotroCardBlueprintLibrary library,
-                      LotroFormatLibrary formatLibrary, CollectionsManager collectionsManager,
-                      AdminService adminService,
+                      LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, CollectionsManager collectionsManager, AdminService adminService,
                       TournamentPrizeSchemeRegistry tournamentPrizeSchemeRegistry,
                       PairingMechanismRegistry pairingMechanismRegistry) {
         _lotroServer = lotroServer;
@@ -83,6 +84,7 @@ public class HallServer extends AbstractServer {
         _tournamentService = tournamentService;
         _library = library;
         _formatLibrary = formatLibrary;
+        _productLibrary = productLibrary;
         _collectionsManager = collectionsManager;
         _adminService = adminService;
         _tournamentPrizeSchemeRegistry = tournamentPrizeSchemeRegistry;
@@ -237,32 +239,32 @@ public class HallServer extends AbstractServer {
 
         _tournamentQueues.put("fotr_queue", new ImmediateRecurringQueue(1500, "fotr_block",
                 CollectionType.ALL_CARDS, "fotrQueue-", "Fellowship Block", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("ts_queue", new ImmediateRecurringQueue(1500, "towers_standard",
                 CollectionType.ALL_CARDS, "tsQueue-", "Towers Standard", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("movie_queue", new ImmediateRecurringQueue(1500, "movie",
                 CollectionType.ALL_CARDS, "movieQueue-", "Movie Block", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("expanded_queue", new ImmediateRecurringQueue(1500, "expanded",
                 CollectionType.ALL_CARDS, "expandedQueue-", "Expanded", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
             _tournamentQueues.put("fotr_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-15 19:30:00").getTime(), _repeatTournaments, "fotrDailyEu-", "Daily Gondor Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
                     "fotr_block", 4));
             _tournamentQueues.put("fotr_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-16 00:30:00").getTime(), _repeatTournaments, "fotrDailyUs-", "Daily Rohan Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
                     "fotr_block", 4));
             _tournamentQueues.put("movie_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-16 19:30:00").getTime(), _repeatTournaments, "movieDailyEu-", "Daily Gondor Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
                     "movie", 4));
             _tournamentQueues.put("movie_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-17 00:30:00").getTime(), _repeatTournaments, "movieDailyUs-", "Daily Rohan Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
                     "movie", 4));
         } catch (ParseException exp) {
             // Ignore, can't happen
@@ -839,7 +841,7 @@ public class HallServer extends AbstractServer {
                                 true, _tournamentService, unstartedTournamentQueue.getStartTime(), unstartedTournamentQueue.getTournamentName(),
                                 unstartedTournamentQueue.getFormat(), CollectionType.ALL_CARDS, Tournament.Stage.PLAYING_GAMES,
                                 _pairingMechanismRegistry.getPairingMechanism(unstartedTournamentQueue.getPlayOffSystem()),
-                                _tournamentPrizeSchemeRegistry.getTournamentPrizes(_library, unstartedTournamentQueue.getPrizeScheme()), unstartedTournamentQueue.getMinimumPlayers());
+                                _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, unstartedTournamentQueue.getPrizeScheme()), unstartedTournamentQueue.getMinimumPlayers());
                         _tournamentQueues.put(scheduledTournamentId, scheduledQueue);
                         hallChanged();
                     }

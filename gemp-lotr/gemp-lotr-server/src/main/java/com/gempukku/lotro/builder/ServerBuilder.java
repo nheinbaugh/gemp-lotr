@@ -56,7 +56,8 @@ public class ServerBuilder {
                         extract(objectMap, PlayerDAO.class),
                         extract(objectMap, CollectionDAO.class),
                         extract(objectMap, TransferDAO.class),
-                        extract(objectMap, LotroCardBlueprintLibrary.class)));
+                        extract(objectMap, LotroCardBlueprintLibrary.class),
+                        extract(objectMap, ProductLibrary.class)));
 
         objectMap.put(SoloDraftDefinitions.class,
                 new SoloDraftDefinitions(
@@ -73,6 +74,7 @@ public class ServerBuilder {
                         extract(objectMap, CollectionsManager.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, ProductLibrary.class),
                         extract(objectMap, SoloDraftDefinitions.class)));
 
         objectMap.put(AdminService.class,
@@ -122,6 +124,7 @@ public class ServerBuilder {
                         extract(objectMap, TournamentService.class),
                         extract(objectMap, LotroCardBlueprintLibrary.class),
                         extract(objectMap, LotroFormatLibrary.class),
+                        extract(objectMap, ProductLibrary.class),
                         extract(objectMap, CollectionsManager.class),
                         extract(objectMap, AdminService.class),
                         tournamentPrizeSchemeRegistry,

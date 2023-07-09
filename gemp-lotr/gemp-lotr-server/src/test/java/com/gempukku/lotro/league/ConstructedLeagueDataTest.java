@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class ConstructedLeagueDataTest extends AbstractAtTest {
     @Test
     public void testParameters() {
-        ConstructedLeagueData leagueData = new ConstructedLeagueData(_cardLibrary, _formatLibrary, "20120312,fotr_block,0.7,default,All cards,7,10,3,fotr1_block,fotr_block,fotr2_block,fotr_block,fotr_block,fotr_block");
+        ConstructedLeagueData leagueData = new ConstructedLeagueData(_productLibrary, _formatLibrary, "20120312,fotr_block,0.7,default,All cards,7,10,3,fotr1_block,fotr_block,fotr2_block,fotr_block,fotr_block,fotr_block");
         final List<LeagueSerieData> series = leagueData.getSeries();
         assertEquals(3, series.size());
         assertEquals(20120312, series.get(0).getStart());

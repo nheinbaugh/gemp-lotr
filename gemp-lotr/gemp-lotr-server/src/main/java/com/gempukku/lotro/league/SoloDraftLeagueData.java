@@ -8,6 +8,7 @@ import com.gempukku.lotro.draft2.SoloDraft;
 import com.gempukku.lotro.draft2.SoloDraftDefinitions;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class SoloDraftLeagueData implements LeagueData {
     private final LeaguePrizes _leaguePrizes;
     private final LeagueSerieData _serie;
 
-    public SoloDraftLeagueData(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, String parameters) {
-        _leaguePrizes = new FixedLeaguePrizes(library);
+    public SoloDraftLeagueData(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary, SoloDraftDefinitions soloDraftDefinitions, String parameters) {
+        _leaguePrizes = new FixedLeaguePrizes(productLibrary);
 
         String[] params = parameters.split(",");
         _draft = soloDraftDefinitions.getSoloDraft(params[0]);

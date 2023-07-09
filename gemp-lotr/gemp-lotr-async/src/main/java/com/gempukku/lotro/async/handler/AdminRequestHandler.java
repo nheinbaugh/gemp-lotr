@@ -370,7 +370,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
                 sb.append("," + formats.get(i) + "," + serieDurations.get(i) + "," + maxMatches.get(i));
 
             String parameters = sb.toString();
-            LeagueData leagueData = new NewConstructedLeagueData(_cardLibrary, _formatLibrary, parameters);
+            LeagueData leagueData = new NewConstructedLeagueData(_productLibrary, _formatLibrary, parameters);
             List<LeagueSerieData> series = leagueData.getSeries();
             int leagueStart = series.get(0).getStart();
             int displayEnd = DateUtils.offsetDate(series.get(series.size() - 1).getEnd(), 2);
@@ -418,7 +418,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
                 sb.append("," + formats.get(i) + "," + serieDurations.get(i) + "," + maxMatches.get(i));
 
             String parameters = sb.toString();
-            LeagueData leagueData = new NewConstructedLeagueData(_cardLibrary, _formatLibrary, parameters);
+            LeagueData leagueData = new NewConstructedLeagueData(_productLibrary, _formatLibrary, parameters);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -483,7 +483,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             String code = String.valueOf(System.currentTimeMillis());
 
             String parameters = format + "," + start + "," + serieDuration + "," + maxMatches + "," + code + "," + name;
-            LeagueData leagueData = new SoloDraftLeagueData(_cardLibrary, _formatLibrary, _soloDraftDefinitions, parameters);
+            LeagueData leagueData = new SoloDraftLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions, parameters);
             List<LeagueSerieData> series = leagueData.getSeries();
             int leagueStart = series.get(0).getStart();
             int displayEnd = DateUtils.offsetDate(series.get(series.size() - 1).getEnd(), 2);
@@ -524,7 +524,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             String code = String.valueOf(System.currentTimeMillis());
 
             String parameters = format + "," + start + "," + serieDuration + "," + maxMatches + "," + code + "," + name;
-            LeagueData leagueData = new SoloDraftLeagueData(_cardLibrary,  _formatLibrary, _soloDraftDefinitions, parameters);
+            LeagueData leagueData = new SoloDraftLeagueData(_productLibrary,  _formatLibrary, _soloDraftDefinitions, parameters);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -589,7 +589,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             String code = String.valueOf(System.currentTimeMillis());
 
             String parameters = _formatLibrary.GetSealedTemplate(format).GetID() + "," + start + "," + serieDuration + "," + maxMatches + "," + code + "," + name;
-            LeagueData leagueData = new NewSealedLeagueData(_cardLibrary, _formatLibrary, parameters);
+            LeagueData leagueData = new NewSealedLeagueData(_productLibrary, _formatLibrary, parameters);
             List<LeagueSerieData> series = leagueData.getSeries();
             int leagueStart = series.get(0).getStart();
             int displayEnd = DateUtils.offsetDate(series.get(series.size() - 1).getEnd(), 2);
@@ -635,7 +635,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             String code = String.valueOf(System.currentTimeMillis());
 
             String parameters = format + "," + start + "," + serieDuration + "," + maxMatches + "," + code + "," + name;
-            LeagueData leagueData = new NewSealedLeagueData(_cardLibrary, _formatLibrary, parameters);
+            LeagueData leagueData = new NewSealedLeagueData(_productLibrary, _formatLibrary, parameters);
 
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

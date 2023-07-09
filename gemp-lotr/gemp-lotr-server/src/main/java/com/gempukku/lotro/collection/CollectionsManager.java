@@ -21,14 +21,17 @@ public class CollectionsManager {
     private final CollectionDAO _collectionDAO;
     private final TransferDAO _transferDAO;
     private final LotroCardBlueprintLibrary _cardLibrary;
+    private final ProductLibrary _productLibrary;
 
     private CardCollection _defaultCollection;
 
-    public CollectionsManager(PlayerDAO playerDAO, CollectionDAO collectionDAO, TransferDAO transferDAO, final LotroCardBlueprintLibrary lotroCardBlueprintLibrary) {
+    public CollectionsManager(PlayerDAO playerDAO, CollectionDAO collectionDAO, TransferDAO transferDAO, final LotroCardBlueprintLibrary lotroCardBlueprintLibrary,
+                              final ProductLibrary productLibrary) {
         _playerDAO = playerDAO;
         _collectionDAO = collectionDAO;
         _transferDAO = transferDAO;
         _cardLibrary = lotroCardBlueprintLibrary;
+        _productLibrary = productLibrary;
 
         _defaultCollection = new CompleteCardCollection(_cardLibrary);
 

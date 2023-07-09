@@ -7,6 +7,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraft;
 import com.gempukku.lotro.game.*;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -21,8 +22,8 @@ public class SealedLeagueData implements LeagueData {
     private final LeaguePrizes _leaguePrizes;
     private final LotroFormatLibrary _formatLibrary;
 
-    public SealedLeagueData(LotroCardBlueprintLibrary library, LotroFormatLibrary formatLibrary, String parameters) {
-        _leaguePrizes = new FixedLeaguePrizes(library);
+    public SealedLeagueData(ProductLibrary productLibrary, LotroFormatLibrary formatLibrary, String parameters) {
+        _leaguePrizes = new FixedLeaguePrizes(productLibrary);
         _formatLibrary = formatLibrary;
         
         String[] params = parameters.split(",");

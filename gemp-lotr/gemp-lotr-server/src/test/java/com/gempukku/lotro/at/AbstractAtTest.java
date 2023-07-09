@@ -11,6 +11,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.DefaultLotroGame;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.*;
 
@@ -19,11 +20,13 @@ import static org.junit.Assert.fail;
 public abstract class AbstractAtTest {
     protected static LotroCardBlueprintLibrary _cardLibrary;
     protected static LotroFormatLibrary _formatLibrary;
+    protected static ProductLibrary _productLibrary;
     private final int cardId = 100;
 
     static {
         _cardLibrary = new LotroCardBlueprintLibrary();
         _formatLibrary = new LotroFormatLibrary(new DefaultAdventureLibrary(), _cardLibrary);
+        _productLibrary = new ProductLibrary(_cardLibrary);
     }
 
     protected DefaultLotroGame _game;

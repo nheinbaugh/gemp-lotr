@@ -36,6 +36,7 @@ var packBlueprints = {
     "(S)RotK - Tengwar": "/gemp-lotr/images/boosters/rotk_tengwar_selection.png",
     "(S)SH - Tengwar": "/gemp-lotr/images/boosters/sh_tengwar_selection.png",
     "(S)Tengwar": "/gemp-lotr/images/boosters/tengwar_selection.png",
+    "Random Tengwar": "/gemp-lotr/images/boosters/random_tengwar.png",
 
     "(S)All Decipher Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
     "(S)Movie Choice - Booster": "/gemp-lotr/images/boosters/booster_selection.png",
@@ -186,7 +187,7 @@ var packBlueprints = {
     "SARU - Smeagol & Urukhai Starter": "/gemp-lotr/images/boosters/saru-smeagol-uruks.png",
     
     "Event Chase Booster": "/gemp-lotr/images/boosters/event_award_booster.png",
-    "Tournament Random Chase Card Selector": "/gemp-lotr/images/boosters/tournament_event_award.png",
+    "Placement Random Chase Card Selector": "/gemp-lotr/images/boosters/event_high_placement.png",
     "Countdown to the King Collection": "/gemp-lotr/images/boosters/countdown_collection.png",
     "The Nine Riders Collection": "/gemp-lotr/images/boosters/nine_riders_collection.png",
     "(S)Alt Image Promo Selection": "/gemp-lotr/images/boosters/promo_selection.png",

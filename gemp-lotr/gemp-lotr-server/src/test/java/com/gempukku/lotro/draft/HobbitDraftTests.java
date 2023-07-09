@@ -22,7 +22,7 @@ public class HobbitDraftTests extends AbstractAtTest {
 //        //library.init(new File(projectRoot + "/gemp-lotr-async/src/main/web/cards"), new CardSets());
 //        library.init(AppConfig.getCardsPath(), AppConfig.getMappingsPath(), new CardSets());
 
-        CollectionsManager collectionsManager = new CollectionsManager(null, null, null, _cardLibrary);
+        CollectionsManager collectionsManager = new CollectionsManager(null, null, null, _cardLibrary, _productLibrary);
         DefaultAdventureLibrary defaultAdventureLibrary = new DefaultAdventureLibrary();
         LotroFormatLibrary lotroFormatLibrary = new LotroFormatLibrary(defaultAdventureLibrary, _cardLibrary);
 

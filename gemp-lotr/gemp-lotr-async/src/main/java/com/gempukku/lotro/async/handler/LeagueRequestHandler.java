@@ -13,6 +13,7 @@ import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.league.LeagueData;
 import com.gempukku.lotro.league.LeagueSerieData;
 import com.gempukku.lotro.league.LeagueService;
+import com.gempukku.lotro.packs.ProductLibrary;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.QueryStringDecoder;
@@ -34,6 +35,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
     private final LeagueService _leagueService;
     private final LotroFormatLibrary _formatLibrary;
     private final LotroCardBlueprintLibrary _library;
+    private final ProductLibrary _productLibrary;
 
     private static final Logger _log = Logger.getLogger(LeagueRequestHandler.class);
 
@@ -44,6 +46,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         _soloDraftDefinitions = extractObject(context, SoloDraftDefinitions.class);
         _leagueService = extractObject(context, LeagueService.class);
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
+        _productLibrary = extractObject(context, ProductLibrary.class);
     }
 
     @Override
@@ -95,7 +98,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         if (league == null)
             throw new HttpProcessingException(404);
 
-        final LeagueData leagueData = league.getLeagueData(_library, _formatLibrary, _soloDraftDefinitions);
+        final LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
         final List<LeagueSerieData> series = leagueData.getSeries();
 
         int end = series.get(series.size() - 1).getEnd();
@@ -165,7 +168,7 @@ public class LeagueRequestHandler extends LotroServerRequestHandler implements U
         Element leagues = doc.createElement("leagues");
 
         for (League league : _leagueService.getActiveLeagues()) {
-            final LeagueData leagueData = league.getLeagueData(_library, _formatLibrary, _soloDraftDefinitions);
+            final LeagueData leagueData = league.getLeagueData(_productLibrary, _formatLibrary, _soloDraftDefinitions);
             final List<LeagueSerieData> series = leagueData.getSeries();
 
             int end = series.get(series.size() - 1).getEnd();

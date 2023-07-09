@@ -35,7 +35,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         League league = new League(5000, "League name", "leagueType", NewConstructedLeagueData.class.getName(), sb.toString(), 0);
         leagues.add(league);
 
-        LeagueSerieData leagueSerie = league.getLeagueData(_cardLibrary, _formatLibrary, null).getSeries().get(0);
+        LeagueSerieData leagueSerie = league.getLeagueData(_productLibrary, _formatLibrary, null).getSeries().get(0);
 
         Mockito.when(leagueDao.loadActiveLeagues(Mockito.anyInt())).thenReturn(leagues);
 
@@ -48,7 +48,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, _productLibrary, null);
 
         assertTrue(leagueService.canPlayRankedGame(league, leagueSerie, "player1"));
         assertTrue(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player2"));
@@ -88,7 +88,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         League league = new League(5000, "League name", "leagueType", NewConstructedLeagueData.class.getName(), sb.toString(), 0);
         leagues.add(league);
 
-        LeagueSerieData leagueSerie = league.getLeagueData(_cardLibrary, _formatLibrary, null).getSeries().get(0);
+        LeagueSerieData leagueSerie = league.getLeagueData(_productLibrary, _formatLibrary, null).getSeries().get(0);
 
         Mockito.when(leagueDao.loadActiveLeagues(Mockito.anyInt())).thenReturn(leagues);
 
@@ -102,7 +102,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         LeagueParticipationDAO leagueParticipationDAO = Mockito.mock(LeagueParticipationDAO.class);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, _productLibrary, null);
 
         assertTrue(leagueService.canPlayRankedGame(league, leagueSerie, "player1"));
         assertFalse(leagueService.canPlayRankedGameAgainst(league, leagueSerie, "player1", "player2"));
@@ -134,7 +134,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         League league = new League(5000, "League name", "leagueType", NewConstructedLeagueData.class.getName(), sb.toString(), 0);
         leagues.add(league);
 
-        LeagueSerieData leagueSerie = league.getLeagueData(_cardLibrary, _formatLibrary,null).getSeries().get(0);
+        LeagueSerieData leagueSerie = league.getLeagueData(_productLibrary, _formatLibrary,null).getSeries().get(0);
 
         Mockito.when(leagueDao.loadActiveLeagues(Mockito.anyInt())).thenReturn(leagues);
 
@@ -152,7 +152,7 @@ public class LeagueServiceTest extends AbstractAtTest {
         Mockito.when(leagueParticipationDAO.getUsersParticipating(league.getType())).thenReturn(players);
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
 
-        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary, null);
+        LeagueService leagueService = new LeagueService(leagueDao, leagueMatchDAO, leagueParticipationDAO, collectionsManager, _cardLibrary, _formatLibrary,  _productLibrary, null);
 
         leagueService.reportLeagueGameResult(league, leagueSerie, "player1", "player2");
         leagueService.reportLeagueGameResult(league, leagueSerie, "player1", "player3");
