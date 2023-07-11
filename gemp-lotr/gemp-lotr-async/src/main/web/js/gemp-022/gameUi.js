@@ -634,7 +634,9 @@ var GempLotrGameUI = Class.extend({
             return false;
         }
 
-        if (!this.successfulDrag && this.infoDialog.dialog("isOpen")) {
+        //Only close any open dialogs if we are not mid-swipe, the dialog is open, and the mouse is not
+        // over a link in the card's info
+        if (!this.successfulDrag && this.infoDialog.dialog("isOpen") && tar.get(0).tagName != "A") {
             this.infoDialog.dialog("close");
             event.stopPropagation();
             return false;
