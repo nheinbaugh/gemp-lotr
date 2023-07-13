@@ -699,3 +699,30 @@ table.tables tr.privateForPlayer {
 .article li {
 	margin: 10px;
 }
+
+.lemph {
+	color: #009f9f;
+	font-weight: bold;
+}
+
+.helpimg {
+	display: block; 
+	margin:auto;
+	padding: 1em;
+}
+
+.helpimg > img {
+	display:block; 
+	margin:auto;
+	max-height: 300; 
+	max-width: 100%;
+	border-style: solid;
+}
+
+.helpimg > span {
+	text-align:center; 
+	margin:auto;
+	display:block;
+	font-style: italic;
+	padding: 1em;
+}
