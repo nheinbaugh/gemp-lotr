@@ -348,3 +348,7 @@ gl_theOneRing,1_2
 2_126,2_122
 #Blade Tip FA
 1_381,1_209
+#Morgul Squealer MW
+8_125,8_77
+#Ent Horde FA
+6_130,6_28

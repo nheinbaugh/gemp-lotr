@@ -496,5 +496,10 @@ var PCCards = {
 	//Blade Tip FA
 	'1_381': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U209.0_card.jpg',
 
+	//July 2023 Gala
+	//Morgul Squealer MW
+	'8_125': 'https://i.lotrtcgpc.net/promos/LOTR-EN08O077.0_card.jpg',
+	//#Ent Horde FA
+	'6_130': 'https://i.lotrtcgpc.net/promos/LOTR-EN06U028.0_card.jpg'
 }
 

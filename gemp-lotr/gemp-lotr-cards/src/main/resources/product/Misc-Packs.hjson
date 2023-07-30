@@ -356,6 +356,10 @@
 			1x2_126
 			#Blade Tip FA
 			1x1_381
+			#Morgul Squealer MW
+			1x8_125
+			#Ent Horde FA
+			1x6_130
 		]
 	}
 	
@@ -429,6 +433,8 @@
 			1x4_369
 			#Blade Tip FA
 			1x1_381
+			#Ent Horde FA
+			1x6_130
 		]
 	}
 	
@@ -548,6 +554,8 @@
 			1x10_126
 			#Gandalf, The Grey Pilgrim MW
 			1x2_126
+			#Morgul Squealer MW
+			1x8_125
 		]
 	}
 	
@@ -667,6 +675,8 @@
 			1x10_126
 			#Gandalf, The Grey Pilgrim MW
 			1x2_126
+			#Morgul Squealer MW
+			1x8_125
 		]
 	}
 ]
