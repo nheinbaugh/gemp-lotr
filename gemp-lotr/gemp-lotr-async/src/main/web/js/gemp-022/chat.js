@@ -132,7 +132,7 @@ var ChatBoxUI = Class.extend({
                     });
                 }
                 
-                this.setDiscordVisible(true);
+                this.setDiscordVisible(false);
             }
             else
             {
