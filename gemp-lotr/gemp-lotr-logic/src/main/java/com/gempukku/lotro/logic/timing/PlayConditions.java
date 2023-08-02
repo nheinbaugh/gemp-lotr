@@ -87,6 +87,15 @@ public class PlayConditions {
         return Filters.filter(game.getGameState().getHand(playerId), game, cardFilter).size() >= count;
     }
 
+    public static boolean hasCardsStacked(LotroGame game, Filterable stackedOn, int count, Filterable... cardFilter) {
+        final Collection<PhysicalCard> matchingStackedOn = Filters.filterActive(game, stackedOn);
+        for (PhysicalCard stackedOnCard : matchingStackedOn) {
+            if (Filters.filter(game.getGameState().getStackedCards(stackedOnCard), game, cardFilter).size() >= count)
+                return true;
+        }
+        return false;
+    }
+
     public static boolean canDiscardCardsFromHandToPlay(PhysicalCard source, LotroGame game, String playerId, int count, Filterable... cardFilter) {
         return Filters.filter(game.getGameState().getHand(playerId), game, Filters.and(cardFilter, Filters.not(source))).size() >= count;
     }
@@ -106,13 +115,13 @@ public class PlayConditions {
     public static boolean canPlayCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
         return (phase == null || game.getGameState().getCurrentPhase() == phase)
                 && self.getZone() == Zone.HAND
-                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getTitle())) == 0);
+                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getSanitizedTitle())) == 0);
     }
 
     public static boolean canPlayCardFromHandDuringPhase(LotroGame game, Phase[] phases, PhysicalCard self) {
         return (phases == null || containsPhase(phases, game.getGameState().getCurrentPhase()))
                 && self.getZone() == Zone.HAND
-                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getTitle())) == 0);
+                && (!self.getBlueprint().isUnique() || Filters.countActive(game, Filters.name(self.getBlueprint().getSanitizedTitle())) == 0);
     }
 
     public static boolean canUseFPCardDuringPhase(LotroGame game, Phase phase, PhysicalCard self) {
@@ -145,7 +154,7 @@ public class PlayConditions {
         return Filters.and(filters).accepts(game, game.getGameState().getCurrentSite());
     }
 
-    public static boolean stackedOn(PhysicalCard card, LotroGame game, Filterable... filters) {
+    public static boolean isStackedOn(PhysicalCard card, LotroGame game, Filterable... filters) {
         return Filters.and(filters).accepts(game, card.getStackedOn());
     }
 
@@ -154,9 +163,9 @@ public class PlayConditions {
         if (!blueprint.isUnique())
             return true;
 
-        final int activeCount = Filters.countActive(game, Filters.name(blueprint.getTitle()));
+        final int activeCount = Filters.countActive(game, Filters.name(blueprint.getSanitizedTitle()));
         return activeCount == 0
-                && (ignoreCheckingDeadPile || (Filters.filter(game.getGameState().getDeadPile(self.getOwner()), game, Filters.name(blueprint.getTitle())).size() == 0));
+                && (ignoreCheckingDeadPile || (Filters.filter(game.getGameState().getDeadPile(self.getOwner()), game, Filters.name(blueprint.getSanitizedTitle())).size() == 0));
     }
 
     private static int getTotalCompanions(String playerId, LotroGame game) {

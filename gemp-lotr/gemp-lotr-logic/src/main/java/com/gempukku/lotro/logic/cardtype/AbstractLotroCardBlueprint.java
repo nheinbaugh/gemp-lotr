@@ -11,6 +11,7 @@ import com.gempukku.lotro.logic.timing.Action;
 import com.gempukku.lotro.logic.timing.Effect;
 import com.gempukku.lotro.logic.timing.EffectResult;
 
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import java.util.Set;
 public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
     private final int _twilightCost;
     private final String _name;
+    private final String _sanitizedName;
     private final String _subTitle;
     private final CardType _cardType;
     private final Side _side;
@@ -36,6 +38,7 @@ public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
         _cardType = cardType;
         _culture = culture;
         _name = name;
+        _sanitizedName = Names.SanitizeName(name);
         _subTitle = subTitle;
         _unique = unique;
     }
@@ -94,6 +97,11 @@ public abstract class AbstractLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public final String getTitle() {
         return _name;
+    }
+
+    @Override
+    public final String getSanitizedTitle() {
+        return _sanitizedName;
     }
 
     @Override

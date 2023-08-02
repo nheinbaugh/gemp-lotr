@@ -18,6 +18,7 @@ import java.util.*;
 
 public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private String title;
+    private String sanitizedTitle;
     private String subtitle;
     private boolean unique;
     private Side side;
@@ -255,6 +256,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
 
     public void setTitle(String title) {
         this.title = title;
+        this.sanitizedTitle = Names.SanitizeName(title);
     }
 
     public void setSubtitle(String subtitle) {
@@ -349,9 +351,10 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     }
 
     @Override
-    public String getTitle() {
-        return title;
-    }
+    public String getTitle() { return title; }
+
+    @Override
+    public String getSanitizedTitle() { return sanitizedTitle; }
 
     @Override
     public String getSubtitle() {

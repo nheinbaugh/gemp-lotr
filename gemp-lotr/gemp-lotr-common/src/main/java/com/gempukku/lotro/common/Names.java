@@ -1,5 +1,7 @@
 package com.gempukku.lotro.common;
 
+import java.text.Normalizer;
+
 public class Names {
     public static final String attea = "Úlairë Attëa";
     public static final String cantea = "Úlairë Cantëa";
@@ -16,4 +18,16 @@ public class Names {
     public static final String eomer = "Éomer";
     public static final String eowyn = "Éowyn";
     public static final String theoden = "Théoden";
+
+    public static String SanitizeName(String name) {
+        return Normalizer.normalize(name, Normalizer.Form.NFD)
+                .replaceAll("’", "'")
+                .replaceAll("‘", "'")
+                .replaceAll("”", "\"")
+                .replaceAll("“", "\"")
+                .replaceAll("\\p{M}", "")
+                .replaceAll(" ", "")
+                .replaceAll("_", "")
+                .toLowerCase();
+    }
 }

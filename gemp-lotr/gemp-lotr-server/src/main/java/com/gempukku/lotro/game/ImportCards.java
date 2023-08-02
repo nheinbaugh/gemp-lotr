@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 
 public class ImportCards {
     //For a deck to be legal in a Pre-shadows format, it must contain one of these sites
-    private final Set<String> fellowshipSiteCheck = new HashSet<>(Arrays.asList("council courtyard",
-            "ford of bruinen", "frodo's bedroom", "rivendell terrace", "rivendell valley", "rivendell waterfall",
-            "house of elrond", "rivendell gateway"));
+    private final Set<String> fellowshipSiteCheck = new HashSet<>(Arrays.asList("councilcourtyard",
+            "fordofbruinen", "frodo'sbedroom", "rivendellterrace", "rivendellvalley", "rivendellwaterfall",
+            "houseofelrond", "rivendellgateway"));
     private final Set<String> towersSiteCheck = new HashSet<>(Arrays.asList("derndingle", "eastfold",
-            "fangorn forest", "plains of rohan camp", "rohirrim village", "uruk camp", "wold of rohan"));
-    private final Set<String> kingSiteCheck = new HashSet<>(Arrays.asList("king's tent", "rohirrim camp", "west road"));
+            "fangornforest", "plainsofrohancamp", "rohirrimvillage", "urukcamp", "woldofrohan"));
+    private final Set<String> kingSiteCheck = new HashSet<>(Arrays.asList("king'stent", "rohirrimcamp", "westroad"));
 
     public List<CardCollection.Item> process(String rawDecklist, LotroCardBlueprintLibrary cardLibrary) {
         List<CardCount> decklist = getDecklist(rawDecklist);
@@ -59,7 +59,7 @@ public class ImportCards {
 
     private boolean exactNameMatch(LotroCardBlueprint blueprint, String title) {
         return blueprint != null
-                && SortAndFilterCards.replaceSpecialCharacters(GameUtils.getFullName(blueprint).toLowerCase()).equals(title);
+                && Names.SanitizeName(GameUtils.getFullName(blueprint).toLowerCase()).equals(title);
     }
 
     private boolean isFromSupportedSet(String id) {
@@ -98,7 +98,7 @@ public class ImportCards {
                     }
 
                     cardLine = matches.group(2).trim();
-                    result.add(new CardCount(SortAndFilterCards.replaceSpecialCharacters(cardLine).trim(), quantity));
+                    result.add(new CardCount(Names.SanitizeName(cardLine).trim(), quantity));
                 }
             } catch (Exception exp) {
                 System.out.println("blah");

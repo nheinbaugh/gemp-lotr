@@ -68,6 +68,7 @@ public class FilterFactory {
         simpleFilters.put("mounted", (actionContext) -> Filters.mounted);
         simpleFilters.put("notassignedtoskirmish",
                 (actionContext) -> Filters.notAssignedToSkirmish);
+        simpleFilters.put("playable", (actionContext) -> Filters.playable());
         simpleFilters.put("ringbearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ring-bearer", (actionContext) -> Filters.ringBearer);
         simpleFilters.put("ringbound",
@@ -276,18 +277,18 @@ public class FilterFactory {
 
         parameterFilters.put("name",
                 (parameter, environment) -> {
-                    String name = Sanitize(parameter);
+                    String name = Names.SanitizeName(Sanitize(parameter));
                     return (actionContext) -> (Filter)
                             (game, physicalCard) -> name != null
-                                    && physicalCard.getBlueprint().getTitle() != null
-                                    && name.equals(Sanitize(physicalCard.getBlueprint().getTitle()));
+                                    && physicalCard.getBlueprint().getSanitizedTitle() != null
+                                    && name.equals(Sanitize(physicalCard.getBlueprint().getSanitizedTitle()));
                 });
         parameterFilters.put("namefrommemory",
                 (parameter, environment) -> actionContext -> {
                     Set<String> titles = new HashSet<>();
                     for (PhysicalCard physicalCard : actionContext.getCardsFromMemory(parameter))
-                        titles.add(physicalCard.getBlueprint().getTitle());
-                    return (Filter) (game, physicalCard) -> titles.contains(physicalCard.getBlueprint().getTitle());
+                        titles.add(physicalCard.getBlueprint().getSanitizedTitle());
+                    return (Filter) (game, physicalCard) -> titles.contains(physicalCard.getBlueprint().getSanitizedTitle());
                 });
         parameterFilters.put("nameinstackedon",
                 (parameter, environment) -> {
@@ -297,7 +298,7 @@ public class FilterFactory {
                         return (Filter) (game, physicalCard) -> {
                             for (PhysicalCard cardWithStack : Filters.filterActive(game, sourceFilterable)) {
                                 for (PhysicalCard stackedCard : game.getGameState().getStackedCards(cardWithStack)) {
-                                    if (stackedCard.getBlueprint().getTitle().equals(physicalCard.getBlueprint().getTitle()))
+                                    if (stackedCard.getBlueprint().getSanitizedTitle().equals(physicalCard.getBlueprint().getSanitizedTitle()))
                                         return true;
                                 }
                             }

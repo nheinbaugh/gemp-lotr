@@ -477,11 +477,29 @@
 			{
 				type: activated
 				phase: shadow
-				effect: {
-					type: playCardFromStacked
-					filter: choose(orc)
-					on: self
-				}
+				requires: [
+					{
+						type: HasCardStacked
+						filter: playable,orc
+						on: self
+					}
+				]
+				effect: [
+					{
+						type: ChooseCardsFromSingleStack
+						filter: choose(orc,playable)
+						count: 1
+						on: self
+						memorize: chosenOrc
+						text: Choose an Orc to play as if from hand.
+					}
+					{
+						type: PlayCardFromStacked
+						filter: memory(chosenOrc)
+						on: self
+						assumePlayable: true
+					}
+				]
 			}
 		]
 	}

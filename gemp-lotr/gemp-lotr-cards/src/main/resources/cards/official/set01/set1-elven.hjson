@@ -410,20 +410,28 @@
 					memorize: revealedCards
 				}
 				{
-					type: optional
-					text: Would you like to discard an ISENGARD minion revealed to draw 2 cards?
+					type: Conditional
+					requires: {
+						type: MemoryMatches
+						memory: revealedCards
+						filter: culture(isengard),minion
+					}
 					effect: {
-						type: costToEffect
-						cost: {
-							type: discardFromHand
-							hand: shadowPlayer
-							forced: true
-							player: you
-							filter: choose(memory(revealedCards),culture(isengard),minion)
-						}
+						type: optional
+						text: Would you like to discard an ISENGARD minion revealed to draw 2 cards?
 						effect: {
-							type: drawCards
-							count: 2
+							type: costToEffect
+							cost: {
+								type: discardFromHand
+								hand: shadowPlayer
+								forced: true
+								player: you
+								filter: choose(memory(revealedCards),culture(isengard),minion)
+							}
+							effect: {
+								type: drawCards
+								count: 2
+							}
 						}
 					}
 				}

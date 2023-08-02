@@ -11,10 +11,7 @@ import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.actions.CostToEffectAction;
 import com.gempukku.lotro.logic.effects.ChooseActiveCardsEffect;
 import com.gempukku.lotro.logic.effects.ChooseArbitraryCardsEffect;
-import com.gempukku.lotro.logic.effects.choose.ChooseCardsFromDeckEffect;
-import com.gempukku.lotro.logic.effects.choose.ChooseCardsFromDiscardEffect;
-import com.gempukku.lotro.logic.effects.choose.ChooseCardsFromHandEffect;
-import com.gempukku.lotro.logic.effects.choose.ChooseStackedCardsEffect;
+import com.gempukku.lotro.logic.effects.choose.*;
 import com.gempukku.lotro.logic.modifiers.evaluator.ConstantEvaluator;
 import com.gempukku.lotro.logic.timing.AbstractEffect;
 import com.gempukku.lotro.logic.timing.Effect;
@@ -26,6 +23,41 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CardResolver {
+
+    public static EffectAppender resolveSingleStack(String selector, ValueSource countSource, FilterableSource stackedOn,
+        String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
+
+        Function<ActionContext, Iterable<? extends PhysicalCard>> stackedOnSource = actionContext ->
+                Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), stackedOn.getFilterable(actionContext));
+
+        Function<ActionContext, Iterable<? extends PhysicalCard>> stackSource = actionContext ->
+                Filters.filter(actionContext.getGame().getGameState().getAllCards(), actionContext.getGame(), Filters.stackedOn(stackedOn.getFilterable(actionContext)));
+
+        if (selector.startsWith("memory(") && selector.endsWith(")")) {
+            return resolveMemoryCards(selector, null, null, countSource, memory, stackSource);
+        }
+        else if (selector.startsWith("choose(") && selector.endsWith(")")) {
+            final PlayerSource playerSource = PlayerResolver.resolvePlayer(choicePlayer, environment);
+            ChoiceEffectSource effectSource = (possibleCards, action, actionContext, min, max) -> {
+                String choicePlayerId = playerSource.getPlayer(actionContext);
+                return new ChooseCardsFromSingleStackEffect(action, choicePlayerId, min, max, stackedOnSource.apply(actionContext).iterator().next(), Filters.in(possibleCards)) {
+                    @Override
+                    protected void cardsChosen(LotroGame game, Collection<PhysicalCard> stackedCards) {
+                        actionContext.setCardMemory(memory, stackedCards);
+                    }
+
+                    @Override
+                    public String getText(LotroGame game) {
+                        return GameUtils.SubstituteText(choiceText, actionContext);
+                    }
+                };
+            };
+
+            return resolveChoiceCards(selector, null, null, countSource, environment, stackSource, effectSource);
+        }
+        throw new RuntimeException("Unable to resolve card resolver of type: " + selector);
+    }
+
     public static EffectAppender resolveStackedCards(String type, ValueSource countSource, FilterableSource stackedOn,
                                                      String memory, String choicePlayer, String choiceText, CardGenerationEnvironment environment) throws InvalidCardDefinitionException {
         return resolveStackedCards(type, null, countSource, stackedOn, memory, choicePlayer, choiceText, environment);

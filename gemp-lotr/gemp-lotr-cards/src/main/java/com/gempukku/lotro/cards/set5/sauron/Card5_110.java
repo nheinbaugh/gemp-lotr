@@ -49,5 +49,4 @@ public class Card5_110 extends AbstractPermanent {
         }
         return null;
     }
-
 }

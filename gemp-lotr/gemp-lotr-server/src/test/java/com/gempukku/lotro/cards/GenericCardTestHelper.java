@@ -192,9 +192,9 @@ public class GenericCardTestHelper extends AbstractAtTest {
         if(attempt != null)
             return attempt;
 
-        final String lowername = name.toLowerCase();
+        final String lowername = Names.SanitizeName(name);
         List<PhysicalCardImpl> advDeck = (List<PhysicalCardImpl>)_game.getGameState().getAdventureDeck(player);
-        return advDeck.stream().filter(x -> x.getBlueprint().getTitle().toLowerCase().contains(lowername)).findFirst().get();
+        return advDeck.stream().filter(x -> x.getBlueprint().getSanitizedTitle().contains(lowername)).findFirst().get();
     }
 
     public List<String> FreepsGetAvailableActions() { return GetAvailableActions(P1); }

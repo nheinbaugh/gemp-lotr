@@ -154,21 +154,68 @@
 		effects: {
 			type: activated
 			phase: fellowship
+			requires: {
+				type: Or
+				requires: [
+					{
+						type: HasCardInHand
+						player: you
+						count: 1
+						filter: side(free people),or(artifact,possession)
+					}
+					{
+						type: HasCardStacked
+						filter: playable
+						on: self
+					}
+				]
+			}
 			effect: {
 				type: choice
 				texts: [
-					Stack a Free Peoples artifact (or possession)
+					Stack a Free Peoples artifact (or possession) here
 					Play a card stacked here
 				]
+				
 				effects: [
 					{
-						type: stackCardsFromHand
-						filter: choose(side(free people),or(artifact,possession))
-						where: self
+						type: Conditional
+						requires: {
+							type: HasCardInHand
+							player: you
+							count: 1
+							filter: side(free people),or(artifact,possession)
+						}
+						effect: {
+							type: StackCardsFromHand
+							filter: choose(side(free people),or(artifact,possession))
+							where: self
+						}
 					}
 					{
-						type: playCardFromStacked
-						on: self
+						//Strictly speaking these are not cost-effect related,
+						// but gemp was choking on the PlayCardFromStacked effect
+						// whenever the memory isn't set (i.e. nearly always)
+						type: CostToEffect
+						requires: {
+							type: HasCardStacked
+							filter: playable
+							on: self
+						}
+						cost: {
+							type: ChooseCardsFromSingleStack
+							filter: choose(playable)
+							count: 1
+							on: self
+							memorize: chosenCard
+							text: Choose a card to play as if from hand.
+						}
+						effect: {
+							type: PlayCardFromStacked
+							filter: memory(chosenCard)
+							on: self
+							assumePlayable: true
+						}
 					}
 				]
 			}

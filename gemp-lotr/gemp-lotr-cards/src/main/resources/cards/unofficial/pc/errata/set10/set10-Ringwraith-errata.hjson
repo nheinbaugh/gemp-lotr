@@ -24,7 +24,7 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Úlairë Enquëa
+		title: Ulaire Enquea
 		subtitle: Thrall of The One
 		unique: true
 		side: Shadow

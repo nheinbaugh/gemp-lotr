@@ -580,6 +580,10 @@ public class Filters {
         };
     }
 
+    public static Filter playable() {
+        return playable(null);
+    }
+
     public static Filter playable(final LotroGame game) {
         return playable(game, 0);
     }
@@ -899,7 +903,7 @@ public class Filters {
         return new Filter() {
             @Override
             public boolean accepts(LotroGame game, PhysicalCard physicalCard) {
-                return name != null && physicalCard.getBlueprint().getTitle() != null && physicalCard.getBlueprint().getTitle().equals(name);
+                return name != null && physicalCard.getBlueprint().getSanitizedTitle() != null && physicalCard.getBlueprint().getSanitizedTitle().equals(Names.SanitizeName(name));
             }
         };
     }

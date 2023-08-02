@@ -27,6 +27,7 @@ public interface LotroCardBlueprint {
     boolean isUnique();
 
     String getTitle();
+    String getSanitizedTitle();
 
     String getSubtitle();
 
