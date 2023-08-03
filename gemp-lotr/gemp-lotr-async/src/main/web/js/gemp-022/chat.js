@@ -67,7 +67,7 @@ var ChatBoxUI = Class.extend({
         this.comm.getPlayerInfo(function(json)
         { 
             that.initPlayerInfo(json);
-            //that.setDiscordVisible(true);
+            setTimeout(() => {  that.setDiscordVisible(true); }, 10);
         }, this.chatErrorMap());
 
         if (this.name != null) {
