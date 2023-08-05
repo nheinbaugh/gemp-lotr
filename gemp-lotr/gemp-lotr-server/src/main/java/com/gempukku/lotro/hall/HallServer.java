@@ -704,8 +704,15 @@ public class HallServer extends AbstractServer {
             Map<String, Integer> deckCardCounts = CollectionUtils.getTotalCardCountForDeck(lotroDeck);
 
             for (Map.Entry<String, Integer> cardCount : deckCardCounts.entrySet()) {
-                int collectionCount = collection.getItemCount(cardCount.getKey()) +
-                        collection.getItemCount(format.applyErrata(cardCount.getKey()));
+                String overtID = cardCount.getKey();
+                String errataID = format.applyErrata(cardCount.getKey());
+                var baseIDs = format.findBaseCards(cardCount.getKey());
+
+                int collectionCount = collection.getItemCount(cardCount.getKey());
+
+                if(!errataID.equals(overtID)) {
+                    collection.getItemCount(errataID);
+                }
 
                 var alts = _library.getAllAlternates(cardCount.getKey());
                 if(alts != null) {
@@ -713,10 +720,6 @@ public class HallServer extends AbstractServer {
                         collectionCount += collection.getItemCount(id);
                     }
                 }
-
-//                for(String id : format.findBaseCards(cardCount.getKey())) {
-//                    collectionCount += collection.getItemCount(id);
-//                }
 
                 if (collectionCount < cardCount.getValue()) {
                     String cardName = null;

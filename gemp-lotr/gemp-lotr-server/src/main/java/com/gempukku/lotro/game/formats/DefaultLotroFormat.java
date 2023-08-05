@@ -488,12 +488,13 @@ public class DefaultLotroFormat implements LotroFormat {
     public String applyErrata(String original) {
         var base = _library.getBaseBlueprintId(original);
         var errata = _errataCardMap.getOrDefault(base, base);
-        if (original.endsWith("*") && !errata.endsWith("*")) {
-            errata += "*";
-        }
 
         if(errata.equals(base))
             return original;
+
+        if (original.endsWith("*") && !errata.endsWith("*")) {
+            errata += "*";
+        }
 
         return errata;
     }
