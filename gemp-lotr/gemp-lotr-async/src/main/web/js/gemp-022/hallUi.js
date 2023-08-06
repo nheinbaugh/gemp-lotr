@@ -255,6 +255,7 @@ var GempLotrHallUI = Class.extend({
 			if (root.tagName == "error") {
 				var message = root.getAttribute("message");
 				this.chat.appendMessage(message, "warningMessage");
+				alert(message);
 			}
 		}
 	},
