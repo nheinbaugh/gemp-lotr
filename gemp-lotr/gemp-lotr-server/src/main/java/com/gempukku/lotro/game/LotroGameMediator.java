@@ -497,6 +497,9 @@ public class LotroGameMediator {
             for (Map.Entry<String, Integer> playerClock : _playerClocks.entrySet()) {
                 String playerClockName = playerClock.getKey();
                 secondsLeft.put(playerClockName, _timeSettings.maxSecondsPerPlayer() - playerClock.getValue() - getCurrentUserPendingTime(playerClockName));
+
+                if (_decisionQuerySentTimes.containsKey(playerClockName))
+                    secondsLeft.put("decisionClock", getCurrentUserPendingTime(playerClockName));
             }
             visitor.visitClock(secondsLeft);
         } finally {
@@ -528,7 +531,11 @@ public class LotroGameMediator {
             for (Map.Entry<String, Integer> playerClock : _playerClocks.entrySet()) {
                 String playerId = playerClock.getKey();
                 secondsLeft.put(playerId, _timeSettings.maxSecondsPerPlayer() - playerClock.getValue() - getCurrentUserPendingTime(playerId));
+
+                if (_decisionQuerySentTimes.containsKey(playerId))
+                    secondsLeft.put("decisionClock", getCurrentUserPendingTime(playerId));
             }
+
             visitor.visitClock(secondsLeft);
         } finally {
             _readLock.unlock();
