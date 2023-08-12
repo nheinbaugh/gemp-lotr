@@ -887,6 +887,18 @@ var GameAnimations = Class.extend({
         var that = this;
         $("#main").queue(
             function (next) {
+                that.game.countdownIntervalId = window.setInterval(function(){
+                    that.game.totalTime -= 1;
+                    that.game.decisionTime += 1;
+                    
+                    if(that.game.allPlayerIds == null)
+                        return;
+                    
+                    var index = that.game.getPlayerIndex(that.game.currentPlayerId);
+                    $("#clock-1").text(that.game.parseTime(that.game.decisionTime));
+                    $("#clock" + index).text(that.game.parseTime(that.game.totalTime));
+                }, 1000);
+                
                 var decisionType = decision.getAttribute("decisionType");
                 if (decisionType == "INTEGER") {
                     that.game.integerDecision(decision);
@@ -903,7 +915,7 @@ var GameAnimations = Class.extend({
                 } else if (decisionType == "ASSIGN_MINIONS") {
                     that.game.assignMinionsDecision(decision);
                 }
-
+                
                 if (!animate)
                     that.game.layoutUI(false);
 

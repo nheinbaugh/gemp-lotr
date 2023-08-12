@@ -283,9 +283,14 @@ body {
     font-size: 70%;
 }
 
-.clock {
+
+.gameClock {
     float: right;
     font-size: 100%;
+}
+
+.decisionClock{
+    font-size: 150%;
 }
 
 .alertButtons .ui-button-text-only .ui-button-text {

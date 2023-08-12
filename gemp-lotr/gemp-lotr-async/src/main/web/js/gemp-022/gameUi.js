@@ -70,6 +70,10 @@ var GempLotrGameUI = Class.extend({
 
     animations: null,
     replayPlay: false,
+    
+    decisionTime: 0,
+    totalTime: 0,
+    countdownIntervalId: 0,
 
     init: function (url, replayMode) {
         this.replayMode = replayMode;
@@ -301,12 +305,13 @@ var GempLotrGameUI = Class.extend({
         this.gameStateElem.css({"border-radius": "7px"});
 
         for (var i = 0; i < this.allPlayerIds.length; i++) {
-            this.gameStateElem.append("<div class='player'>" + (i + 1) + ". " + this.allPlayerIds[i] + "<div id='clock" + i + "' class='clock'></div>"
+            this.gameStateElem.append("<div class='player'>" + (i + 1) + ". " + this.allPlayerIds[i] + "<div id='clock" + i + "' class='gameClock'></div>"
                 + "<div class='playerStats'><div id='deck" + i + "' class='deckSize'></div><div id='hand" + i + "' class='handSize'></div><div id='threats" + i + "' class='threatsSize'></div><div id='showStats" + i + "' class='showStats'></div><div id='discard" + i + "' class='discardSize'></div><div id='deadPile" + i + "' class='deadPileSize'></div><div id='adventureDeck" + i + "' class='adventureDeckSize'></div><div id='removedPile" + i + "' class='removedPileSize'></div></div></div>");
         }
 
         this.gameStateElem.append("<div class='twilightPool'>0</div>");
         this.gameStateElem.append("<div class='phase'></div>");
+        this.gameStateElem.append("<div id='clock-1' class='decisionClock'></div>");
 
         $("#main").append(this.gameStateElem);
 
@@ -462,6 +467,7 @@ var GempLotrGameUI = Class.extend({
                 return that.dragStopCardFunction(event);
             });
     },
+    
     
     processGameEnd: function() {
         var that = this;
@@ -1125,6 +1131,7 @@ var GempLotrGameUI = Class.extend({
     decisionFunction: function (decisionId, result) {
         var that = this;
         this.stopAnimatingTitle();
+        clearInterval(this.countdownIntervalId);
         this.communication.gameDecisionMade(decisionId, result,
             this.channelNumber,
             function (xml) {
@@ -1323,6 +1330,7 @@ var GempLotrGameUI = Class.extend({
             }
 
             if (this.allPlayerIds != null) {
+                
                 var clocksXml = element.getElementsByTagName("clocks");
                 if (clocksXml.length > 0) {
                     var clocks = clocksXml[0].getElementsByTagName("clock");
@@ -1332,17 +1340,13 @@ var GempLotrGameUI = Class.extend({
                         var index = this.getPlayerIndex(participantId);
 
                         var value = parseInt(clock.childNodes[0].nodeValue);
+                        
+                        if(this.bottomPlayerId == participantId)
+                            this.totalTime = value;
+                        else if(index == -1)
+                            this.decisionTime = value;
 
-                        var sign = (value < 0) ? "-" : "";
-                        value = Math.abs(value);
-                        var hours = Math.floor(value / 3600);
-                        var minutes = Math.floor(value / 60) % 60;
-                        var seconds = value % 60;
-
-                        if (hours > 0)
-                            $("#clock" + index).text(sign + hours + ":" + ((minutes < 10) ? ("0" + minutes) : minutes) + ":" + ((seconds < 10) ? ("0" + seconds) : seconds));
-                        else
-                            $("#clock" + index).text(sign + minutes + ":" + ((seconds < 10) ? ("0" + seconds) : seconds));
+                        $("#clock" + index).text(this.parseTime(value));
                     }
                 }
             }
@@ -1354,6 +1358,22 @@ var GempLotrGameUI = Class.extend({
             }
         } catch (e) {
             this.showErrorDialog("Game error", "There was an error while processing game events in your browser. Reload the game to continue", true, false, false);
+            console.log(e);
+        }
+    },
+    
+    parseTime: function(value) {
+        var sign = (value < 0) ? "-" : "";
+        value = Math.abs(value);
+        var hours = Math.floor(value / 3600);
+        var minutes = Math.floor(value / 60) % 60;
+        var seconds = value % 60;
+        
+        if(hours > 0) {
+            return sign + hours + ":" + ((minutes < 10) ? ("0" + minutes) : minutes) + ":" + ((seconds < 10) ? ("0" + seconds) : seconds);
+        }
+        else {
+            return sign + minutes + ":" + ((seconds < 10) ? ("0" + seconds) : seconds);
         }
     },
 
