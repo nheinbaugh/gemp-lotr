@@ -77,9 +77,9 @@ var GempLotrHallUI = Class.extend({
 		this.adminTab.hide();
 		
 		this.comm.getPlayerInfo(function(json)
-        { 
-        	that.userInfo = json;
-            if(that.userInfo.type.includes("a") || that.userInfo.type.includes("l"))
+				{ 
+					that.userInfo = json;
+						if(that.userInfo.type.includes("a") || that.userInfo.type.includes("l"))
 			{
 				that.adminTab.show();
 			}
@@ -87,12 +87,12 @@ var GempLotrHallUI = Class.extend({
 			{
 				that.adminTab.hide();
 			}
-        });
+				});
 		
 
 		var hallSettingsStr = $.cookie("hallSettings");
 		if (hallSettingsStr == null)
-			hallSettingsStr = "1|1|0|0|0";
+			hallSettingsStr = "1|1|0|0|0|0|0";
 		var hallSettings = hallSettingsStr.split("|");
 
 		this.initTable(hallSettings[0] == "1", "waitingTablesHeader", "waitingTablesContent");
@@ -100,6 +100,13 @@ var GempLotrHallUI = Class.extend({
 		this.initTable(hallSettings[2] == "1", "finishedTablesHeader", "finishedTablesContent");
 		this.initTable(hallSettings[3] == "1", "tournamentQueuesHeader", "tournamentQueuesContent");
 		this.initTable(hallSettings[4] == "1", "activeTournamentsHeader", "activeTournamentsContent");
+		this.initTable(hallSettings[5] == "1", "wcQueuesHeader", "wcQueuesContent");
+		this.initTable(hallSettings[6] == "1", "wcEventsHeader", "wcEventsContent");
+		
+		$('#wcQueuesHeader').hide();
+		$('#wcQueuesContent').hide();
+		$('#wcEventsHeader').hide();
+		$('#wcEventsContent').hide();
 		
 		$("#deckbuilder-button").button();
 		$("#bug-button").button();
@@ -230,6 +237,27 @@ var GempLotrHallUI = Class.extend({
 			closeText: ''
 		}).text(text);
 	},
+	
+	showDialog:function(title, text, height) {
+		if(height == null)
+			height = 200
+		var dialog = $("<div></div>").dialog({
+			title: title,
+			resizable: true,
+			height: height,
+			modal: true,
+			closeOnEscape: true,
+			buttons: [
+				{
+					text: "OK",
+					click: function() {
+						$( this ).dialog( "close" );
+					}
+				}
+			],
+			closeText: ''
+		}).html(text);	
+	},
 
 	updateDecks:function () {
 		var that = this;
@@ -250,14 +278,18 @@ var GempLotrHallUI = Class.extend({
 	},
 
 	processResponse:function (xml) {
-		if (xml != null) {
+		if (xml != null && xml != "OK") {
+			
 			var root = xml.documentElement;
 			if (root.tagName == "error") {
 				var message = root.getAttribute("message");
 				this.chat.appendMessage(message, "warningMessage");
-				alert(message);
+				
+				this.showDialog("Error", message);
+				return false;
 			}
 		}
+		return true;
 	},
 
 	processDecks:function (xml) {
@@ -335,6 +367,7 @@ var GempLotrHallUI = Class.extend({
 			for (var i = 0; i < queues.length; i++) {
 				var queue = queues[i];
 				var id = queue.getAttribute("id");
+				var isWC = id.toLowerCase().includes("wc");
 				var action = queue.getAttribute("action");
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
@@ -343,59 +376,123 @@ var GempLotrHallUI = Class.extend({
 					if (joined != "true" && queue.getAttribute("joinable") == "true") {
 						var but = $("<button>Join Queue</button>");
 						$(but).button().click((
-							function(queueId) {
+							function(queueInfo) {
 								return function () {
 									var deck = that.decksSelect.val();
-									if (deck != null)
-										that.comm.joinQueue(queueId, deck, function (xml) {
-											that.processResponse(xml);
-										});
+									
+									if (deck == null)
+										return;
+									
+									var queueId = queueInfo.getAttribute("id");
+									var queueName = queueInfo.getAttribute("queue");
+									var queueStart = queueInfo.getAttribute("start");
+									that.comm.joinQueue(queueId, deck, function (xml) {
+										var result = that.processResponse(xml);
+										if(result) {
+											that.showDialog("Joined Tournament", "You have signed up to participate in the <b>" + queueName
+											 + "</b> tournament.<br><br>You will use a snapshot of your '<b>" + deck +"</b>' deck as it is right now.  " + 
+											 "If you need to change or update your deck, you will need to leave the queue and rejoin.<br><br>" +
+											 "The first game begins at " + queueStart + ".	Good luck!", 320);
+										}
+									}, that.hallErrorMap());
 								};
 							}
-							)(id));
+							)(queue));
 						actionsField.append(but);
 					} else if (joined == "true") {
 						var but = $("<button>Leave Queue</button>");
 						$(but).button().click((
-							function(queueId) {
+							function(queueInfo) {
 								return function() {
+									var queueId = queueInfo.getAttribute("id");
+									var queueName = queueInfo.getAttribute("queue");
+									var queueStart = queueInfo.getAttribute("start");
 									that.comm.leaveQueue(queueId, function (xml) {
-										that.processResponse(xml);
+										var result = that.processResponse(xml);
+										
+										if(result) {
+											that.showDialog("Left Tournament", "You have been removed from the <b>" + queueName
+											 + "</b> tournament.<br><br>If you wish to rejoin, you will need to requeue before it starts at " + queueStart + ".", 230);
+										}
 									});
 								}
-							})(id));
+							})(queue));
 						actionsField.append(but);
 					}
 
-					var row = $("<tr class='queue" + id + "'><td>" + queue.getAttribute("format") + "</td>" +
-						"<td>" + queue.getAttribute("collection") + "</td>" +
+					var rowstr = "<tr class='queue" + id + "'><td>" + queue.getAttribute("format") + "</td>";
+					if(isWC) {
+						rowstr = "<tr class='wc-queue" + id + "'><td>" + queue.getAttribute("format") + "</td>" +
+						"<td>" + queue.getAttribute("queue") + "</td>" +
+						"<td>" + queue.getAttribute("start") + "</td>" +
+						"<td>" + queue.getAttribute("system") + "</td>" +
+						"<td>" + queue.getAttribute("playerCount") + "</td>" +
+						"</tr>";
+					}
+					else {
+						rowstr += "<td>" + queue.getAttribute("collection") + "</td>" +
 						"<td>" + queue.getAttribute("queue") + "</td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
 						"<td>" + queue.getAttribute("playerCount") + "</td>" +
 						"<td align='right'>" + formatPrice(queue.getAttribute("cost")) + "</td>" +
 						"<td>" + queue.getAttribute("prizes") + "</td>" +
-						"</tr>");
-
+						"</tr>";
+					}
+						
+					var row = $(rowstr);
 					row.append(actionsField);
 
 					if (action == "add") {
-						$("table.queues", this.tablesDiv)
+						if(isWC) {
+							$("table.wc-queues", this.tablesDiv)
 							.append(row);
+						}
+						else {
+							$("table.queues", this.tablesDiv)
+							.append(row);
+						}
 					} else if (action == "update") {
-						$(".queue" + id, this.tablesDiv).replaceWith(row);
+						if(isWC) {
+							$(".wc-queue" + id, this.tablesDiv).replaceWith(row);
+						}
+						else {
+							$(".queue" + id, this.tablesDiv).replaceWith(row);
+						}
+						
 					}
 
-					this.animateRowUpdate(".queue" + id);
+					if(isWC) {
+						this.animateRowUpdate(".wc-queue" + id);
+					}
+					else {
+						this.animateRowUpdate(".queue" + id);
+					}
+					
 				} else if (action == "remove") {
-					$(".queue" + id, this.tablesDiv).remove();
+					if(isWC) {
+						$(".wc-queue" + id, this.tablesDiv).remove();
+					}
+					else {
+						$(".queue" + id, this.tablesDiv).remove();
+					}
+					
 				}
+			}
+			
+			if($('.wc-queues tr').length <= 1) {
+				$('#wcQueuesHeader').hide();
+				$('#wcQueuesContent').hide();
+			} else {
+				$('#wcQueuesHeader').show();
+				$('#wcQueuesContent').show();
 			}
 
 			var tournaments = root.getElementsByTagName("tournament");
 			for (var i = 0; i < tournaments.length; i++) {
 				var tournament = tournaments[i];
 				var id = tournament.getAttribute("id");
+				var isWC = id.includes("wc");
 				var action = tournament.getAttribute("action");
 				if (action == "add" || action == "update") {
 					var actionsField = $("<td></td>");
@@ -404,18 +501,36 @@ var GempLotrHallUI = Class.extend({
 					if (joined == "true") {
 						var but = $("<button>Drop from tournament</button>");
 						$(but).button().click((
-							function(tournamentId) {
+							function(tourneyInfo) {
+								var tourneyId = tournament.getAttribute("id");
+								var tourneyName = tournament.getAttribute("queue");
+								let isExecuted = confirm("Are you sure you want to resign from the " + tourneyName + " tournament? This cannot be undone.");
+
 								return function () {
-									that.comm.dropFromTournament(tournamentId, function (xml) {
+									if(isExecuted) {
+										that.comm.dropFromTournament(tournamentId, function (xml) {
 										that.processResponse(xml);
 									});
+									}
 								};
 							}
-							)(id));
+							)(tournament));
 						actionsField.append(but);
 					}
 
-					var row = $("<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>" +
+					var rowstr = "";
+					
+					if(isWC) {
+						rowstr = $("<tr class='wc-tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>" +
+						"<td>" + tournament.getAttribute("name") + "</td>" +
+						"<td>" + tournament.getAttribute("system") + "</td>" +
+						"<td>" + tournament.getAttribute("stage") + "</td>" +
+						"<td>" + tournament.getAttribute("round") + "</td>" +
+						"<td>" + tournament.getAttribute("playerCount") + "</td>" +
+						"</tr>");
+					}
+					else {
+						rowstr = $("<tr class='tournament" + id + "'><td>" + tournament.getAttribute("format") + "</td>" +
 						"<td>" + tournament.getAttribute("collection") + "</td>" +
 						"<td>" + tournament.getAttribute("name") + "</td>" +
 						"<td>" + tournament.getAttribute("system") + "</td>" +
@@ -423,20 +538,48 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + tournament.getAttribute("round") + "</td>" +
 						"<td>" + tournament.getAttribute("playerCount") + "</td>" +
 						"</tr>");
+					}
 
+					var row = $(rowstr);
 					row.append(actionsField);
 
 					if (action == "add") {
-						$("table.tournaments", this.tablesDiv)
+						if(isWC) {
+							$("table.wc-tournaments", this.tablesDiv)
 							.append(row);
+						}
+						else {
+							$("table.tournaments", this.tablesDiv)
+							.append(row);
+						}
+						
 					} else if (action == "update") {
-						$(".tournament" + id, this.tablesDiv).replaceWith(row);
+						if(isWC) {
+							$(".wc-tournament" + id, this.tablesDiv).replaceWith(row);
+						}
+						else {
+							$(".tournament" + id, this.tablesDiv).replaceWith(row);
+						}
+						
 					}
 
 					this.animateRowUpdate(".tournament" + id);
 				} else if (action == "remove") {
-					$(".tournament" + id, this.tablesDiv).remove();
+					if(isWC) {
+						$(".wc-tournament" + id, this.tablesDiv).remove();
+					}
+					else {
+						$(".tournament" + id, this.tablesDiv).remove();
+					}
 				}
+			}
+			
+			if($('.wc-events tr').length <= 1) {
+				$('#wcEventsHeader').hide();
+				$('#wcEventsContent').hide();
+			} else {
+				$('#wcEventsHeader').show();
+				$('#wcEventsContent').show();
 			}
 
 			var tables = root.getElementsByTagName("table");

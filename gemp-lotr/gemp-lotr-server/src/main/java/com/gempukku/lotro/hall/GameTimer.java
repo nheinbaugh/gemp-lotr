@@ -8,6 +8,7 @@ public record GameTimer(boolean longGame, String name, int maxSecondsPerPlayer, 
     public static final GameTimer GLACIAL_TIMER = new GameTimer(true, "Glacial", 60 * 60 * 24 * 3, 60 * 60 * 24);
     // 5 minutes timeout, 40 minutes per game per player
     public static final GameTimer COMPETITIVE_TIMER = new GameTimer(false, "Competitive", 60 * 40, 60 * 5);
+    public static final GameTimer CHAMPIONSHIP_TIMER = new GameTimer(false, "WC", 60 * 20, 60 * 10);
     public static final GameTimer TOURNAMENT_TIMER = new GameTimer(false, "Tournament", 60 * 40, 60 * 5);
 
     public static GameTimer ResolveTimer(String timer) {

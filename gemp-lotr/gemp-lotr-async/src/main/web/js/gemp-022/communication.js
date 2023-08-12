@@ -603,18 +603,19 @@ var GempLotrCommunication = Class.extend({
                 participantId:getUrlParam("participantId")},
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"text"
         });
     },
-    leaveQueue:function (queueId, errorMap) {
+    leaveQueue:function (queueId, callback, errorMap) {
         $.ajax({
             type:"POST",
             url:this.url + "/hall/queue/" + queueId + "/leave",
             cache:false,
             data:{
                 participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
-            dataType:"xml"
+            dataType:"text"
         });
     },
     dropFromTournament:function(tournamentId, callback, errorMap) {

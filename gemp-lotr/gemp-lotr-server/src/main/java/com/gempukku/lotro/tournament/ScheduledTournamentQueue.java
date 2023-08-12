@@ -10,6 +10,8 @@ import java.util.Date;
 
 public class ScheduledTournamentQueue extends AbstractTournamentQueue implements TournamentQueue {
     private static final long _signupTimeBeforeStart = 1000 * 60 * 60; // 60 minutes before start
+
+    private static final long _wcSignupTimeBeforeStart = 1000 * 60 * 60 * 24; // 24 hours before start
     private final long _startTime;
     private final int _minimumPlayers;
     private final String _startCondition;
@@ -72,6 +74,10 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
 
     @Override
     public boolean isJoinable() {
-        return System.currentTimeMillis() >= _startTime - _signupTimeBeforeStart;
+        long window = _signupTimeBeforeStart;
+        if(_scheduledTournamentId.toLowerCase().contains("wc")) {
+            window = _wcSignupTimeBeforeStart;
+        }
+        return System.currentTimeMillis() >= _startTime - window;
     }
 }

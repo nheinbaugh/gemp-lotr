@@ -877,10 +877,15 @@ public class HallServer extends AbstractServer {
         private final Tournament _tournament;
         private final GameSettings tournamentGameSettings;
 
+        private final GameSettings wcGameSettings;
+
         private HallTournamentCallback(Tournament tournament) {
             _tournament = tournament;
             tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(_tournament.getFormat()),
                     null, null, true, false, false, false, GameTimer.TOURNAMENT_TIMER, null);
+
+            wcGameSettings  = new GameSettings(null, _formatLibrary.getFormat(_tournament.getFormat()),
+                    null, null, true, false, false, false, GameTimer.CHAMPIONSHIP_TIMER, null);
         }
 
         @Override
@@ -895,7 +900,11 @@ public class HallServer extends AbstractServer {
             _hallDataAccessLock.writeLock().lock();
             try {
                 if (!_shutdown) {
-                    final GameTable gameTable = tableHolder.setupTournamentTable(tournamentGameSettings, participants);
+                    var settings = tournamentGameSettings;
+                    if(_tournament.getTournamentId().toLowerCase().contains("wc")) {
+                        settings = wcGameSettings;
+                    }
+                    final GameTable gameTable = tableHolder.setupTournamentTable(settings, participants);
                     final LotroGameMediator mediator = createGameMediator(participants,
                             new GameResultListener() {
                                 @Override
@@ -907,7 +916,7 @@ public class HallServer extends AbstractServer {
                                 public void gameCancelled() {
                                     createGameInternal(participants);
                                 }
-                            }, _tournament.getTournamentName(), tournamentGameSettings);
+                            }, _tournament.getTournamentName(), settings);
                     gameTable.startGame(mediator);
                 }
             } finally {

@@ -280,6 +280,14 @@ table.tables tr.privateForPlayer {
 	border-radius: 3px;
 }
 
+.wc-queues {
+	background-color: #FF5555;
+}
+
+.wc-events {
+	background-color: #FFFF55;
+}
+
 .tableFormatName {
 	text-align: center;
 	font-weight: bold;
