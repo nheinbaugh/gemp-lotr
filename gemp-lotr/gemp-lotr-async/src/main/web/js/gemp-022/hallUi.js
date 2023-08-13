@@ -498,7 +498,7 @@ var GempLotrHallUI = Class.extend({
 
 					var joined = tournament.getAttribute("signedUp");
 					if (joined == "true") {
-						var but = $("<button>Drop from tournament</button>");
+						var but = $("<button>Abandon Tournament</button>");
 						$(but).button().click((
 							function(tourneyInfo) {
 								var tourneyId = tournament.getAttribute("id");
@@ -642,6 +642,11 @@ var GempLotrHallUI = Class.extend({
 					}
 					
 					name += "</td>";
+					
+					//TODO: Replace this with an actual fix on the server side
+					if(name.includes("Casual - WC")) {
+						name = "<td>Competitive - Format Championships</td>"
+					}
 					row.append(name);
 					row.append("<td>" + statusDescription + "</td>");
 
