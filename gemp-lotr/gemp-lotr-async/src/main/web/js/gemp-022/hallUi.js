@@ -503,9 +503,10 @@ var GempLotrHallUI = Class.extend({
 							function(tourneyInfo) {
 								var tourneyId = tournament.getAttribute("id");
 								var tourneyName = tournament.getAttribute("queue");
-								let isExecuted = confirm("Are you sure you want to resign from the " + tourneyName + " tournament? This cannot be undone.");
-
+								
 								return function () {
+									let isExecuted = confirm("Are you sure you want to resign from the " + tourneyName + " tournament? This cannot be undone.");
+									
 									if(isExecuted) {
 										that.comm.dropFromTournament(tournamentId, function (xml) {
 										that.processResponse(xml);
