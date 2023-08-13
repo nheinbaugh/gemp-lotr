@@ -545,7 +545,7 @@ var GempLotrHallUI = Class.extend({
 
 					if (action == "add") {
 						if(isWC) {
-							$("table.wc-tournaments", this.tablesDiv)
+							$("table.wc-events", this.tablesDiv)
 							.append(row);
 						}
 						else {
@@ -771,6 +771,9 @@ var GempLotrHallUI = Class.extend({
 			$(".count", $(".eventHeader.waitingTables")).html("(" + ($("tr", $("table.waitingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.playingTables")).html("(" + ($("tr", $("table.playingTables")).length - 1) + ")");
 			$(".count", $(".eventHeader.finishedTables")).html("(" + ($("tr", $("table.finishedTables")).length - 1) + ")");
+			
+			$(".count", $(".eventHeader.wc-queues")).html("(" + ($("tr", $("table.wc-queues")).length - 1) + ")");
+			$(".count", $(".eventHeader.wc-events")).html("(" + ($("tr", $("table.wc-events")).length - 1) + ")");
 
 			var games = root.getElementsByTagName("newGame");
 			for (var i=0; i<games.length; i++) {
