@@ -2,12 +2,22 @@ package com.gempukku.lotro;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 public class DateUtils {
+
+    public static final DateTimeFormatter DateHourMinuteFormatter
+            = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    public static String FormatStandardDateTime(ZonedDateTime dateTime) {
+        return dateTime.format(DateHourMinuteFormatter);
+    }
+
     public static int getCurrentDate() {
         Calendar date = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
         return date.get(Calendar.YEAR) * 10000 + (date.get(Calendar.MONTH) + 1) * 100 + date.get(Calendar.DAY_OF_MONTH);

@@ -23,10 +23,15 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
 public class TournamentRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
+
+    public static final Duration RecentTournamentDuration = Duration.ofDays(7);
+
     private final TournamentService _tournamentService;
     private final LotroFormatLibrary _formatLibrary;
     private final LotroCardBlueprintLibrary _library;
@@ -154,7 +159,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         Document doc = documentBuilder.newDocument();
         Element tournaments = doc.createElement("tournaments");
 
-        for (Tournament tournament : _tournamentService.getOldTournaments(System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 7))) {
+        for (Tournament tournament : _tournamentService.getOldTournaments(ZonedDateTime.now().minus(RecentTournamentDuration))) {
             Element tournamentElem = doc.createElement("tournament");
 
             tournamentElem.setAttribute("id", tournament.getTournamentId());

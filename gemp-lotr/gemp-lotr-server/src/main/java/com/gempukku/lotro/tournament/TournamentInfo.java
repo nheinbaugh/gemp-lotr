@@ -1,64 +1,64 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.packs.ProductLibrary;
 
-public class TournamentInfo {
-    private final String _tournamentId;
-    private final String _draftType;
-    private final String _tournamentName;
-    private final String _tournamentFormat;
-    private final CollectionType _collectionType;
-    private final String _prizesScheme;
-    private final int _tournamentRound;
-    private final String _pairingMechanism;
-    private final Tournament.Stage _tournamentStage;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-    public TournamentInfo(String tournamentId, String draftType, String tournamentName, String tournamentFormat, CollectionType collectionType,
-                          Tournament.Stage tournamentStage, String pairingMechanism, String prizesScheme, int tournamentRound) {
-        _tournamentId = tournamentId;
-        _draftType = draftType;
-        _tournamentName = tournamentName;
-        _tournamentFormat = tournamentFormat;
-        _collectionType = collectionType;
-        _prizesScheme = prizesScheme;
-        _tournamentRound = tournamentRound;
-        _pairingMechanism = pairingMechanism;
-        _tournamentStage = tournamentStage;
+public record TournamentInfo(String tournamentId, String draftType, String name, String format,
+                             ZonedDateTime startDate, CollectionType collectionType,
+                             Tournament.Stage tournamentStage, int round, boolean manualKickoff,
+                             PairingMechanism pairingMechanism, TournamentPrizes prizesScheme
+    ) {
+
+    public TournamentInfo(ProductLibrary library, DBDefs.Tournament info) {
+        this(info.tournament_id, info.draft_type, info.name, info.format, info.GetUTCStartDate(),
+                CollectionType.parseCollectionCode(info.collection), Tournament.Stage.parseStage(info.stage),
+                info.round, info.manual_kickoff, Tournament.getPairingMechanism(info.pairing),
+                Tournament.getTournamentPrizes(library, info.prizes));
     }
 
-    public String getTournamentId() {
-        return _tournamentId;
+    public TournamentInfo(ProductLibrary library,  DBDefs.ScheduledTournament info) {
+        this(info.tournament_id, null, info.name, info.format, info.GetUTCStartDate(),
+                CollectionType.ALL_CARDS, info.manual_kickoff ? Tournament.Stage.AWAITING_KICKOFF : Tournament.Stage.PLAYING_GAMES,
+                0, info.manual_kickoff, Tournament.getPairingMechanism(info.playoff),
+                Tournament.getTournamentPrizes(library, info.prizes));
     }
 
-    public String getDraftType() {
-        return _draftType;
+    public DBDefs.Tournament ToDB() {
+        var tourney = new DBDefs.Tournament();
+        tourney.tournament_id = this.tournamentId;
+        tourney.start_date = this.startDate.toLocalDateTime();
+        tourney.draft_type = this.draftType;
+        tourney.name = this.name;
+        tourney.format = this.format;
+        tourney.collection = this.collectionType.getCode();
+        tourney.stage = this.tournamentStage.getHumanReadable();
+        tourney.round = this.round;
+        tourney.manual_kickoff = this.manualKickoff;
+        tourney.pairing = this.pairingMechanism.getRegistryRepresentation();
+        tourney.prizes = this.prizesScheme.getRegistryRepresentation();
+
+        return tourney;
     }
 
-    public String getTournamentName() {
-        return _tournamentName;
+    public static List<TournamentInfo> fromDB(ProductLibrary library,  List<DBDefs.Tournament> dbinfos) {
+        List<TournamentInfo> infos = new ArrayList<>();
+        for(var result : dbinfos) {
+            infos.add(new TournamentInfo(library, result));
+        }
+        return infos;
     }
 
-    public String getTournamentFormat() {
-        return _tournamentFormat;
-    }
-
-    public CollectionType getCollectionType() {
-        return _collectionType;
-    }
-
-    public int getTournamentRound() {
-        return _tournamentRound;
-    }
-
-    public String getPairingMechanism() {
-        return _pairingMechanism;
-    }
-
-    public String getPrizesScheme() {
-        return _prizesScheme;
-    }
-
-    public Tournament.Stage getTournamentStage() {
-        return _tournamentStage;
+    public static List<TournamentInfo> fromSDB(ProductLibrary library,  List<DBDefs.ScheduledTournament> dbinfos) {
+        List<TournamentInfo> infos = new ArrayList<>();
+        for(var result : dbinfos) {
+            infos.add(new TournamentInfo(library, result));
+        }
+        return infos;
     }
 }
+

@@ -1,8 +1,10 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,13 +33,13 @@ public interface ITournamentService {
 
     List<TournamentMatch> getMatches(String tournamentId);
 
-    Tournament addTournament(String tournamentId, String draftType, String tournamentName, String format, CollectionType collectionType, Tournament.Stage stage, String pairingMechanism, String prizeScheme, Date start);
+    Tournament addTournament(TournamentInfo info);
 
     void updateTournamentStage(String tournamentId, Tournament.Stage stage);
 
     void updateTournamentRound(String tournamentId, int round);
 
-    List<Tournament> getOldTournaments(long since);
+    List<Tournament> getOldTournaments(ZonedDateTime since);
 
     List<Tournament> getLiveTournaments();
 
@@ -47,7 +49,7 @@ public interface ITournamentService {
 
     Map<String, Integer> getPlayerByes(String tournamentId);
 
-    List<TournamentQueueInfo> getUnstartedScheduledTournamentQueues(long tillDate);
+    List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate);
 
     void updateScheduledTournamentStarted(String scheduledTournamentId);
 }

@@ -326,7 +326,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
     }
 
     private CollectionType createCollectionType(String collectionType) {
-        final CollectionType result = CollectionType.getCollectionTypeByCode(collectionType);
+        final CollectionType result = CollectionType.parseCollectionCode(collectionType);
         if (result != null)
             return result;
 
@@ -751,6 +751,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         _cacheManager.clearCaches();
 
         int after = _cacheManager.getTotalCount();
+
+        //_hallServer.cleanup();
 
         responseWriter.writeHtmlResponse("Before: " + before + "<br><br>After: " + after);
     }

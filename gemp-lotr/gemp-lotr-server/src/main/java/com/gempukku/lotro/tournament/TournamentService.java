@@ -1,6 +1,7 @@
 package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.DraftPack;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -9,13 +10,12 @@ import com.gempukku.lotro.packs.DraftPackStorage;
 import com.gempukku.lotro.packs.PacksStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 public class TournamentService implements ITournamentService {
     private final ProductLibrary _productLibrary;
     private final DraftPackStorage _draftPackStorage;
-    private final PairingMechanismRegistry _pairingMechanismRegistry;
-    private final TournamentPrizeSchemeRegistry _tournamentPrizeSchemeRegistry;
     private final TournamentDAO _tournamentDao;
     private final TournamentPlayerDAO _tournamentPlayerDao;
     private final TournamentMatchDAO _tournamentMatchDao;
@@ -26,14 +26,11 @@ public class TournamentService implements ITournamentService {
     private final Map<String, Tournament> _tournamentById = new HashMap<>();
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
-                             PairingMechanismRegistry pairingMechanismRegistry, TournamentPrizeSchemeRegistry tournamentPrizeSchemeRegistry,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
                              LotroCardBlueprintLibrary library) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
-        _pairingMechanismRegistry = pairingMechanismRegistry;
-        _tournamentPrizeSchemeRegistry = tournamentPrizeSchemeRegistry;
         _tournamentDao = tournamentDao;
         _tournamentPlayerDao = tournamentPlayerDao;
         _tournamentMatchDao = tournamentMatchDao;
@@ -96,9 +93,10 @@ public class TournamentService implements ITournamentService {
     }
 
     @Override
-    public Tournament addTournament(String tournamentId, String draftType, String tournamentName, String format, CollectionType collectionType, Tournament.Stage stage, String pairingMechanism, String prizeScheme, Date start) {
-        _tournamentDao.addTournament(tournamentId, draftType, tournamentName, format, collectionType, stage, pairingMechanism, prizeScheme, start);
-        return createTournamentAndStoreInCache(tournamentId, new TournamentInfo(tournamentId, draftType, tournamentName, format, collectionType, stage, pairingMechanism, prizeScheme, 0));
+    public Tournament addTournament(TournamentInfo info) {
+
+        _tournamentDao.addTournament(info.ToDB());
+        return createTournamentAndStoreInCache(info);
     }
 
     @Override
@@ -112,12 +110,12 @@ public class TournamentService implements ITournamentService {
     }
 
     @Override
-    public List<Tournament> getOldTournaments(long since) {
+    public List<Tournament> getOldTournaments(ZonedDateTime since) {
         List<Tournament> result = new ArrayList<>();
-        for (TournamentInfo tournamentInfo : _tournamentDao.getFinishedTournamentsSince(since)) {
-            Tournament tournament = _tournamentById.get(tournamentInfo.getTournamentId());
+        for (var dbinfo : _tournamentDao.getFinishedTournamentsSince(since)) {
+            Tournament tournament = _tournamentById.get(dbinfo.tournament_id);
             if (tournament == null)
-                tournament = createTournamentAndStoreInCache(tournamentInfo.getTournamentId(), tournamentInfo);
+                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
             result.add(tournament);
         }
         return result;
@@ -126,10 +124,10 @@ public class TournamentService implements ITournamentService {
     @Override
     public List<Tournament> getLiveTournaments() {
         List<Tournament> result = new ArrayList<>();
-        for (TournamentInfo tournamentInfo : _tournamentDao.getUnfinishedTournaments()) {
-            Tournament tournament = _tournamentById.get(tournamentInfo.getTournamentId());
+        for (var dbinfo : _tournamentDao.getUnfinishedTournaments()) {
+            Tournament tournament = _tournamentById.get(dbinfo.tournament_id);
             if (tournament == null)
-                tournament = createTournamentAndStoreInCache(tournamentInfo.getTournamentId(), tournamentInfo);
+                tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
             result.add(tournament);
         }
         return result;
@@ -139,33 +137,30 @@ public class TournamentService implements ITournamentService {
     public Tournament getTournamentById(String tournamentId) {
         Tournament tournament = _tournamentById.get(tournamentId);
         if (tournament == null) {
-            TournamentInfo tournamentInfo = _tournamentDao.getTournamentById(tournamentId);
-            if (tournamentInfo == null)
+            var dbinfo = _tournamentDao.getTournamentById(tournamentId);
+            if (dbinfo == null)
                 return null;
 
-            tournament = createTournamentAndStoreInCache(tournamentId, tournamentInfo);
+            tournament = createTournamentAndStoreInCache(new TournamentInfo(_productLibrary, dbinfo));
         }
         return tournament;
     }
 
-    private Tournament createTournamentAndStoreInCache(String tournamentId, TournamentInfo tournamentInfo) {
+    private Tournament createTournamentAndStoreInCache(TournamentInfo info) {
         Tournament tournament;
         try {
             DraftPack draftPack = null;
-            String draftType = tournamentInfo.getDraftType();
-            if (draftType != null)
-                _draftPackStorage.getDraftPack(draftType);
+            //The below appears to be half-finished and completely pointless
+//            String draftType = info.getDraftType();
+//            if (draftType != null)
+//                _draftPackStorage.getDraftPack(draftType);
 
-            tournament = new DefaultTournament(_collectionsManager, this, _productLibrary, draftPack,
-                    tournamentId,  tournamentInfo.getTournamentName(), tournamentInfo.getTournamentFormat(),
-                    tournamentInfo.getCollectionType(), tournamentInfo.getTournamentRound(), tournamentInfo.getTournamentStage(), 
-                    _pairingMechanismRegistry.getPairingMechanism(tournamentInfo.getPairingMechanism()),
-                    _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, tournamentInfo.getPrizesScheme()));
+            tournament = new DefaultTournament(this, _collectionsManager, _productLibrary, null, info);
 
         } catch (Exception exp) {
             throw new RuntimeException("Unable to create Tournament", exp);
         }
-        _tournamentById.put(tournamentId, tournament);
+        _tournamentById.put(tournament.getTournamentId(), tournament);
         return tournament;
     }
 
@@ -180,7 +175,7 @@ public class TournamentService implements ITournamentService {
     }
 
     @Override
-    public List<TournamentQueueInfo> getUnstartedScheduledTournamentQueues(long tillDate) {
+    public List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
         return _tournamentDao.getUnstartedScheduledTournamentQueues(tillDate);
     }
 

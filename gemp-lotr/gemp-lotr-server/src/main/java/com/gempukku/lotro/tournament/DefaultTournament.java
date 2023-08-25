@@ -32,6 +32,7 @@ public class DefaultTournament implements Tournament {
     private int _tournamentRound;
 
     private final Set<String> _players;
+    private String _playerList;
     private final Map<String, LotroDeck> _playerDecks;
     private final Set<String> _droppedPlayers;
     private final Map<String, Integer> _playerByes;
@@ -49,9 +50,14 @@ public class DefaultTournament implements Tournament {
 
     private List<PlayerStanding> _currentStandings;
 
-    public DefaultTournament(CollectionsManager collectionsManager, TournamentService tournamentService,
-                             ProductLibrary productLibrary, DraftPack draftPack, String tournamentId, String tournamentName, String format, CollectionType collectionType,
-                             int tournamentRound, Stage tournamentStage, PairingMechanism pairingMechanism, TournamentPrizes tournamentPrizes) {
+    private final boolean _manualKickoff;
+    private boolean _hasKickedOff;
+
+    public DefaultTournament(TournamentService tournamentService, String tournamentId,
+                             String tournamentName, String format, CollectionType collectionType,
+                             int tournamentRound, Stage tournamentStage, boolean manualKickoff,
+                             PairingMechanism pairingMechanism, TournamentPrizes tournamentPrizes,
+                             CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPack draftPack) {
         _tournamentService = tournamentService;
         _tournamentId = tournamentId;
         _tournamentName = tournamentName;
@@ -59,6 +65,7 @@ public class DefaultTournament implements Tournament {
         _collectionType = collectionType;
         _tournamentRound = tournamentRound;
         _tournamentStage = tournamentStage;
+        _manualKickoff = manualKickoff;
         _pairingMechanism = pairingMechanism;
         _tournamentPrizes = tournamentPrizes;
 
@@ -69,6 +76,8 @@ public class DefaultTournament implements Tournament {
         _droppedPlayers = new HashSet<>(_tournamentService.getDroppedPlayers(_tournamentId));
         _playerByes = new HashMap<>(_tournamentService.getPlayerByes(_tournamentId));
         _finishedTournamentMatches = new HashSet<>();
+
+        regeneratePlayerList();
 
         if (_tournamentStage == Stage.PLAYING_GAMES) {
             Map<String, String> matchesToCreate = new HashMap<>();
@@ -89,9 +98,44 @@ public class DefaultTournament implements Tournament {
                     _players);
         } else if (_tournamentStage == Stage.DECK_BUILDING) {
             _deckBuildStartTime = System.currentTimeMillis();
+        } else if (_tournamentStage == Stage.AWAITING_KICKOFF) {
+
         } else if (_tournamentStage == Stage.FINISHED) {
             _finishedTournamentMatches.addAll(_tournamentService.getMatches(_tournamentId));
         }
+    }
+
+    public DefaultTournament(TournamentService tournamentService, CollectionsManager collectionsManager,
+                             ProductLibrary productLibrary, DraftPack draftPack, TournamentInfo info) {
+        this(tournamentService, info.tournamentId(), info.name(), info.format(), info.collectionType(),
+                info.round(), info.tournamentStage(), info.manualKickoff(), info.pairingMechanism(), info.prizesScheme(),
+                collectionsManager, productLibrary, draftPack);
+    }
+
+    public DefaultTournament( TournamentService tournamentService, TournamentInfo info) {
+        this(tournamentService, null, null, null, info);
+    }
+
+    protected void regeneratePlayerList() {
+        _playerList = "";
+
+        for(var player : _players) {
+            if(!_droppedPlayers.contains(player)) {
+                _playerList += player + ", ";
+            }
+        }
+
+        if(_players.size() > 0) {
+            _playerList = _playerList.substring(0, _playerList.length() - 2);
+        }
+
+        if(_droppedPlayers.size() > 0) {
+            _playerList += ", " + String.join("*, ", _droppedPlayers);
+            if(_droppedPlayers.size() > 0) {
+                _playerList += "*";
+            }
+        }
+
     }
 
     public void setWaitForPairingsTime(long waitForPairingsTime) {
@@ -106,6 +150,11 @@ public class DefaultTournament implements Tournament {
     @Override
     public int getPlayersInCompetitionCount() {
         return _players.size() - _droppedPlayers.size();
+    }
+
+    @Override
+    public String getPlayerList() {
+        return _playerList;
     }
 
     @Override
@@ -171,7 +220,7 @@ public class DefaultTournament implements Tournament {
     }
 
     @Override
-    public void playerSummittedDeck(String player, LotroDeck deck) {
+    public void playerSubmittedDeck(String player, LotroDeck deck) {
         _lock.writeLock().lock();
         try {
             if (_tournamentStage == Stage.DECK_BUILDING && _players.contains(player)) {
@@ -223,6 +272,7 @@ public class DefaultTournament implements Tournament {
 
             _tournamentService.dropPlayer(_tournamentId, player);
             _droppedPlayers.add(player);
+            regeneratePlayerList();
             return true;
         } finally {
             _lock.writeLock().unlock();
@@ -253,6 +303,9 @@ public class DefaultTournament implements Tournament {
                         _tournamentService.updateTournamentStage(_tournamentId, _tournamentStage);
                         result = true;
                     }
+                }
+                if (_tournamentStage == Stage.AWAITING_KICKOFF) {
+
                 }
                 if (_tournamentStage == Stage.PLAYING_GAMES) {
                     if (_currentlyPlayingPlayers.size() == 0) {

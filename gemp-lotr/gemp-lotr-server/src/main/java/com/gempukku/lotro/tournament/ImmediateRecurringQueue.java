@@ -2,8 +2,10 @@ package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
 
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class ImmediateRecurringQueue extends AbstractTournamentQueue implements TournamentQueue {
@@ -45,8 +47,11 @@ public class ImmediateRecurringQueue extends AbstractTournamentQueue implements 
                 _playerDecks.remove(player);
             }
 
-            Tournament tournament = _tournamentService.addTournament(tournamentId, null, tournamentName, _format, _collectionType, Tournament.Stage.PLAYING_GAMES, "singleElimination",
-                    _tournamentPrizes.getRegistryRepresentation(), new Date());
+            var info = new TournamentInfo(tournamentId, null, tournamentName, _format, ZonedDateTime.now(),
+                    _collectionType, Tournament.Stage.PLAYING_GAMES, 0, false,
+                    Tournament.getPairingMechanism("singleElimination"), _tournamentPrizes);
+
+            var tournament = _tournamentService.addTournament(info);
 
             tournamentQueueCallback.createTournament(tournament);
         }

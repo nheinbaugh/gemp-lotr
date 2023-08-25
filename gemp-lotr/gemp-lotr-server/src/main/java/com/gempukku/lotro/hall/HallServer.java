@@ -6,6 +6,7 @@ import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatRoomMediator;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.IgnoreDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
@@ -25,6 +26,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -36,7 +39,7 @@ public class HallServer extends AbstractServer {
     private static final int _playerTableInactivityPeriod = 1000 * 20 ; // 20 seconds
 
     private static final int _playerChatInactivityPeriod = 1000 * 60 * 5; // 5 minutes
-    private static final long _scheduledTournamentLoadTime = 1000 * 60 * 60 * 24 * 7; // Week
+    private static final int _scheduledTournamentLoadTime = 7; // In days; one week
     // Repeat tournaments every 2 days
     private static final long _repeatTournaments = 1000 * 60 * 60 * 24 * 2;
 
@@ -48,9 +51,7 @@ public class HallServer extends AbstractServer {
     private final ProductLibrary _productLibrary;
     private final CollectionsManager _collectionsManager;
     private final LotroServer _lotroServer;
-    private final PairingMechanismRegistry _pairingMechanismRegistry;
     private final AdminService _adminService;
-    private final TournamentPrizeSchemeRegistry _tournamentPrizeSchemeRegistry;
 
     private final CollectionType _defaultCollectionType = CollectionType.ALL_CARDS;
     private final CollectionType _tournamentCollectionType = CollectionType.OWNED_TOURNAMENT_CARDS;
@@ -75,9 +76,7 @@ public class HallServer extends AbstractServer {
     private static final Logger _log = Logger.getLogger(HallServer.class);
 
     public HallServer(IgnoreDAO ignoreDAO, LotroServer lotroServer, ChatServer chatServer, LeagueService leagueService, TournamentService tournamentService, LotroCardBlueprintLibrary library,
-                      LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, CollectionsManager collectionsManager, AdminService adminService,
-                      TournamentPrizeSchemeRegistry tournamentPrizeSchemeRegistry,
-                      PairingMechanismRegistry pairingMechanismRegistry) {
+                      LotroFormatLibrary formatLibrary, ProductLibrary productLibrary, CollectionsManager collectionsManager, AdminService adminService) {
         _lotroServer = lotroServer;
         _chatServer = chatServer;
         _leagueService = leagueService;
@@ -87,8 +86,6 @@ public class HallServer extends AbstractServer {
         _productLibrary = productLibrary;
         _collectionsManager = collectionsManager;
         _adminService = adminService;
-        _tournamentPrizeSchemeRegistry = tournamentPrizeSchemeRegistry;
-        _pairingMechanismRegistry = pairingMechanismRegistry;
 
         tableHolder = new TableHolder(leagueService, ignoreDAO);
 
@@ -239,41 +236,41 @@ public class HallServer extends AbstractServer {
 
         _tournamentQueues.put("fotr_queue", new ImmediateRecurringQueue(1500, "fotr_block",
                 CollectionType.ALL_CARDS, "fotrQueue-", "Fellowship Block", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("pc_fotr_queue", new ImmediateRecurringQueue(1500, "pc_fotr_block",
                 CollectionType.ALL_CARDS, "pcfotrQueue-", "PC-Fellowship", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("ts_queue", new ImmediateRecurringQueue(1500, "towers_standard",
                 CollectionType.ALL_CARDS, "tsQueue-", "Towers Standard", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("movie_queue", new ImmediateRecurringQueue(1500, "movie",
                 CollectionType.ALL_CARDS, "movieQueue-", "Movie Block", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("pc_movie_queue", new ImmediateRecurringQueue(1500, "pc_movie",
                 CollectionType.ALL_CARDS, "pcmovieQueue-", "PC-Movie", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("expanded_queue", new ImmediateRecurringQueue(1500, "expanded",
                 CollectionType.ALL_CARDS, "expandedQueue-", "Expanded", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
         _tournamentQueues.put("pc_expanded_queue", new ImmediateRecurringQueue(1500, "pc_expanded",
                 CollectionType.ALL_CARDS, "pcexpandedQueue-", "PC-Expanded", 4,
-                true, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "onDemand"), _pairingMechanismRegistry.getPairingMechanism("singleElimination")));
+                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
         try {
             _tournamentQueues.put("fotr_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-15 19:30:00").getTime(), _repeatTournaments, "fotrDailyEu-", "Daily Gondor Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
                     "fotr_block", 4));
             _tournamentQueues.put("fotr_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-16 00:30:00").getTime(), _repeatTournaments, "fotrDailyUs-", "Daily Rohan Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
                     "fotr_block", 4));
             _tournamentQueues.put("movie_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-16 19:30:00").getTime(), _repeatTournaments, "movieDailyEu-", "Daily Gondor Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
                     "movie", 4));
             _tournamentQueues.put("movie_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-17 00:30:00").getTime(), _repeatTournaments, "movieDailyUs-", "Daily Rohan Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, "daily"), _pairingMechanismRegistry.getPairingMechanism("swiss-3"),
+                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
                     "movie", 4));
         } catch (ParseException exp) {
             // Ignore, can't happen
@@ -452,7 +449,8 @@ public class HallServer extends AbstractServer {
             hallChanged();
 
             return true;
-        } finally {
+        }
+        finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
@@ -606,10 +604,12 @@ public class HallServer extends AbstractServer {
             for (Map.Entry<String, TournamentQueue> tournamentQueueEntry : _tournamentQueues.entrySet()) {
                 String tournamentQueueKey = tournamentQueueEntry.getKey();
                 TournamentQueue tournamentQueue = tournamentQueueEntry.getValue();
+
+
                 visitor.visitTournamentQueue(tournamentQueueKey, tournamentQueue.getCost(), tournamentQueue.getCollectionType().getFullName(),
                         _formatLibrary.getFormat(tournamentQueue.getFormat()).getName(), tournamentQueue.getTournamentQueueName(),
                         tournamentQueue.getPrizesDescription(), tournamentQueue.getPairingDescription(), tournamentQueue.getStartCondition(),
-                        tournamentQueue.getPlayerCount(), tournamentQueue.isPlayerSignedUp(player.getName()), tournamentQueue.isJoinable());
+                        tournamentQueue.getPlayerCount(), tournamentQueue.getPlayerList(), tournamentQueue.isPlayerSignedUp(player.getName()), tournamentQueue.isJoinable());
             }
 
             for (Map.Entry<String, Tournament> tournamentEntry : _runningTournaments.entrySet()) {
@@ -618,7 +618,7 @@ public class HallServer extends AbstractServer {
                 visitor.visitTournament(tournamentKey, tournament.getCollectionType().getFullName(),
                         _formatLibrary.getFormat(tournament.getFormat()).getName(), tournament.getTournamentName(), tournament.getPlayOffSystem(),
                         tournament.getTournamentStage().getHumanReadable(),
-                        tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.isPlayerInCompetition(player.getName()));
+                        tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()));
             }
         } finally {
             _hallDataAccessLock.readLock().unlock();
@@ -844,17 +844,13 @@ public class HallServer extends AbstractServer {
 
             if (_tickCounter == 60) {
                 _tickCounter = 0;
-                List<TournamentQueueInfo> unstartedTournamentQueues = _tournamentService.getUnstartedScheduledTournamentQueues(
-                        System.currentTimeMillis() + _scheduledTournamentLoadTime);
-                for (TournamentQueueInfo unstartedTournamentQueue : unstartedTournamentQueues) {
-                    String scheduledTournamentId = unstartedTournamentQueue.getScheduledTournamentId();
+                var unstartedTournamentQueues = _tournamentService.getUnstartedScheduledTournamentQueues(
+                        ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
+                for (var unstartedTourney : unstartedTournamentQueues) {
+                    String scheduledTournamentId = unstartedTourney.tournament_id;
                     if (!_tournamentQueues.containsKey(scheduledTournamentId)) {
-                        ScheduledTournamentQueue scheduledQueue = new ScheduledTournamentQueue(scheduledTournamentId, unstartedTournamentQueue.getCost(),
-                                true, _tournamentService, unstartedTournamentQueue.getStartTime(), unstartedTournamentQueue.getTournamentName(),
-                                unstartedTournamentQueue.getFormat(), CollectionType.ALL_CARDS, Tournament.Stage.PLAYING_GAMES,
-                                _pairingMechanismRegistry.getPairingMechanism(unstartedTournamentQueue.getPlayOffSystem()),
-                                _tournamentPrizeSchemeRegistry.getTournamentPrizes(_productLibrary, unstartedTournamentQueue.getPrizeScheme()), unstartedTournamentQueue.getMinimumPlayers());
-                        _tournamentQueues.put(scheduledTournamentId, scheduledQueue);
+                        var scheduledTourney = new ScheduledTournamentQueue(_tournamentService, _productLibrary, unstartedTourney);
+                        _tournamentQueues.put(scheduledTournamentId, scheduledTourney);
                         hallChanged();
                     }
                 }
@@ -927,6 +923,7 @@ public class HallServer extends AbstractServer {
         @Override
         public void broadcastMessage(String message) {
             try {
+                //check-in callback
                 _hallChat.sendMessage("TournamentSystem", message, true);
             } catch (PrivateInformationException exp) {
                 // Ignore, sent as admin

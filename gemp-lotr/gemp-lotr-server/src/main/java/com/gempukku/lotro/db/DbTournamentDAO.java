@@ -1,114 +1,138 @@
 package com.gempukku.lotro.db;
 
+import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.vo.CollectionType;
+import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.tournament.Tournament;
 import com.gempukku.lotro.tournament.TournamentDAO;
 import com.gempukku.lotro.tournament.TournamentInfo;
-import com.gempukku.lotro.tournament.TournamentQueueInfo;
+import org.sql2o.Query;
+import org.sql2o.Sql2o;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class DbTournamentDAO implements TournamentDAO {
     private final DbAccess _dbAccess;
-
     public DbTournamentDAO(DbAccess dbAccess) {
         _dbAccess = dbAccess;
     }
 
     @Override
-    public void addTournament(String tournamentId, String draftType, String tournamentName, String format, CollectionType collectionType, Tournament.Stage stage, String pairingMechanism, String prizesScheme, Date start) {
+    public void addTournament(DBDefs.Tournament dbinfo) {
         try {
-            try (Connection conn = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = conn.prepareStatement("insert into tournament (tournament_id, draft_type, name, format, collection, stage, pairing, start, round, prizes) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-                    statement.setString(1, tournamentId);
-                    statement.setString(2, draftType);
-                    statement.setString(3, tournamentName);
-                    statement.setString(4, format);
-                    statement.setString(5, collectionType.getCode() + ":" + collectionType.getFullName());
-                    statement.setString(6, stage.name());
-                    statement.setString(7, pairingMechanism);
-                    statement.setLong(8, start.getTime());
-                    statement.setInt(9, 0);
-                    statement.setString(10, prizesScheme);
-                    statement.execute();
-                }
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            String sql = """
+                        INSERT INTO tournament (tournament_id, start_date, draft_type, name, format, 
+                            collection, stage, pairing, round, manual_kickoff, prizes) 
+                        VALUES (:tid, :start, :draft, :name, :format,
+                            :collection, :stage, :pairing, :round, :kickoff, :prizes)
+                        """;
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                Query query = conn.createQuery(sql, true);
+                query.addParameter("tid", dbinfo.tournament_id)
+                        .addParameter("start", dbinfo.start_date)
+                        .addParameter("draft", dbinfo.draft_type)
+                        .addParameter("name", dbinfo.name)
+                        .addParameter("format", dbinfo.format)
+                        .addParameter("collection", dbinfo.collection)
+                        .addParameter("stage", dbinfo.stage)
+                        .addParameter("pairing", dbinfo.pairing)
+                        .addParameter("round", dbinfo.round)
+                        .addParameter("kickoff", dbinfo.manual_kickoff)
+                        .addParameter("prizes", dbinfo.prizes);
+
+                int id = query.executeUpdate()
+                        .getKey(Integer.class);
+                conn.commit();
+
+                return;
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to insert tournament", ex);
         }
     }
 
     @Override
-    public TournamentInfo getTournamentById(String tournamentId) {
+    public DBDefs.Tournament getTournamentById(String tournamentId) {
+
         try {
-            try (Connection connection = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = connection.prepareStatement("select draft_type, name, format, collection, stage, pairing, round, prizes from tournament where tournament_id=?")) {
-                    statement.setString(1, tournamentId);
-                    try (ResultSet rs = statement.executeQuery()) {
-                        if (rs.next()) {
-                            String[] collectionTypeStr = rs.getString(4).split(":", 2);
-                            return new TournamentInfo(
-                                    tournamentId, rs.getString(1), rs.getString(2), rs.getString(3),
-                                    new CollectionType(collectionTypeStr[0], collectionTypeStr[1]), Tournament.Stage.valueOf(rs.getString(5)),
-                                    rs.getString(6), rs.getString(8), rs.getInt(7));
-                        } else
-                            return null;
-                    }
-                }
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT 
+                            tournament_id, start_date, draft_type, name, format, 
+                            collection, stage, pairing, round, manual_kickoff, prizes 
+                        FROM tournament 
+                        WHERE tournament_id = :id;
+                        """;
+                List<DBDefs.Tournament> result = conn.createQuery(sql)
+                        .addParameter("id", tournamentId)
+                        .executeAndFetch(DBDefs.Tournament.class);
+
+                return result.stream().findFirst().orElse(null);
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve tournament with ID " + tournamentId, ex);
         }
     }
 
     @Override
-    public List<TournamentInfo> getUnfinishedTournaments() {
+    public List<DBDefs.Tournament> getUnfinishedTournaments() {
         try {
-            try (Connection connection = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = connection.prepareStatement("select tournament_id, draft_type, name, format, collection, stage, pairing, round, prizes from tournament where stage <> '" + Tournament.Stage.FINISHED.name() + "'")) {
-                    try (ResultSet rs = statement.executeQuery()) {
-                        List<TournamentInfo> result = new ArrayList<>();
-                        while (rs.next()) {
-                            String[] collectionTypeStr = rs.getString(5).split(":", 2);
-                            result.add(new TournamentInfo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                                    new CollectionType(collectionTypeStr[0], collectionTypeStr[1]), Tournament.Stage.valueOf(rs.getString(6)),
-                                    rs.getString(7), rs.getString(9), rs.getInt(8)));
-                        }
-                        return result;
-                    }
-                }
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT 
+                            tournament_id, start_date, draft_type, name, format, 
+                            collection, stage, pairing, round, manual_kickoff, prizes 
+                        FROM tournament 
+                        WHERE stage <> :finished;
+                        """;
+                List<DBDefs.Tournament> results = conn.createQuery(sql)
+                        .addParameter("finished", Tournament.Stage.FINISHED.name())
+                        .executeAndFetch(DBDefs.Tournament.class);
+
+                return results;
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve unfinished tournaments", ex);
         }
     }
 
     @Override
-    public List<TournamentInfo> getFinishedTournamentsSince(long time) {
+    public List<DBDefs.Tournament> getFinishedTournamentsSince(ZonedDateTime time) {
         try {
-            try (Connection connection = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = connection.prepareStatement("select tournament_id, draft_type, name, format, collection, stage, pairing, round, prizes from tournament where stage = '" + Tournament.Stage.FINISHED.name() + "' and start>?")) {
-                    statement.setLong(1, time);
-                    try (ResultSet rs = statement.executeQuery()) {
-                        List<TournamentInfo> result = new ArrayList<>();
-                        while (rs.next()) {
-                            String[] collectionTypeStr = rs.getString(5).split(":", 2);
-                            result.add(new TournamentInfo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
-                                    new CollectionType(collectionTypeStr[0], collectionTypeStr[1]), Tournament.Stage.valueOf(rs.getString(6)),
-                                    rs.getString(7), rs.getString(9), rs.getInt(8)));
-                        }
-                        return result;
-                    }
-                }
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT 
+                            tournament_id, start_date, draft_type, name, format, 
+                            collection, stage, pairing, round, manual_kickoff, prizes 
+                        FROM tournament 
+                        WHERE stage = :finished 
+                            AND start_date > :start;
+                        """;
+                List<DBDefs.Tournament> results = conn.createQuery(sql)
+                        .addParameter("start", time)
+                        .addParameter("finished", Tournament.Stage.FINISHED.name())
+                        .executeAndFetch(DBDefs.Tournament.class);
+
+                return results;
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve finished tournaments", ex);
         }
     }
 
@@ -143,37 +167,49 @@ public class DbTournamentDAO implements TournamentDAO {
     }
 
     @Override
-    public List<TournamentQueueInfo> getUnstartedScheduledTournamentQueues(long tillDate) {
+    public List<DBDefs.ScheduledTournament> getUnstartedScheduledTournamentQueues(ZonedDateTime tillDate) {
         try {
-            try (Connection connection = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = connection.prepareStatement("select tournament_id, name, format, start, cost, playoff, prizes, minimum_players from scheduled_tournament where started = 0 and start<=?")) {
-                    statement.setLong(1, tillDate);
-                    try (ResultSet rs = statement.executeQuery()) {
-                        List<TournamentQueueInfo> result = new ArrayList<>();
-                        while (rs.next()) {
-                            result.add(new TournamentQueueInfo(rs.getString(1), rs.getString(2), rs.getString(3), rs.getLong(4),
-                                    rs.getInt(5), rs.getString(6), rs.getString(7), rs.getInt(8)));
-                        }
-                        return result;
-                    }
-                }
+
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                    SELECT id, tournament_id, name, format, start_date, cost, playoff,
+                        tiebreaker, prizes, minimum_players, manual_kickoff, started
+                    FROM scheduled_tournament
+                    WHERE started = 0
+                        AND start_date <= :start;
+                        """;
+                List<DBDefs.ScheduledTournament> result = conn.createQuery(sql)
+                        .addParameter("start", tillDate)
+                        .executeAndFetch(DBDefs.ScheduledTournament.class);
+
+                return result;
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to retrieve Unstarted Scheduled Tournament Queues", ex);
         }
     }
 
     @Override
     public void updateScheduledTournamentStarted(String scheduledTournamentId) {
         try {
-            try (Connection conn = _dbAccess.getDataSource().getConnection()) {
-                try (PreparedStatement statement = conn.prepareStatement("update scheduled_tournament set started=1 where tournament_id=?")) {
-                    statement.setString(1, scheduledTournamentId);
-                    statement.executeUpdate();
-                }
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            String sql = """
+                        UPDATE scheduled_tournament 
+                        SET started = 1 
+                        WHERE tournament_id = :id;
+                        """;
+
+            try (org.sql2o.Connection conn = db.beginTransaction()) {
+                Query query = conn.createQuery(sql);
+                query.addParameter("id", scheduledTournamentId);
+                query.executeUpdate();
+                conn.commit();
             }
-        } catch (SQLException exp) {
-            throw new RuntimeException(exp);
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to update ScheduledTournament started status", ex);
         }
     }
 }

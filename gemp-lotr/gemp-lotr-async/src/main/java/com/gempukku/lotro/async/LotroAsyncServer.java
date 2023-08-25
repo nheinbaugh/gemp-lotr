@@ -22,6 +22,10 @@ public class LotroAsyncServer {
     public static void main(String[] server) throws InterruptedException {
         int httpPort = Integer.parseInt(AppConfig.getProperty("port"));
 
+        //Use this to halt gemp on startup long enough for the debugger to attach.
+        //DO NOT commit this line to the main gemp uncommented.
+        //Thread.sleep(10_000);
+
         GempukkuServer gempukkuServer = new GempukkuServer();
 
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);

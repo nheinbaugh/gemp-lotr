@@ -23,7 +23,7 @@ public final class CollectionType {
         DEFINED_COLLECTION_TYPES.put(OWNED_TOURNAMENT_CARDS.getCode(), OWNED_TOURNAMENT_CARDS);
     }
 
-    public static CollectionType getCollectionTypeByCode(String code) {
+    public static CollectionType parseCollectionCode(String code) {
         return DEFINED_COLLECTION_TYPES.get(code);
     }
 

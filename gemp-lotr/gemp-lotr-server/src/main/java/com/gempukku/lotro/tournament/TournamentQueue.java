@@ -34,6 +34,7 @@ public interface TournamentQueue {
     public void leaveAllPlayers(CollectionsManager collectionsManager) throws SQLException, IOException;
 
     public int getPlayerCount();
+    public String getPlayerList();
 
     public boolean isPlayerSignedUp(String player);
 

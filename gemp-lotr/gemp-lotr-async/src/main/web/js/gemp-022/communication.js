@@ -603,7 +603,7 @@ var GempLotrCommunication = Class.extend({
                 participantId:getUrlParam("participantId")},
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
-            dataType:"text"
+            dataType:"xml"
         });
     },
     leaveQueue:function (queueId, callback, errorMap) {
@@ -615,7 +615,7 @@ var GempLotrCommunication = Class.extend({
                 participantId:getUrlParam("participantId")},
             success:this.deliveryCheck(callback),
             error:this.errorCheck(errorMap),
-            dataType:"text"
+            dataType:"xml"
         });
     },
     dropFromTournament:function(tournamentId, callback, errorMap) {

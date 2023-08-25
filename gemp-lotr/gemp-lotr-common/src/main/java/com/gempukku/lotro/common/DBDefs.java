@@ -1,7 +1,11 @@
 package com.gempukku.lotro.common;
 
+import com.sun.source.doctree.IndexTree;
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class DBDefs {
@@ -22,8 +26,16 @@ public class DBDefs {
         public String win_recording_id;
         public String lose_recording_id;
 
-        public ZonedDateTime start_date;
-        public ZonedDateTime end_date;
+        public LocalDateTime  start_date;
+        public LocalDateTime end_date;
+
+        public ZonedDateTime GetUTCStartDate() {
+            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+        }
+
+        public ZonedDateTime GetUTCEndDate() {
+            return ZonedDateTime.of(end_date, ZoneId.of("UTC"));
+        }
 
         public String format_name;
 
@@ -58,8 +70,8 @@ public class DBDefs {
         public String product_variant;
         public String product;
         public String source;
-        public LocalDateTime created_date;
-        public LocalDateTime modified_date;
+        public ZonedDateTime created_date;
+        public ZonedDateTime modified_date;
         public String notes;
     }
 
@@ -85,5 +97,55 @@ public class DBDefs {
         public String Format;
         public int Count;
         public boolean Casual;
+    }
+
+    public static class PendingTournamentQueue {
+        public int id;
+        public int scheduled_tournament_id;
+        public int player_id;
+        public String deck_name; //45
+        public String deck; //text
+        public boolean dropped;
+        public boolean checked_in;
+    }
+
+    public static class Tournament {
+        public int id;
+        public String tournament_id; //255
+        public LocalDateTime start_date;
+        public ZonedDateTime GetUTCStartDate() {
+            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+        }
+        public String draft_type; //45
+        public String name; //255
+        public String format; //255
+        public String collection; //255
+        public String stage; //45
+        public int round;
+        public boolean manual_kickoff;
+        public String pairing; //45
+        public String prizes; //45
+
+
+    }
+
+    public static class ScheduledTournament {
+        public int id;
+        public String tournament_id; //45
+        public String name; //255
+        public String format; //45
+        public LocalDateTime start_date;
+
+        public ZonedDateTime GetUTCStartDate() {
+            return ZonedDateTime.of(start_date, ZoneId.of("UTC"));
+        }
+
+        public int cost;
+        public String playoff; //45
+        public String tiebreaker; //45
+        public String prizes; //45
+        public int minimum_players;
+        public boolean manual_kickoff;
+        public boolean started;
     }
 }

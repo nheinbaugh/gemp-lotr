@@ -7,14 +7,12 @@ import com.gempukku.lotro.logic.vo.LotroDeck;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public abstract class AbstractTournamentQueue implements TournamentQueue {
     protected int _cost;
     protected Queue<String> _players = new LinkedList<>();
+    protected String _playerList;
     protected Map<String, LotroDeck> _playerDecks = new HashMap<>();
     protected boolean _requiresDeck;
 
@@ -49,11 +47,16 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
         return _tournamentPrizes.getPrizeDescription();
     }
 
+    protected void regeneratePlayerList() {
+        _playerList =  String.join(", ", new ArrayList<>(_players).stream().sorted().toList() );
+    }
+
     @Override
     public final synchronized void joinPlayer(CollectionsManager collectionsManager, Player player, LotroDeck deck) throws SQLException, IOException {
         if (!_players.contains(player.getName()) && isJoinable()) {
             if (_cost <= 0 || collectionsManager.removeCurrencyFromPlayerCollection("Joined "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost)) {
                 _players.add(player.getName());
+                regeneratePlayerList();
                 if (_requiresDeck)
                     _playerDecks.put(player.getName(), deck);
             }
@@ -66,6 +69,7 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
             if (_cost > 0)
                 collectionsManager.addCurrencyToPlayerCollection(true, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost);
             _players.remove(player.getName());
+            regeneratePlayerList();
             _playerDecks.remove(player.getName());
         }
     }
@@ -77,12 +81,18 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
                 collectionsManager.addCurrencyToPlayerCollection(false, "Return for leaving "+getTournamentQueueName()+" queue", player, _currencyCollection, _cost);
         }
         _players.clear();
+        regeneratePlayerList();
         _playerDecks.clear();
     }
 
     @Override
     public final synchronized int getPlayerCount() {
         return _players.size();
+    }
+
+    @Override
+    public String getPlayerList() {
+        return _playerList;
     }
 
     @Override

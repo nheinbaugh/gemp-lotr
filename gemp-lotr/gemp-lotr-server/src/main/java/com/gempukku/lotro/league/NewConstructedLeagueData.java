@@ -6,7 +6,6 @@ import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft2.SoloDraft;
 import com.gempukku.lotro.game.CardCollection;
-import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.packs.ProductLibrary;
@@ -30,7 +29,7 @@ public class NewConstructedLeagueData implements LeagueData {
         String[] params = parameters.split(",");
         int start = Integer.parseInt(params[0]);
 
-        _collectionType = CollectionType.getCollectionTypeByCode(params[1]);
+        _collectionType = CollectionType.parseCollectionCode(params[1]);
         if (_collectionType == null)
             throw new IllegalArgumentException("Unknown collection type");
 

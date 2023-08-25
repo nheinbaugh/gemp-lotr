@@ -516,7 +516,7 @@
     setName: PC Supplements
     rarityFile: /set100-rarity.txt
     originalSet: false
-    merchantable: false
+    merchantable: true
     needsLoading: false
     playable: true
   }
@@ -526,7 +526,7 @@
     setName: Shadow of the Past
     rarityFile: /set101-rarity.txt
     originalSet: false
-    merchantable: false
+    merchantable: true
     needsLoading: false
     playable: true
   }

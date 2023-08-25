@@ -426,7 +426,7 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + queue.getAttribute("queue") + "</td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
-						"<td>" + queue.getAttribute("playerCount") + "</td>" +
+						"<td><div class='prizeHint' title='Queued Players' value='" + queue.getAttribute("playerList") + "'>" + queue.getAttribute("playerCount") + "</div></td>" +
 						"</tr>";
 					}
 					else {
@@ -434,7 +434,7 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + queue.getAttribute("queue") + "</td>" +
 						"<td>" + queue.getAttribute("start") + "</td>" +
 						"<td>" + queue.getAttribute("system") + "</td>" +
-						"<td>" + queue.getAttribute("playerCount") + "</td>" +
+						"<td><div class='prizeHint' title='Queued Players' value='" + queue.getAttribute("playerList") + "'>" + queue.getAttribute("playerCount") + "</div></td>" +
 						"<td align='right'>" + formatPrice(queue.getAttribute("cost")) + "</td>" +
 						"<td>" + queue.getAttribute("prizes") + "</td>" +
 						"</tr>";
@@ -502,13 +502,13 @@ var GempLotrHallUI = Class.extend({
 						$(but).button().click((
 							function(tourneyInfo) {
 								var tourneyId = tournament.getAttribute("id");
-								var tourneyName = tournament.getAttribute("queue");
+								var tourneyName = tournament.getAttribute("name");
 								
 								return function () {
 									let isExecuted = confirm("Are you sure you want to resign from the " + tourneyName + " tournament? This cannot be undone.");
 									
 									if(isExecuted) {
-										that.comm.dropFromTournament(tournamentId, function (xml) {
+										that.comm.dropFromTournament(tourneyId, function (xml) {
 										that.processResponse(xml);
 									});
 									}
@@ -526,7 +526,7 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + tournament.getAttribute("system") + "</td>" +
 						"<td>" + tournament.getAttribute("stage") + "</td>" +
 						"<td>" + tournament.getAttribute("round") + "</td>" +
-						"<td>" + tournament.getAttribute("playerCount") + "</td>" +
+						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>" +
 						"</tr>");
 					}
 					else {
@@ -536,7 +536,7 @@ var GempLotrHallUI = Class.extend({
 						"<td>" + tournament.getAttribute("system") + "</td>" +
 						"<td>" + tournament.getAttribute("stage") + "</td>" +
 						"<td>" + tournament.getAttribute("round") + "</td>" +
-						"<td>" + tournament.getAttribute("playerCount") + "</td>" +
+						"<td><div class='prizeHint' title='Competing Players' value='" + tournament.getAttribute("playerList") + "<br><br>* = abandoned'>" + tournament.getAttribute("playerCount") + "</div></td>" +
 						"</tr>");
 					}
 

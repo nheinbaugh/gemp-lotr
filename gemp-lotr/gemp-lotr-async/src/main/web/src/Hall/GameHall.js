@@ -70,10 +70,14 @@ var chat;
 					return false;
 				} else if (tar.hasClass("prizeHint")) {
 					var prizeDescription = tar.attr("value");
+					var title = tar.attr("title");
+					if(!title) {
+						title = "Prizes details";
+					}
 
 					infoDialog.html(prizeDescription);
 
-					infoDialog.dialog({title:"Prizes details", width:300, height: 150});
+					infoDialog.dialog({title: title, width: 300, height: 150});
 					infoDialog.dialog("open");
 
 					event.stopPropagation();

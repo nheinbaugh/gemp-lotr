@@ -258,8 +258,8 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
                     response1 = writer.toString();
                     contentType = "application/xml; charset=UTF-8";
                 } else {
-                    response1 = "OK";
-                    contentType = "text/plain";
+                    response1 = "<result>OK</result>";
+                    contentType = "application/xml; charset=UTF-8";
                 }
                 HttpHeaders headers1 = convertToHeaders(headers);
                 headers1.set(CONTENT_TYPE, contentType);

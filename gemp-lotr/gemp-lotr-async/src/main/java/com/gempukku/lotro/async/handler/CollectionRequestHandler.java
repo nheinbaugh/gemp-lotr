@@ -239,7 +239,7 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
     }
 
     private CollectionType createCollectionType(String collectionType) {
-        final CollectionType result = CollectionType.getCollectionTypeByCode(collectionType);
+        final CollectionType result = CollectionType.parseCollectionCode(collectionType);
         if (result != null)
             return result;
 

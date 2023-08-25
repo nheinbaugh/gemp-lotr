@@ -73,8 +73,8 @@ public class GameRecorder {
                 win_recording_id = getNewRecordingID();
                 lose_recording_id = getNewRecordingID();
 
-                start_date = startDate;
-                end_date = endDate;
+                start_date = startDate.toLocalDateTime();
+                end_date = endDate.toLocalDateTime();
 
                 format_name = format.getName();
 
@@ -212,7 +212,7 @@ public class GameRecorder {
 
                 doc.appendChild(gameReplay);
 
-                try (OutputStream replayStream = getRecordingWriteStream(playerId, recordingId, gameInfo.start_date)) {
+                try (OutputStream replayStream = getRecordingWriteStream(playerId, recordingId, gameInfo.GetUTCStartDate())) {
                     // Prepare the DOM document for writing
                     Source source = new DOMSource(doc);
                     // Prepare the output file
@@ -264,7 +264,7 @@ public class GameRecorder {
             recordingFile = getRecordingFileVersion0(playerId, recordId);
         }
         else if(history.replay_version == 1) {
-            recordingFile = getRecordingFileVersion1(playerId, recordId, history.start_date);
+            recordingFile = getRecordingFileVersion1(playerId, recordId, history.GetUTCStartDate());
         }
 
         if (recordingFile == null || !recordingFile.exists() || !recordingFile.isFile())

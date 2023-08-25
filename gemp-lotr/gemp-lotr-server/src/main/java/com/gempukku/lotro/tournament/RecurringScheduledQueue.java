@@ -6,6 +6,7 @@ import com.gempukku.lotro.db.vo.CollectionType;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 public class RecurringScheduledQueue extends AbstractTournamentQueue implements TournamentQueue {
@@ -68,8 +69,12 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
                 for (String player : _players)
                     _tournamentService.addPlayer(tournamentId, player, _playerDecks.get(player));
 
-                Tournament tournament = _tournamentService.addTournament(tournamentId, null, tournamentName, _format, _collectionType, Tournament.Stage.PLAYING_GAMES,
-                        _pairingMechanism.getRegistryRepresentation(), _tournamentPrizes.getRegistryRepresentation(), new Date());
+                var info = new TournamentInfo(tournamentId, null, tournamentName, _format, ZonedDateTime.now(),
+                        _collectionType, Tournament.Stage.PLAYING_GAMES, 0, false,
+                        _pairingMechanism, _tournamentPrizes);
+
+                var tournament = _tournamentService.addTournament(info);
+
                 tournamentQueueCallback.createTournament(tournament);
 
                 _players.clear();

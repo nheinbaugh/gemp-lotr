@@ -1,5 +1,6 @@
 package com.gempukku.lotro.async.handler;
 
+import com.gempukku.lotro.DateUtils;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.common.DBDefs;
@@ -61,8 +62,6 @@ public class GameHistoryRequestHandler extends LotroServerRequestHandler impleme
         gameHistory.setAttribute("count", String.valueOf(recordCount));
         gameHistory.setAttribute("playerId", resourceOwner.getName());
 
-        var formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
         for (DBDefs.GameHistory game : playerGameHistory) {
             Element historyEntry = doc.createElement("historyEntry");
             historyEntry.setAttribute("winner", game.winner);
@@ -84,8 +83,8 @@ public class GameHistoryRequestHandler extends LotroServerRequestHandler impleme
                 historyEntry.setAttribute("deckName", game.loser_deck_name);
             }
 
-            historyEntry.setAttribute("startTime", game.start_date.format(formatter));
-            historyEntry.setAttribute("endTime", game.end_date.format(formatter));
+            historyEntry.setAttribute("startTime", game.start_date.format(DateUtils.DateHourMinuteFormatter));
+            historyEntry.setAttribute("endTime", game.end_date.format(DateUtils.DateHourMinuteFormatter));
 
             gameHistory.appendChild(historyEntry);
         }

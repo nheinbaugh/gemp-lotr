@@ -19,7 +19,7 @@ public class GameHistoryService {
 
     public int addGameHistory(DBDefs.GameHistory gh) {
         return addGameHistory(gh.winner, gh.winnerId, gh.loser, gh.loserId, gh.win_reason, gh.lose_reason, gh.win_recording_id, gh.lose_recording_id,
-                gh.format_name, gh.tournament, gh.winner_deck_name, gh.loser_deck_name, gh.start_date, gh.end_date, gh.replay_version);
+                gh.format_name, gh.tournament, gh.winner_deck_name, gh.loser_deck_name, gh.GetUTCStartDate(), gh.GetUTCEndDate(), gh.replay_version);
     }
 
     public int addGameHistory(String winner, int winnerId, String loser, int loserId, String winReason, String loseReason, String winRecordingId, String loseRecordingId, String formatName, String tournament, String winnerDeckName, String loserDeckName, ZonedDateTime startDate, ZonedDateTime endDate, int version) {

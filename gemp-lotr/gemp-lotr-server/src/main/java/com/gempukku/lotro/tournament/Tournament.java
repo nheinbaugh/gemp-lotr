@@ -5,12 +5,17 @@ import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.logic.vo.LotroDeck;
+import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.util.List;
 
 public interface Tournament {
     public enum Stage {
-        DRAFT("Drafting"), DECK_BUILDING("Deck building"), PLAYING_GAMES("Playing games"), FINISHED("Finished");
+        DRAFT("Drafting"),
+        DECK_BUILDING("Deck building"),
+        AWAITING_KICKOFF("Awaiting kickoff"),
+        PLAYING_GAMES("Playing games"),
+        FINISHED("Finished");
 
         private final String _humanReadable;
 
@@ -21,6 +26,36 @@ public interface Tournament {
         public String getHumanReadable() {
             return _humanReadable;
         }
+
+        public static Stage parseStage(String name) {
+            String nameCaps = name.toUpperCase().replace(' ', '_').replace('-', '_');
+            String nameLower = name.toLowerCase();
+
+            for (Stage stage : values()) {
+                if (stage.getHumanReadable().toLowerCase().equals(nameLower)
+                        || stage.toString().equals(nameCaps))
+                    return stage;
+            }
+            return null;
+        }
+    }
+
+    public static TournamentPrizes getTournamentPrizes(ProductLibrary productLibrary, String prizesScheme) {
+        if (prizesScheme == null || prizesScheme.equals("none"))
+            return new NoPrizes();
+
+        return new DailyTournamentPrizes(prizesScheme, productLibrary);
+    }
+
+    public static PairingMechanism getPairingMechanism(String pairingType) {
+        if (pairingType.equals("singleElimination"))
+            return new SingleEliminationPairing("singleElimination");
+        if (pairingType.equals("swiss"))
+            return new SwissPairingMechanism("swiss");
+        if (pairingType.equals("swiss-3"))
+            return new SwissPairingMechanism("swiss-3", 3);
+
+        return null;
     }
 
     public String getTournamentId();
@@ -32,13 +67,14 @@ public interface Tournament {
     public Stage getTournamentStage();
     public int getCurrentRound();
     public int getPlayersInCompetitionCount();
+    public String getPlayerList();
 
     public boolean advanceTournament(TournamentCallback tournamentCallback, CollectionsManager collectionsManager);
 
     public void reportGameFinished(String winner, String loser);
 
     public void playerChosenCard(String playerName, String cardId);
-    public void playerSummittedDeck(String player, LotroDeck deck);
+    public void playerSubmittedDeck(String player, LotroDeck deck);
     public LotroDeck getPlayerDeck(String player);
     public boolean dropPlayer(String player);
 
