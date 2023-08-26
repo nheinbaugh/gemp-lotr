@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class ScheduledTournamentQueue extends AbstractTournamentQueue implements TournamentQueue {
     private static final Duration _signupTimeBeforeStart = Duration.ofMinutes(60);
-    private static final Duration _wcSignupTimeBeforeStart = Duration.ofHours(24);
+    private static final Duration _wcSignupTimeBeforeStart = Duration.ofHours(30);
     private final ZonedDateTime _startTime;
     private final int _minimumPlayers;
     private final String _startCondition;

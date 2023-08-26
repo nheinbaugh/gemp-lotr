@@ -14,6 +14,7 @@ public interface Tournament {
         DRAFT("Drafting"),
         DECK_BUILDING("Deck building"),
         AWAITING_KICKOFF("Awaiting kickoff"),
+        PREPARING("Preparing"),
         PLAYING_GAMES("Playing games"),
         FINISHED("Finished");
 

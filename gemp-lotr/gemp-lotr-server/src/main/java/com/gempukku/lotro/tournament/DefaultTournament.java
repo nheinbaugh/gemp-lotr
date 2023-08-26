@@ -307,7 +307,11 @@ public class DefaultTournament implements Tournament {
                 if (_tournamentStage == Stage.AWAITING_KICKOFF) {
 
                 }
-                if (_tournamentStage == Stage.PLAYING_GAMES) {
+                else if (_tournamentStage == Stage.PREPARING) {
+                    _tournamentStage = Stage.PLAYING_GAMES;
+                    _tournamentService.updateTournamentStage(_tournamentId, _tournamentStage);
+                }
+                else if (_tournamentStage == Stage.PLAYING_GAMES) {
                     if (_currentlyPlayingPlayers.size() == 0) {
                         if (_pairingMechanism.isFinished(_tournamentRound, _players, _droppedPlayers)) {
                             finishTournament(tournamentCallback, collectionsManager);
