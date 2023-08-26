@@ -125,7 +125,7 @@ public class DefaultTournament implements Tournament {
             }
         }
 
-        if(_players.size() > 0) {
+        if(_players.size() > 0 && _playerList.length() > 2) {
             _playerList = _playerList.substring(0, _playerList.length() - 2);
         }
 

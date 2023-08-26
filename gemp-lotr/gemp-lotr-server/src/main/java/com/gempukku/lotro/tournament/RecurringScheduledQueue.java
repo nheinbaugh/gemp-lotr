@@ -6,14 +6,17 @@ import com.gempukku.lotro.db.vo.CollectionType;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 public class RecurringScheduledQueue extends AbstractTournamentQueue implements TournamentQueue {
-    private static final long _signupTimeBeforeStart = 1000 * 60 * 60; // 60 minutes before start
+    private static final Duration _signupTimeBeforeStart = Duration.ofMinutes(60);
 
-    private final long _repeatEvery;
-    private long _nextStart;
+    private final Duration _repeatEvery;
+    private ZonedDateTime _nextStart;
     private String _nextStartText;
 
     private final String _tournamentIdPrefix;
@@ -22,20 +25,21 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
     private final int _minimumPlayers;
     private final TournamentService _tournamentService;
 
-    public RecurringScheduledQueue(long originalStart, long repeatEvery, String tournamentIdPrefix,
+    public RecurringScheduledQueue(String id, ZonedDateTime originalStart, Duration repeatEvery, String tournamentIdPrefix,
                                               String tournamentQueueName, int cost, boolean requiresDeck,
                                               CollectionType collectionType,
                                               TournamentService tournamentService, TournamentPrizes tournamentPrizes, PairingMechanism pairingMechanism, String format, int minimumPlayers) {
-        super(cost, requiresDeck, collectionType, tournamentPrizes, pairingMechanism, format);
+        super(id, cost, requiresDeck, collectionType, tournamentPrizes, pairingMechanism, format);
         _repeatEvery = repeatEvery;
         _tournamentIdPrefix = tournamentIdPrefix;
         _tournamentQueueName = tournamentQueueName;
         _tournamentService = tournamentService;
         _minimumPlayers = minimumPlayers;
-        long number = (System.currentTimeMillis() - originalStart) / repeatEvery;
+        var sinceOriginal = Duration.between(originalStart, ZonedDateTime.now());
+        long intervals = (sinceOriginal.getSeconds() / repeatEvery.getSeconds()) + 1;
 
-        _nextStart = originalStart + (number + 1) * repeatEvery;
-        _nextStartText = DateUtils.formatDateWithHour(new Date(_nextStart));
+        _nextStart = originalStart.plus(intervals * repeatEvery.getSeconds(), ChronoUnit.SECONDS);
+        _nextStartText = DateUtils.FormatStandardDateTime(_nextStart);
     }
 
     @Override
@@ -55,13 +59,12 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
 
     @Override
     public boolean isJoinable() {
-        return System.currentTimeMillis() >= _nextStart - _signupTimeBeforeStart;
+        return ZonedDateTime.now().isAfter(_nextStart.minus(_signupTimeBeforeStart));
     }
 
     @Override
     public boolean process(TournamentQueueCallback tournamentQueueCallback, CollectionsManager collectionsManager) throws SQLException, IOException {
-        long now = System.currentTimeMillis();
-        if (now > _nextStart) {
+        if (ZonedDateTime.now().isAfter(_nextStart)) {
             if (_players.size() >= _minimumPlayers) {
                 String tournamentId = _tournamentIdPrefix+System.currentTimeMillis();
                 String tournamentName = _tournamentQueueName + " - " + DateUtils.getStringDateWithHour();
@@ -82,8 +85,8 @@ public class RecurringScheduledQueue extends AbstractTournamentQueue implements 
             } else {
                 leaveAllPlayers(collectionsManager);
             }
-            _nextStart+=_repeatEvery;
-            _nextStartText = DateUtils.formatDateWithHour(new Date(_nextStart));
+            _nextStart = _nextStart.plus(_repeatEvery);
+            _nextStartText = DateUtils.FormatStandardDateTime(_nextStart);
         }
         return false;
     }

@@ -30,6 +30,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -727,7 +728,6 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         _chatServer.sendSystemMessageToAllChatRooms("@everyone Server is reloading card definitions.  This will impact game speed until it is complete.");
 
-        Thread.sleep(6000);
         _cardLibrary.reloadAllDefinitions();
 
         _productLibrary.ReloadPacks();
@@ -740,7 +740,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
         responseWriter.writeHtmlResponse("OK");
     }
 
-    private void clearCache(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException {
+    private void clearCache(HttpRequest request, ResponseWriter responseWriter) throws HttpProcessingException, SQLException, IOException {
         validateAdmin(request);
 
         _leagueService.clearCache();
@@ -752,7 +752,7 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
 
         int after = _cacheManager.getTotalCount();
 
-        //_hallServer.cleanup();
+        _hallServer.cleanup(true);
 
         responseWriter.writeHtmlResponse("Before: " + before + "<br><br>After: " + after);
     }

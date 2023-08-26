@@ -2,6 +2,8 @@ package com.gempukku.lotro;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -16,6 +18,10 @@ public class DateUtils {
 
     public static String FormatStandardDateTime(ZonedDateTime dateTime) {
         return dateTime.format(DateHourMinuteFormatter);
+    }
+
+    public static ZonedDateTime ParseStringDate(String str) {
+        return ZonedDateTime.of(LocalDateTime.parse(str, DateHourMinuteFormatter), ZoneId.of("UTC"));
     }
 
     public static int getCurrentDate() {

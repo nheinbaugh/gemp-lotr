@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 public abstract class AbstractTournamentQueue implements TournamentQueue {
+    protected String _id;
     protected int _cost;
     protected Queue<String> _players = new LinkedList<>();
     protected String _playerList;
@@ -23,7 +24,8 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     protected final TournamentPrizes _tournamentPrizes;
     protected String _format;
 
-    public AbstractTournamentQueue(int cost, boolean requiresDeck, CollectionType collectionType, TournamentPrizes tournamentPrizes, PairingMechanism pairingMechanism, String format) {
+    public AbstractTournamentQueue(String id, int cost, boolean requiresDeck, CollectionType collectionType, TournamentPrizes tournamentPrizes, PairingMechanism pairingMechanism, String format) {
+        _id = id;
         _cost = cost;
         _requiresDeck = requiresDeck;
         _collectionType = collectionType;
@@ -98,6 +100,11 @@ public abstract class AbstractTournamentQueue implements TournamentQueue {
     @Override
     public final synchronized boolean isPlayerSignedUp(String player) {
         return _players.contains(player);
+    }
+
+    @Override
+    public final String getID() {
+        return _id;
     }
 
     @Override

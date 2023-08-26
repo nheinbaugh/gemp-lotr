@@ -24,9 +24,9 @@ public class ScheduledTournamentQueue extends AbstractTournamentQueue implements
     private final Tournament.Stage _stage;
     private final String _scheduledTournamentId;
 
-    public ScheduledTournamentQueue(TournamentService tournamentService, ProductLibrary productLibrary,
+    public ScheduledTournamentQueue(String id, TournamentService tournamentService, ProductLibrary productLibrary,
                                     DBDefs.ScheduledTournament info) {
-        super(info.cost, true, CollectionType.ALL_CARDS,
+        super(id, info.cost, true, CollectionType.ALL_CARDS,
                 Tournament.getTournamentPrizes(productLibrary, info.prizes),
                 Tournament.getPairingMechanism(info.playoff), info.format);
 

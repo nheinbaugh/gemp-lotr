@@ -6,7 +6,6 @@ import com.gempukku.lotro.chat.ChatCommandErrorException;
 import com.gempukku.lotro.chat.ChatRoomMediator;
 import com.gempukku.lotro.chat.ChatServer;
 import com.gempukku.lotro.collection.CollectionsManager;
-import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.IgnoreDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.db.vo.League;
@@ -24,10 +23,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAmount;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -39,9 +35,6 @@ public class HallServer extends AbstractServer {
     private static final int _playerTableInactivityPeriod = 1000 * 20 ; // 20 seconds
 
     private static final int _playerChatInactivityPeriod = 1000 * 60 * 5; // 5 minutes
-    private static final int _scheduledTournamentLoadTime = 7; // In days; one week
-    // Repeat tournaments every 2 days
-    private static final long _repeatTournaments = 1000 * 60 * 60 * 24 * 2;
 
     private final ChatServer _chatServer;
     private final LeagueService _leagueService;
@@ -67,9 +60,9 @@ public class HallServer extends AbstractServer {
     private final Map<Player, HallCommunicationChannel> _playerChannelCommunication = new ConcurrentHashMap<>();
     private int _nextChannelNumber = 0;
 
-    private final Map<String, Tournament> _runningTournaments = new LinkedHashMap<>();
 
-    private final Map<String, TournamentQueue> _tournamentQueues = new LinkedHashMap<>();
+
+
     private final ChatRoomMediator _hallChat;
     private final GameResultListener _notifyHallListeners = new NotifyHallListenersGameResultListener();
 
@@ -234,58 +227,23 @@ public class HallServer extends AbstractServer {
                     }
                 });
 
-        _tournamentQueues.put("fotr_queue", new ImmediateRecurringQueue(1500, "fotr_block",
-                CollectionType.ALL_CARDS, "fotrQueue-", "Fellowship Block", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_fotr_queue", new ImmediateRecurringQueue(1500, "pc_fotr_block",
-                CollectionType.ALL_CARDS, "pcfotrQueue-", "PC-Fellowship", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("ts_queue", new ImmediateRecurringQueue(1500, "towers_standard",
-                CollectionType.ALL_CARDS, "tsQueue-", "Towers Standard", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("movie_queue", new ImmediateRecurringQueue(1500, "movie",
-                CollectionType.ALL_CARDS, "movieQueue-", "Movie Block", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_movie_queue", new ImmediateRecurringQueue(1500, "pc_movie",
-                CollectionType.ALL_CARDS, "pcmovieQueue-", "PC-Movie", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("expanded_queue", new ImmediateRecurringQueue(1500, "expanded",
-                CollectionType.ALL_CARDS, "expandedQueue-", "Expanded", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
-        _tournamentQueues.put("pc_expanded_queue", new ImmediateRecurringQueue(1500, "pc_expanded",
-                CollectionType.ALL_CARDS, "pcexpandedQueue-", "PC-Expanded", 4,
-                true, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "onDemand"), Tournament.getPairingMechanism("singleElimination")));
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-        try {
-            _tournamentQueues.put("fotr_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-15 19:30:00").getTime(), _repeatTournaments, "fotrDailyEu-", "Daily Gondor Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "fotr_block", 4));
-            _tournamentQueues.put("fotr_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-16 00:30:00").getTime(), _repeatTournaments, "fotrDailyUs-", "Daily Rohan Fellowship Block", 0,
-                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "fotr_block", 4));
-            _tournamentQueues.put("movie_daily_eu", new RecurringScheduledQueue(sdf.parse("2013-01-16 19:30:00").getTime(), _repeatTournaments, "movieDailyEu-", "Daily Gondor Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "movie", 4));
-            _tournamentQueues.put("movie_daily_us", new RecurringScheduledQueue(sdf.parse("2013-01-17 00:30:00").getTime(), _repeatTournaments, "movieDailyUs-", "Daily Rohan Movie Block", 0,
-                    true, _defaultCollectionType, tournamentService, Tournament.getTournamentPrizes(_productLibrary, "daily"), Tournament.getPairingMechanism("swiss-3"),
-                    "movie", 4));
-        } catch (ParseException exp) {
-            // Ignore, can't happen
-        }
     }
 
     private void hallChanged() {
-        for (HallCommunicationChannel hallCommunicationChannel : _playerChannelCommunication.values())
+        for (var hallCommunicationChannel : _playerChannelCommunication.values())
             hallCommunicationChannel.hallChanged();
     }
 
     @Override
     protected void doAfterStartup() {
-        for (Tournament tournament : _tournamentService.getLiveTournaments())
-            _runningTournaments.put(tournament.getTournamentId(), tournament);
+        _hallDataAccessLock.writeLock().lock();
+        try {
+            _tournamentService.reloadTournaments();
+        }
+        finally {
+            _hallDataAccessLock.writeLock().unlock();
+        }
     }
 
     public void setShutdown(boolean shutdown) throws SQLException, IOException {
@@ -295,7 +253,7 @@ public class HallServer extends AbstractServer {
             _shutdown = shutdown;
             if (shutdown) {
                 cancelWaitingTables();
-                cancelTournamentQueues();
+                _tournamentService.cancelAllTournamentQueues();
                 _chatServer.sendSystemMessageToAllChatRooms("@everyone System is entering shutdown mode and will be restarted when all games are finished.");
                 hallChanged();
             }
@@ -339,10 +297,7 @@ public class HallServer extends AbstractServer {
         tableHolder.cancelWaitingTables();
     }
 
-    private void cancelTournamentQueues() throws SQLException, IOException {
-        for (TournamentQueue tournamentQueue : _tournamentQueues.values())
-            tournamentQueue.leaveAllPlayers(_collectionsManager);
-    }
+
 
     /**
      * @return If table created, otherwise <code>false</code> (if the user already is sitting at a table or playing).
@@ -434,7 +389,7 @@ public class HallServer extends AbstractServer {
 
         _hallDataAccessLock.writeLock().lock();
         try {
-            TournamentQueue tournamentQueue = _tournamentQueues.get(queueId);
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
             if (tournamentQueue == null)
                 throw new HallException("Tournament queue already finished accepting players, try again in a few seconds");
             if (tournamentQueue.isPlayerSignedUp(player.getName()))
@@ -503,7 +458,7 @@ public class HallServer extends AbstractServer {
     public void leaveQueue(String queueId, Player player) throws SQLException, IOException {
         _hallDataAccessLock.writeLock().lock();
         try {
-            TournamentQueue tournamentQueue = _tournamentQueues.get(queueId);
+            TournamentQueue tournamentQueue = _tournamentService.getTournamentQueue(queueId);
             if (tournamentQueue != null && tournamentQueue.isPlayerSignedUp(player.getName())) {
                 tournamentQueue.leavePlayer(_collectionsManager, player);
                 hallChanged();
@@ -517,7 +472,7 @@ public class HallServer extends AbstractServer {
         _hallDataAccessLock.writeLock().lock();
         try {
             boolean result = false;
-            for (TournamentQueue tournamentQueue : _tournamentQueues.values()) {
+            for (TournamentQueue tournamentQueue : _tournamentService.getAllTournamentQueues()) {
                 if (tournamentQueue.isPlayerSignedUp(player.getName())) {
                     tournamentQueue.leavePlayer(_collectionsManager, player);
                     result = true;
@@ -532,7 +487,7 @@ public class HallServer extends AbstractServer {
     public void dropFromTournament(String tournamentId, Player player) {
         _hallDataAccessLock.writeLock().lock();
         try {
-            Tournament tournament = _runningTournaments.get(tournamentId);
+            Tournament tournament = _tournamentService.getTournamentById(tournamentId);
             if (tournament != null) {
                 tournament.dropPlayer(player.getName());
                 hallChanged();
@@ -600,26 +555,8 @@ public class HallServer extends AbstractServer {
                 visitor.motd(_motd);
 
             tableHolder.processTables(isAdmin, player, visitor);
+            _tournamentService.processTournamentsForHall(_formatLibrary, player, visitor);
 
-            for (Map.Entry<String, TournamentQueue> tournamentQueueEntry : _tournamentQueues.entrySet()) {
-                String tournamentQueueKey = tournamentQueueEntry.getKey();
-                TournamentQueue tournamentQueue = tournamentQueueEntry.getValue();
-
-
-                visitor.visitTournamentQueue(tournamentQueueKey, tournamentQueue.getCost(), tournamentQueue.getCollectionType().getFullName(),
-                        _formatLibrary.getFormat(tournamentQueue.getFormat()).getName(), tournamentQueue.getTournamentQueueName(),
-                        tournamentQueue.getPrizesDescription(), tournamentQueue.getPairingDescription(), tournamentQueue.getStartCondition(),
-                        tournamentQueue.getPlayerCount(), tournamentQueue.getPlayerList(), tournamentQueue.isPlayerSignedUp(player.getName()), tournamentQueue.isJoinable());
-            }
-
-            for (Map.Entry<String, Tournament> tournamentEntry : _runningTournaments.entrySet()) {
-                String tournamentKey = tournamentEntry.getKey();
-                Tournament tournament = tournamentEntry.getValue();
-                visitor.visitTournament(tournamentKey, tournament.getCollectionType().getFullName(),
-                        _formatLibrary.getFormat(tournament.getFormat()).getName(), tournament.getTournamentName(), tournament.getPlayOffSystem(),
-                        tournament.getTournamentStage().getHumanReadable(),
-                        tournament.getCurrentRound(), tournament.getPlayersInCompetitionCount(), tournament.getPlayerList(), tournament.isPlayerInCompetition(player.getName()));
-            }
         } finally {
             _hallDataAccessLock.readLock().unlock();
         }
@@ -796,14 +733,20 @@ public class HallServer extends AbstractServer {
         }
     }
 
+    public TournamentCallback getTournamentCallback(Tournament tourney) {
+        return new HallTournamentCallback(tourney);
+    }
+
     private int _tickCounter = 60;
 
-    @Override
-    protected void cleanup() throws SQLException, IOException {
+    public void cleanup(boolean forceRefresh) throws SQLException, IOException {
+
         _hallDataAccessLock.writeLock().lock();
         try {
             // Remove finished games
             tableHolder.removeFinishedGames();
+
+            boolean changed = false;
 
             long currentTime = System.currentTimeMillis();
             Map<Player, HallCommunicationChannel> visitCopy = new LinkedHashMap<>(_playerChannelCommunication);
@@ -812,8 +755,7 @@ public class HallServer extends AbstractServer {
                     Player player = lastVisitedPlayer.getKey();
                     boolean leftTables = leaveAwaitingTablesForLeavingPlayer(player);
                     boolean leftQueues = leaveQueuesForLeavingPlayer(player);
-                    if (leftTables || leftQueues)
-                        hallChanged();
+                    changed |= (leftTables || leftQueues);
                 }
 
                 if (currentTime > lastVisitedPlayer.getValue().getLastAccessed() + _playerChatInactivityPeriod) {
@@ -822,54 +764,34 @@ public class HallServer extends AbstractServer {
                 }
             }
 
-            for (Map.Entry<String, TournamentQueue> runningTournamentQueue : new HashMap<>(_tournamentQueues).entrySet()) {
-                String tournamentQueueKey = runningTournamentQueue.getKey();
-                TournamentQueue tournamentQueue = runningTournamentQueue.getValue();
-                HallTournamentQueueCallback queueCallback = new HallTournamentQueueCallback();
-                // If it's finished, remove it
-                if (tournamentQueue.process(queueCallback, _collectionsManager)) {
-                    _tournamentQueues.remove(tournamentQueueKey);
-                    hallChanged();
-                }
+            if(forceRefresh) {
+                _tournamentService.reloadTournaments();
             }
 
-            for (Map.Entry<String, Tournament> tournamentEntry : new HashMap<>(_runningTournaments).entrySet()) {
-                Tournament runningTournament = tournamentEntry.getValue();
-                boolean changed = runningTournament.advanceTournament(new HallTournamentCallback(runningTournament), _collectionsManager);
-                if (runningTournament.getTournamentStage() == Tournament.Stage.FINISHED)
-                    _runningTournaments.remove(tournamentEntry.getKey());
-                if (changed)
-                    hallChanged();
-            }
+            changed |= _tournamentService.cleanupTournamentQueues(this);
+            changed |= _tournamentService.cleanupTournaments(this);
 
-            if (_tickCounter == 60) {
+            if (_tickCounter == 60 || forceRefresh) {
                 _tickCounter = 0;
-                var unstartedTournamentQueues = _tournamentService.getUnstartedScheduledTournamentQueues(
-                        ZonedDateTime.now().plusDays(_scheduledTournamentLoadTime));
-                for (var unstartedTourney : unstartedTournamentQueues) {
-                    String scheduledTournamentId = unstartedTourney.tournament_id;
-                    if (!_tournamentQueues.containsKey(scheduledTournamentId)) {
-                        var scheduledTourney = new ScheduledTournamentQueue(_tournamentService, _productLibrary, unstartedTourney);
-                        _tournamentQueues.put(scheduledTournamentId, scheduledTourney);
-                        hallChanged();
-                    }
-                }
+                changed |= _tournamentService.refreshQueues(this);
             }
             _tickCounter++;
+
+            if(changed) {
+                hallChanged();
+            }
 
         } finally {
             _hallDataAccessLock.writeLock().unlock();
         }
     }
 
-    private class HallTournamentQueueCallback implements TournamentQueueCallback {
-        @Override
-        public void createTournament(Tournament tournament) {
-            _runningTournaments.put(tournament.getTournamentId(), tournament);
-        }
+    @Override
+    public void cleanup() throws SQLException, IOException {
+        cleanup(false);
     }
 
-    private class HallTournamentCallback implements TournamentCallback {
+    public class HallTournamentCallback implements TournamentCallback {
         private final Tournament _tournament;
         private final GameSettings tournamentGameSettings;
 

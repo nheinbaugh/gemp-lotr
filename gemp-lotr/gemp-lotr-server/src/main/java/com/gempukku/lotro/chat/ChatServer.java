@@ -47,8 +47,10 @@ public class ChatServer extends AbstractServer {
 
     public void sendSystemMessageToAllChatRooms(String message) {
         try {
-            for (ChatRoomMediator chatRoomMediator : _chatRooms.values())
+            for (ChatRoomMediator chatRoomMediator : _chatRooms.values()) {
                 chatRoomMediator.sendMessage("System", message, true);
+            }
+            cleanup();
         } catch (PrivateInformationException exp) {
             // Ignore, sent as admin
         } catch (ChatCommandErrorException e) {

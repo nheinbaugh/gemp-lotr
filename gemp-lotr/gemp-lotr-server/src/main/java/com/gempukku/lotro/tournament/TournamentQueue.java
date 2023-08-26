@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public interface TournamentQueue {
+    public String getID();
     public int getCost();
 
     public String getFormat();
