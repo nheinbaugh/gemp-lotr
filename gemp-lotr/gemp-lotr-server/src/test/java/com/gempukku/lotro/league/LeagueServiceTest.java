@@ -160,32 +160,32 @@ public class LeagueServiceTest extends AbstractAtTest {
 
         final List<PlayerStanding> leagueSerieStandings = leagueService.getLeagueSerieStandings(league, leagueSerie);
         assertEquals(3, leagueSerieStandings.size());
-        assertEquals("player1", leagueSerieStandings.get(0).getPlayerName());
-        assertEquals(4, leagueSerieStandings.get(0).getPoints());
-        assertEquals(2, leagueSerieStandings.get(0).getGamesPlayed());
-        assertEquals(1, leagueSerieStandings.get(0).getStanding());
-        assertEquals("player2", leagueSerieStandings.get(1).getPlayerName());
-        assertEquals(3, leagueSerieStandings.get(1).getPoints());
-        assertEquals(2, leagueSerieStandings.get(1).getGamesPlayed());
-        assertEquals(2, leagueSerieStandings.get(1).getStanding());
-        assertEquals("player3", leagueSerieStandings.get(2).getPlayerName());
-        assertEquals(2, leagueSerieStandings.get(2).getPoints());
-        assertEquals(2, leagueSerieStandings.get(2).getGamesPlayed());
-        assertEquals(3, leagueSerieStandings.get(2).getStanding());
+        assertEquals("player1", leagueSerieStandings.get(0).playerName());
+        assertEquals(4, leagueSerieStandings.get(0).points());
+        assertEquals(2, leagueSerieStandings.get(0).gamesPlayed());
+        assertEquals(1, leagueSerieStandings.get(0).standing());
+        assertEquals("player2", leagueSerieStandings.get(1).playerName());
+        assertEquals(3, leagueSerieStandings.get(1).points());
+        assertEquals(2, leagueSerieStandings.get(1).gamesPlayed());
+        assertEquals(2, leagueSerieStandings.get(1).standing());
+        assertEquals("player3", leagueSerieStandings.get(2).playerName());
+        assertEquals(2, leagueSerieStandings.get(2).points());
+        assertEquals(2, leagueSerieStandings.get(2).gamesPlayed());
+        assertEquals(3, leagueSerieStandings.get(2).standing());
 
         final List<PlayerStanding> leagueStandings = leagueService.getLeagueStandings(league);
         assertEquals(3, leagueStandings.size());
-        assertEquals("player1", leagueStandings.get(0).getPlayerName());
-        assertEquals(4, leagueStandings.get(0).getPoints());
-        assertEquals(2, leagueStandings.get(0).getGamesPlayed());
-        assertEquals(1, leagueStandings.get(0).getStanding());
-        assertEquals("player2", leagueStandings.get(1).getPlayerName());
-        assertEquals(3, leagueStandings.get(1).getPoints());
-        assertEquals(2, leagueStandings.get(1).getGamesPlayed());
-        assertEquals(2, leagueStandings.get(1).getStanding());
-        assertEquals("player3", leagueStandings.get(2).getPlayerName());
-        assertEquals(2, leagueStandings.get(2).getPoints());
-        assertEquals(2, leagueStandings.get(2).getGamesPlayed());
-        assertEquals(3, leagueStandings.get(2).getStanding());
+        assertEquals("player1", leagueStandings.get(0).playerName());
+        assertEquals(4, leagueStandings.get(0).points());
+        assertEquals(2, leagueStandings.get(0).gamesPlayed());
+        assertEquals(1, leagueStandings.get(0).standing());
+        assertEquals("player2", leagueStandings.get(1).playerName());
+        assertEquals(3, leagueStandings.get(1).points());
+        assertEquals(2, leagueStandings.get(1).gamesPlayed());
+        assertEquals(2, leagueStandings.get(1).standing());
+        assertEquals("player3", leagueStandings.get(2).playerName());
+        assertEquals(2, leagueStandings.get(2).points());
+        assertEquals(2, leagueStandings.get(2).gamesPlayed());
+        assertEquals(3, leagueStandings.get(2).standing());
     }
 }

@@ -3,6 +3,7 @@ package com.gempukku.lotro.tournament;
 import com.gempukku.lotro.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.common.DBDefs;
+import com.gempukku.lotro.db.GameHistoryDAO;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.DraftPack;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
@@ -28,6 +29,7 @@ public class TournamentService {
     private final TournamentDAO _tournamentDao;
     private final TournamentPlayerDAO _tournamentPlayerDao;
     private final TournamentMatchDAO _tournamentMatchDao;
+    private final GameHistoryDAO _gameHistoryDao;
     private final LotroCardBlueprintLibrary _library;
 
     private final CollectionsManager _collectionsManager;
@@ -40,13 +42,14 @@ public class TournamentService {
 
     public TournamentService(CollectionsManager collectionsManager, ProductLibrary productLibrary, DraftPackStorage draftPackStorage,
                              TournamentDAO tournamentDao, TournamentPlayerDAO tournamentPlayerDao, TournamentMatchDAO tournamentMatchDao,
-                             LotroCardBlueprintLibrary library) {
+                             GameHistoryDAO gameHistoryDao, LotroCardBlueprintLibrary library) {
         _collectionsManager = collectionsManager;
         _productLibrary = productLibrary;
         _draftPackStorage = draftPackStorage;
         _tournamentDao = tournamentDao;
         _tournamentPlayerDao = tournamentPlayerDao;
         _tournamentMatchDao = tournamentMatchDao;
+        _gameHistoryDao = gameHistoryDao;
         _library = library;
     }
 
@@ -227,7 +230,16 @@ public class TournamentService {
     }
 
     public List<TournamentMatch> getMatches(String tournamentId) {
-        return _tournamentMatchDao.getMatches(tournamentId);
+        var dbMatches = _tournamentMatchDao.getMatches(tournamentId);
+        var matches = new ArrayList<TournamentMatch>();
+        for(var dbmatch : dbMatches) {
+            matches.add(TournamentMatch.fromDB(dbmatch));
+        }
+        return matches;
+    }
+
+    public List<DBDefs.GameHistory> getGames(String tournamentName) {
+        return _gameHistoryDao.getGamesForTournament(tournamentName);
     }
 
     public Tournament addTournament(TournamentInfo info) {

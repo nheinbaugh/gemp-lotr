@@ -4,6 +4,10 @@ import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
+import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
+import com.gempukku.lotro.game.SortAndFilterCards;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 
@@ -84,4 +88,6 @@ public interface Tournament {
     public List<PlayerStanding> getCurrentStandings();
 
     public boolean isPlayerInCompetition(String player);
+
+    public String produceReport(LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,  SortAndFilterCards cardFilter) throws CardNotFoundException;
 }

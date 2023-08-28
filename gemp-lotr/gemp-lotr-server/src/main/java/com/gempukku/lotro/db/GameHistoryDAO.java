@@ -14,6 +14,7 @@ public interface GameHistoryDAO {
     public int getGameHistoryForPlayerCount(Player player);
 
     public List<DBDefs.GameHistory> getGameHistoryForFormat(String format, int count);
+    public List<DBDefs.GameHistory> getGamesForTournament(String tournamentName);
 
     public int getActivePlayersCount(ZonedDateTime from, ZonedDateTime to);
 

@@ -1,5 +1,6 @@
 package com.gempukku.lotro.tournament;
 
+import com.gempukku.lotro.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
@@ -7,12 +8,17 @@ import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.DefaultDraft;
 import com.gempukku.lotro.draft.Draft;
 import com.gempukku.lotro.draft.DraftPack;
-import com.gempukku.lotro.game.CardCollection;
+import com.gempukku.lotro.game.*;
+import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.logic.GameUtils;
 import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.PacksStorage;
 import com.gempukku.lotro.packs.ProductLibrary;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
+import org.json.XML;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -35,7 +41,8 @@ public class DefaultTournament implements Tournament {
     private String _playerList;
     private final Map<String, LotroDeck> _playerDecks;
     private final Set<String> _droppedPlayers;
-    private final Map<String, Integer> _playerByes;
+    //This used to be "byes per player", but is now "rounds with byes per player"
+    private final HashMap<String, Integer> _playerByes;
 
     private final Set<String> _currentlyPlayingPlayers;
     private final Set<TournamentMatch> _finishedTournamentMatches;
@@ -52,6 +59,8 @@ public class DefaultTournament implements Tournament {
 
     private final boolean _manualKickoff;
     private boolean _hasKickedOff;
+
+    private String _tournamentReport;
 
     public DefaultTournament(TournamentService tournamentService, String tournamentId,
                              String tournamentName, String format, CollectionType collectionType,
@@ -362,10 +371,10 @@ public class DefaultTournament implements Tournament {
         for (PlayerStanding playerStanding : list) {
             CardCollection prizes = _tournamentPrizes.getPrizeForTournament(playerStanding, list.size());
             if (prizes != null)
-                collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " prize", playerStanding.getPlayerName(), CollectionType.MY_CARDS, prizes.getAll());
+                collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " prize", playerStanding.playerName(), CollectionType.MY_CARDS, prizes.getAll());
             CardCollection trophies = _tournamentPrizes.getTrophyForTournament(playerStanding, list.size());
             if (trophies != null)
-                collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " trophy", playerStanding.getPlayerName(), CollectionType.TROPHY, trophies.getAll());
+                collectionsManager.addItemsToPlayerCollection(true, "Tournament " + getTournamentName() + " trophy", playerStanding.playerName(), CollectionType.TROPHY, trophies.getAll());
         }
     }
 
@@ -382,7 +391,8 @@ public class DefaultTournament implements Tournament {
 
         Map<String, Set<String>> previouslyPaired = getPreviouslyPairedPlayersMap();
 
-        boolean finished = _pairingMechanism.pairPlayers(_tournamentRound, _players, _droppedPlayers, _playerByes, getCurrentStandings(), previouslyPaired, pairingResults, byeResults);
+        boolean finished = _pairingMechanism.pairPlayers(_tournamentRound, _players, _droppedPlayers, _playerByes,
+                getCurrentStandings(), previouslyPaired, pairingResults, byeResults);
         if (finished) {
             finishTournament(tournamentCallback, collectionsManager);
         } else {
@@ -395,11 +405,13 @@ public class DefaultTournament implements Tournament {
                 createNewGame(tournamentCallback, playerOne, playerTwo);
             }
 
-            if (byeResults.size()>0)
+            if (byeResults.size() > 0) {
                 tournamentCallback.broadcastMessage("Bye awarded to: "+ StringUtils.join(byeResults, ", "));
+            }
+
             for (String bye : byeResults) {
                 _tournamentService.addRoundBye(_tournamentId, bye, _tournamentRound);
-                addPlayerBye(bye);
+                _playerByes.put(bye, _tournamentRound);
             }
         }
     }
@@ -414,13 +426,6 @@ public class DefaultTournament implements Tournament {
             previouslyPaired.get(finishedTournamentMatch.getLoser()).add(finishedTournamentMatch.getWinner());
         }
         return previouslyPaired;
-    }
-
-    private void addPlayerBye(String player) {
-        Integer byes = _playerByes.get(player);
-        if (byes == null)
-            byes = 0;
-        _playerByes.put(player, byes + 1);
     }
 
     private class PairPlayers implements TournamentTask {
@@ -457,5 +462,143 @@ public class DefaultTournament implements Tournament {
         public long getExecuteAfter() {
             return 0;
         }
+    }
+
+    @Override
+    public String produceReport(LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,  SortAndFilterCards cardFilter) throws CardNotFoundException {
+        if(_tournamentReport != null)
+            return _tournamentReport;
+
+        ZonedDateTime start = null;
+        ZonedDateTime end = null;
+
+        var games = _tournamentService.getGames(_tournamentName);
+
+        for(var match : _finishedTournamentMatches) {
+            var game = games.stream()
+                .filter((x) -> x.winner.equals(match.getWinner()) && x.loser.equals(match.getLoser()))
+                .findFirst()
+                .orElse(null);
+
+            var gameStart = game.GetUTCStartDate();
+            var gameEnd = game.GetUTCEndDate();
+
+            if(start == null || gameStart.isBefore(start)) {
+                start = gameStart;
+            }
+
+            if(end == null || gameEnd.isAfter(end)) {
+                end = gameEnd;
+            }
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append("<html><body>")
+                .append("<h1>").append(StringEscapeUtils.escapeHtml(_tournamentName)).append("</h1>")
+                .append("<ul>")
+                .append("<li>Format: ").append(_format).append("</li>")
+                .append("<li>Collection: ").append(_collectionType.getFullName()).append("</li>")
+                .append("<li>Total Rounds: ").append(_tournamentRound).append("</li>")
+                .append("<li>Start: ").append(DateUtils.FormatStandardDateTime(start)).append("</li>")
+                .append("<li>End: ").append(DateUtils.FormatStandardDateTime(end)).append("</li>")
+                .append("</ul><br/><br/><hr>");
+
+        for(var standing : getCurrentStandings()) {
+            var playerName = standing.playerName();
+            result.append("<h2>by ").append(playerName).append("</h2><br/>")
+                    .append("<h3>Round Replays</h3>");
+
+            var rounds = new ArrayList<String>();
+
+            var playerRounds = _finishedTournamentMatches.stream()
+                    .filter((x) -> x.getPlayerOne().equals(playerName) || x.getPlayerTwo().equals(playerName))
+                    .toList();
+            for(int i = 1; i <= _tournamentRound; i++) {
+                if(_playerByes.containsKey(playerName) && _playerByes.get(playerName) == i) {
+                    rounds.add("[bye]");
+                    continue;
+                }
+
+                int currentRound = i;
+                var match = playerRounds.stream().filter(x -> x.getRound() == currentRound)
+                        .findFirst().orElse(null);
+
+                if(match == null) {
+                    rounds.add("[dropped]");
+                    continue;
+                }
+
+                var game = games.stream().filter(x -> x.winner.equals(playerName) || x.loser.equals(playerName))
+                        .findFirst().orElse(null);
+                if(game == null)
+                    continue;
+
+                String replayId = game.win_recording_id;
+                if(match.getLoser().equals(playerName)) {
+                    replayId = game.lose_recording_id;
+                }
+
+                rounds.add("<a href='https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=" +
+                        playerName.replace("_", "%5F") + "$" + replayId +
+                        "' target='_blank'>Round " + i + "</a>");
+            }
+
+            result.append(String.join(" • ", rounds));
+
+            result.append("<h3>Deck</h3>");
+
+            LotroDeck deck = _tournamentService.getPlayerDeck(_tournamentId, playerName, _format);
+
+            String ringBearer = deck.getRingBearer();
+            if (ringBearer != null) {
+                result.append("<b>Ring-bearer:</b> ")
+                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(ringBearer)))
+                    .append("<br/>");
+            }
+
+            String ring = deck.getRing();
+            if (ring != null) {
+                result.append("<b>Ring:</b> ")
+                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(ring)))
+                    .append("<br/>");
+            }
+
+            DefaultCardCollection deckCards = new DefaultCardCollection();
+            for (String card : deck.getAdventureCards()) {
+                deckCards.addItem(bpLibrary.getBaseBlueprintId(card), 1);
+            }
+            for (String site : deck.getSites()) {
+                deckCards.addItem(bpLibrary.getBaseBlueprintId(site), 1);
+            }
+
+            result.append("<br/>");
+            result.append("<b>Adventure deck:</b><br/>");
+            for (CardCollection.Item item : cardFilter.process("cardType:SITE sort:siteNumber,twilight", deckCards.getAll(), bpLibrary, formatLibrary)) {
+                result.append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
+                    .append("<br/>");
+            }
+
+            result.append("<br/>");
+            result.append("<b>Free Peoples Draw Deck:</b><br/>");
+            for (CardCollection.Item item : cardFilter.process("side:FREE_PEOPLE sort:cardType,culture,name", deckCards.getAll(), bpLibrary, formatLibrary)) {
+                result.append(item.getCount()).append("x ")
+                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
+                    .append("<br/>");
+            }
+
+            result.append("<br/>");
+            result.append("<b>Shadow Draw Deck:</b><br/>");
+            for (CardCollection.Item item : cardFilter.process("side:SHADOW sort:cardType,culture,name", deckCards.getAll(), bpLibrary, formatLibrary)) {
+                result.append(item.getCount()).append("x ")
+                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
+                    .append("<br/>");
+            }
+
+            result.append("<br/><br/><hr>");
+        }
+
+        result.append("</body></html>");
+
+        return result.toString();
     }
 }

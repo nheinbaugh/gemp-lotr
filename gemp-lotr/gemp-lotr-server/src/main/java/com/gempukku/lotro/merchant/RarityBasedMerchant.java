@@ -73,6 +73,8 @@ public class RarityBasedMerchant implements Merchant {
         if (rarity == null)
             return null;
         String cardRarity = rarity.getCardRarity(blueprintId);
+        if(cardRarity == null)
+            return null;
         return switch (cardRarity) {
             case "C" -> 50;
             case "U", "S" -> 100;

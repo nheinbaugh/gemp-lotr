@@ -83,3 +83,17 @@ ADD COLUMN manual_kickoff BIT NOT NULL DEFAULT 0 AFTER `round`;
 
 
 
+ALTER TABLE gemp_db.tournament_match  
+ADD COLUMN round2 INT NOT NULL DEFAULT 0 AFTER `round`;
+
+UPDATE tournament_match 
+SET round2 = `round`;
+
+ALTER TABLE gemp_db.tournament_match 
+DROP COLUMN `round`;
+
+ALTER TABLE gemp_db.tournament_match 
+RENAME COLUMN round2 TO `round`;
+
+
+

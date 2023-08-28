@@ -148,4 +148,13 @@ public class DBDefs {
         public boolean manual_kickoff;
         public boolean started;
     }
+
+    public static class TournamentMatch {
+        public int id;
+        public String tournament_id;
+        public int round;
+        public String player_one; //45
+        public String player_two; //45
+        public String winner; //45
+    }
 }

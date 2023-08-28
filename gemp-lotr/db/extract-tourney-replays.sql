@@ -33,7 +33,7 @@
 
 
 
-SET @player = 'Icarus', @rank=0;
+SET @player = 'Axter', @rank=0;
 
 SELECT 
 	 @player AS player
@@ -48,10 +48,19 @@ INNER JOIN player p
 INNER JOIN deck d 
 	ON d.player_id = p.id 
 	AND (d.name = winner_deck_name OR d.name = loser_deck_name OR d.name = 'denethor / tentacle V2') 
-WHERE tournament = '2023 Decipher Fellowship Block Format Championship'
+WHERE tournament = '2023 PC-Expanded Championship'
 	AND start_date > '2023-07-20'
 	AND (winner = @player OR loser = @player)
 ORDER BY gh.id;
+
+
+
+-- 
+-- SELECT *
+-- 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(winner, '_', '%5F'), '$', win_recording_id) AS winner_replay
+-- 	,CONCAT('https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=',REPLACE(loser, '_', '%5F'), '$', lose_recording_id) AS loser_replay
+-- FROM game_history gh 
+-- WHERE tournament = '2023 PC-Expanded Championship'
 
 
 

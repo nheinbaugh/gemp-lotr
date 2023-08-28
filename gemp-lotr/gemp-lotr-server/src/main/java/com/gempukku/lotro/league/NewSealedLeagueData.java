@@ -103,12 +103,12 @@ public class NewSealedLeagueData implements LeagueData {
             LeagueSerieData lastSerie = _series.get(_series.size() - 1);
             if (currentTime > DateUtils.offsetDate(lastSerie.getEnd(), 1)) {
                 for (PlayerStanding leagueStanding : leagueStandings) {
-                    CardCollection leaguePrize = _leaguePrizes.getPrizeForLeague(leagueStanding.getStanding(), leagueStandings.size(), leagueStanding.getGamesPlayed(), maxGamesTotal, _collectionType);
+                    CardCollection leaguePrize = _leaguePrizes.getPrizeForLeague(leagueStanding.standing(), leagueStandings.size(), leagueStanding.gamesPlayed(), maxGamesTotal, _collectionType);
                     if (leaguePrize != null)
-                        collectionsManager.addItemsToPlayerCollection(true, "End of league prizes", leagueStanding.getPlayerName(), _prizeCollectionType, leaguePrize.getAll());
-                    final CardCollection leagueTrophies = _leaguePrizes.getTrophiesForLeague(leagueStanding.getStanding(), leagueStandings.size(), leagueStanding.getGamesPlayed(), maxGamesTotal, _collectionType);
+                        collectionsManager.addItemsToPlayerCollection(true, "End of league prizes", leagueStanding.playerName(), _prizeCollectionType, leaguePrize.getAll());
+                    final CardCollection leagueTrophies = _leaguePrizes.getTrophiesForLeague(leagueStanding.standing(), leagueStandings.size(), leagueStanding.gamesPlayed(), maxGamesTotal, _collectionType);
                     if (leagueTrophies != null)
-                        collectionsManager.addItemsToPlayerCollection(true, "End of league trophies", leagueStanding.getPlayerName(), CollectionType.TROPHY, leagueTrophies.getAll());
+                        collectionsManager.addItemsToPlayerCollection(true, "End of league trophies", leagueStanding.playerName(), CollectionType.TROPHY, leagueTrophies.getAll());
                 }
                 status++;
             }

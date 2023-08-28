@@ -53,7 +53,8 @@ public class SwissPairingMechanism implements PairingMechanism {
 
         Set<String> playersWithByes = getPlayersWithByes(playerByes);
 
-        boolean success = tryPairBracketAndFurther(0, new HashSet<>(), new HashSet<>(), playersGroupedByBracket, playersWithByes, previouslyPaired, pairingResults, byeResults);
+        boolean success = tryPairBracketAndFurther(0, new HashSet<>(), new HashSet<>(), playersGroupedByBracket,
+                playersWithByes, previouslyPaired, pairingResults, byeResults);
         // Managed to pair with this carry over count - proceed with the pairings
         if (success) {
             return false;
@@ -166,9 +167,9 @@ public class SwissPairingMechanism implements PairingMechanism {
     private List<List<String>> groupPlayersByPointBracket(Set<String> droppedPlayers, List<PlayerStanding> currentStandings, int maxNumberOfPoints) {
         List<String>[] playersByPoints = new List[maxNumberOfPoints + 1];
         for (PlayerStanding currentStanding : currentStandings) {
-            String playerName = currentStanding.getPlayerName();
+            String playerName = currentStanding.playerName();
             if (!droppedPlayers.contains(playerName)) {
-                int points = currentStanding.getPoints();
+                int points = currentStanding.points();
                 List<String> playersByPoint = playersByPoints[maxNumberOfPoints - points];
                 if (playersByPoint == null) {
                     playersByPoint = new ArrayList<>();
@@ -191,8 +192,8 @@ public class SwissPairingMechanism implements PairingMechanism {
     private int determineMaximumNumberOfPoints(Set<String> droppedPlayers, List<PlayerStanding> currentStandings) {
         int maxNumberOfPoints = 0;
         for (PlayerStanding currentStanding : currentStandings) {
-            if (!droppedPlayers.contains(currentStanding.getPlayerName())) {
-                maxNumberOfPoints = Math.max(currentStanding.getPoints(), maxNumberOfPoints);
+            if (!droppedPlayers.contains(currentStanding.playerName())) {
+                maxNumberOfPoints = Math.max(currentStanding.points(), maxNumberOfPoints);
             }
         }
         return maxNumberOfPoints;
