@@ -480,6 +480,9 @@ public class DefaultTournament implements Tournament {
                 .findFirst()
                 .orElse(null);
 
+            if(game == null)
+                continue;
+            
             var gameStart = game.GetUTCStartDate();
             var gameEnd = game.GetUTCEndDate();
 
