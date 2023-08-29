@@ -254,33 +254,46 @@ var LeagueResultsUI = Class.extend({
         this.questionDialog.dialog("open");
     },
 
-    createStandingsTable:function (standings) {
+    createStandingsTable:function (xmlstandings) {
         var standingsTable = $("<table class='standings'></table>");
 
         standingsTable.append("<tr><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th><th></th><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>");
 
+        var standings = [];
+        for (var k = 0; k < xmlstandings.length; k++) {
+            var standing = {};
+            var xmlstanding = xmlstandings[k];
+            
+            standing.currentStanding = xmlstanding.getAttribute("standing");
+            standing.player = xmlstanding.getAttribute("player");
+            standing.points = parseInt(xmlstanding.getAttribute("points"));
+            standing.gamesPlayed = parseInt(xmlstanding.getAttribute("gamesPlayed"));
+            standing.opponentWinPerc = xmlstanding.getAttribute("opponentWin");
+            
+            standings.push(standing);
+        }
+        
+        standings.sort((a, b) => a.currentStanding - b.currentStanding);
+        
         var secondColumnBaseIndex = Math.ceil(standings.length / 2);
 
         for (var k = 0; k < secondColumnBaseIndex; k++) {
             var standing = standings[k];
-            var currentStanding = standing.getAttribute("standing");
-            var player = standing.getAttribute("player");
-            var points = parseInt(standing.getAttribute("points"));
-            var gamesPlayed = parseInt(standing.getAttribute("gamesPlayed"));
-            var opponentWinPerc = standing.getAttribute("opponentWin");
 
-            standingsTable.append("<tr><td>" + currentStanding + "</td><td>" + player + "</td><td>" + points + "</td><td>" + gamesPlayed + "</td><td>" + opponentWinPerc + "</td></tr>");
+            standingsTable.append("<tr><td>" + standing.currentStanding 
+                                  + "</td><td>" + standing.player + "</td><td>" 
+                                  + standing.points + "</td><td>" + standing.gamesPlayed 
+                                  + "</td><td>" + standing.opponentWinPerc + "</td></tr>");
         }
 
         for (var k = secondColumnBaseIndex; k < standings.length; k++) {
             var standing = standings[k];
-            var currentStanding = standing.getAttribute("standing");
-            var player = standing.getAttribute("player");
-            var points = parseInt(standing.getAttribute("points"));
-            var gamesPlayed = parseInt(standing.getAttribute("gamesPlayed"));
-            var opponentWinPerc = standing.getAttribute("opponentWin");
 
-            $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable).append("<td></td><td>" + currentStanding + "</td><td>" + player + "</td><td>" + points + "</td><td>" + gamesPlayed + "</td><td>" + opponentWinPerc + "</td>");
+            $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable)
+                .append("<td></td><td>" + standing.currentStanding + "</td><td>" 
+                        + standing.player + "</td><td>" + standing.points 
+                        + "</td><td>" + standing.gamesPlayed + "</td><td>" 
+                        + standing.opponentWinPerc + "</td>");
         }
 
         return standingsTable;
