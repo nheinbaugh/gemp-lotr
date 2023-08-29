@@ -81,7 +81,7 @@ var TournamentResultsUI = Class.extend({
                 var tournamentStage = tournament.getAttribute("stage");
 
                 $("#tournamentResults").append("<div class='tournamentName'>" + tournamentName + "</div>");
-                $("#tournamentResults").append("<div class='tournamentRound'><b>Round:</b> " + tournamentRound + "</div>");
+                $("#tournamentResults").append("<div class='tournamentRound'><b>Rounds:</b> " + tournamentRound + "</div>");
 
                 var detailsBut = $("<button>See details</button>").button();
                 detailsBut.click(
@@ -103,45 +103,51 @@ var TournamentResultsUI = Class.extend({
         }
     },
 
-    createStandingsTable:function (standings, tournamentId, tournamentStage) {
+    createStandingsTable:function (xmlstandings, tournamentId, tournamentStage) {
         var standingsTable = $("<table class='standings'></table>");
 
         standingsTable.append("<tr><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th><th></th><th>Standing</th><th>Player</th><th>Points</th><th>Games played</th><th>Opp. Win %</th></tr>");
 
-        var secondColumnBaseIndex = Math.ceil(standings.length / 2);
+        var standings = [];
+        for (var k = 0; k < xmlstandings.length; k++) {
+            var standing = {};
+            var xmlstanding = xmlstandings[k];
+            
+            standing.currentStanding = xmlstanding.getAttribute("standing");
+            standing.player = xmlstanding.getAttribute("player");
+            standing.points = parseInt(xmlstanding.getAttribute("points"));
+            standing.gamesPlayed = parseInt(xmlstanding.getAttribute("gamesPlayed"));
+            standing.opponentWinPerc = xmlstanding.getAttribute("opponentWin");
 
+            if (tournamentStage == "Finished")
+                standing.playerStr = "<a target='_blank' href='/gemp-lotr-server/tournament/" + tournamentId + "/deck/" + standing.player + "/html'>" + standing.player + "</a>";
+            else
+                standing.playerStr = standing.player;
+            
+            standings.push(standing);
+        }
+        
+        standings.sort((a, b) => a.currentStanding - b.currentStanding);
+        
+        var secondColumnBaseIndex = Math.ceil(standings.length / 2);
+        
         for (var k = 0; k < secondColumnBaseIndex; k++) {
             var standing = standings[k];
-            var currentStanding = standing.getAttribute("standing");
-            var player = standing.getAttribute("player");
-            var points = parseInt(standing.getAttribute("points"));
-            var gamesPlayed = parseInt(standing.getAttribute("gamesPlayed"));
-            var opponentWinPerc = standing.getAttribute("opponentWin");
-
-            var playerStr;
-            if (tournamentStage == "Finished")
-                playerStr = "<a target='_blank' href='/gemp-lotr-server/tournament/" + tournamentId + "/deck/" + player + "/html'>" + player + "</a>";
-            else
-                playerStr = player;
-
-            standingsTable.append("<tr><td>" + currentStanding + "</td><td>" + playerStr + "</td><td>" + points + "</td><td>" + gamesPlayed + "</td><td>" + opponentWinPerc + "</td></tr>");
+            
+            standingsTable.append("<tr><td>" + standing.currentStanding + "</td><td>" 
+                                  + standing.playerStr + "</td><td>" + standing.points 
+                                  + "</td><td>" + standing.gamesPlayed + "</td><td>" 
+                                  + standing.opponentWinPerc + "</td></tr>");
         }
 
         for (var k = secondColumnBaseIndex; k < standings.length; k++) {
             var standing = standings[k];
-            var currentStanding = standing.getAttribute("standing");
-            var player = standing.getAttribute("player");
-            var points = parseInt(standing.getAttribute("points"));
-            var gamesPlayed = parseInt(standing.getAttribute("gamesPlayed"));
-            var opponentWinPerc = standing.getAttribute("opponentWin");
 
-            var playerStr;
-            if (tournamentStage == "Finished")
-                playerStr = "<a target='_blank' href='/gemp-lotr-server/tournament/" + tournamentId + "/deck/" + player + "/html'>" + player + "</a>";
-            else
-                playerStr = player;
-
-            $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable).append("<td></td><td>" + currentStanding + "</td><td>" + playerStr + "</td><td>" + points + "</td><td>" + gamesPlayed + "</td><td>" + opponentWinPerc + "</td>");
+            $("tr:eq(" + (k - secondColumnBaseIndex + 1) + ")", standingsTable)
+                .append("<td></td><td>" + standing.currentStanding + "</td><td>" 
+                                  + standing.playerStr + "</td><td>" + standing.points 
+                                  + "</td><td>" + standing.gamesPlayed + "</td><td>" 
+                                  + standing.opponentWinPerc + "</td></tr>");
         }
 
         return standingsTable;
