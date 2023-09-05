@@ -352,3 +352,11 @@ gl_theOneRing,1_2
 8_125,8_77
 #Ent Horde FA
 6_130,6_28
+#Sirannon Ruins FA
+18_151,18_138
+#Ulaire Enquea, Lieutenant of Mordor FA
+1_382,1_231
+#Sapling of the White Tree MW
+9_58,9_35
+#Gollum, Dark as Darkness FA
+9_59,9_28

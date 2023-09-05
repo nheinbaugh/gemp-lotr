@@ -500,6 +500,22 @@ var PCCards = {
 	//Morgul Squealer MW
 	'8_125': 'https://i.lotrtcgpc.net/promos/LOTR-EN08O077.0_card.jpg',
 	//#Ent Horde FA
-	'6_130': 'https://i.lotrtcgpc.net/promos/LOTR-EN06U028.0_card.jpg'
+	'6_130': 'https://i.lotrtcgpc.net/promos/LOTR-EN06U028.0_card.jpg',
+	
+	//August 2023 Gala
+	//Aragorn's Bow, Ranger's Longbow MW (repeat from July 2022)
+	//Sirannon Ruins FA
+	'18_151': 'https://i.lotrtcgpc.net/promos/LOTR-EN18U138.0_card.jpg',
+	
+	//August 2023 Gala
+	//Sapling of the White Tree MW
+	'9_58': 'https://i.lotrtcgpc.net/promos/LOTR-EN09O035.0_card.jpg',
+	//Gollum, Dark as Darkness FA
+	'9_59': 'https://i.lotrtcgpc.net/promos/LOTR-EN09U028.0_card.jpg',
+	
+	
+	//September 2023 World Championship Walk-ons
+	//Ulaire Enquea, Lieutenant of Mordor FA
+	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U231.0_card.jpg'
 }
 

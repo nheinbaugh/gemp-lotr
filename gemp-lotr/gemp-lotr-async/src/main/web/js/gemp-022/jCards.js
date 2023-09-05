@@ -336,7 +336,7 @@ var Card = Class.extend({
         if (setNo == 17 || setNo == 67 || setNo == 87)
             return (cardNo >= 145 && cardNo <= 148);
         if (setNo == 18 || setNo == 68 || setNo == 88)
-            return (cardNo >= 134 && cardNo <= 140);
+            return (cardNo >= 134 && cardNo <= 140) || cardNo == 151;
         if (setNo == 20)
             return (cardNo >= 416 && cardNo <= 469);
         if (setNo == 30)
