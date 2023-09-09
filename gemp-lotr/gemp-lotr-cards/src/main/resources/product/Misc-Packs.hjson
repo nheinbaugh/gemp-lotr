@@ -362,6 +362,12 @@
 			1x6_130
 			#Sirannon Ruins FA
 			1x18_151
+			#Ulaire Enquea, Lieutenant of Mordor FA
+			1x1_382
+			#Sapling of the White Tree MW
+			1x9_58
+			#Gollum, Dark as Darkness FA
+			1x9_59
 		]
 	}
 	
@@ -439,6 +445,10 @@
 			1x6_130
 			#Sirannon Ruins FA
 			1x18_151
+			#Ulaire Enquea, Lieutenant of Mordor FA
+			1x9_58
+			#Gollum, Dark as Darkness FA
+			1x9_59
 		]
 	}
 	
@@ -560,6 +570,8 @@
 			1x2_126
 			#Morgul Squealer MW
 			1x8_125
+			#Sapling of the White Tree MW
+			1x9_58
 		]
 	}
 	
@@ -681,6 +693,8 @@
 			1x2_126
 			#Morgul Squealer MW
 			1x8_125
+			#Sapling of the White Tree MW
+			1x9_58
 		]
 	}
 ]

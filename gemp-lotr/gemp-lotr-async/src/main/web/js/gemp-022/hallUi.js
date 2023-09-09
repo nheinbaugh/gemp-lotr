@@ -645,7 +645,7 @@ var GempLotrHallUI = Class.extend({
 					
 					//TODO: Replace this with an actual fix on the server side
 					if(name.includes("Casual - WC")) {
-						name = "<td>Competitive - Format Championships</td>"
+						name = "<td>Competitive - 2023 World Championship Walk-on Qualifiers</td>"
 					}
 					row.append(name);
 					row.append("<td>" + statusDescription + "</td>");
