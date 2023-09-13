@@ -19,13 +19,13 @@ public class Card_03_017_ErrataTests
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("galadriel", "53_17");
 					put("celeborn", "1_34");
 					put("greenleaf", "1_50");
 				}},
-				new HashMap<String, String>() {{
+				new HashMap<>() {{
 					put("site1", "1_319");
 					put("site2", "1_332");
 					put("site3", "1_337");
@@ -46,12 +46,12 @@ public class Card_03_017_ErrataTests
 
 	protected GenericCardTestHelper GetExpandedScenario() throws CardNotFoundException, DecisionResultInvalidException {
 		return new GenericCardTestHelper(
-				new HashMap<String, String>()
+				new HashMap<>()
 				{{
 					put("galadriel", "53_17");
 					// put other cards in here as needed for the test case
 				}},
-				new HashMap<String, String>() {{
+				new HashMap<>() {{
 					put("site1", "1_319");
 					put("site2", "1_332");
 					put("site3", "1_337");
@@ -104,9 +104,7 @@ public class Card_03_017_ErrataTests
 		assertEquals(3, galadriel.getBlueprint().getTwilightCost());
 		assertEquals(3, galadriel.getBlueprint().getStrength());
 		assertEquals(3, galadriel.getBlueprint().getVitality());
-		//assertEquals(, galadriel.getBlueprint().getResistance());
-		//assertEquals(Signet., galadriel.getBlueprint().getSignet());
-		assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]); // Change this to getAllyHomeSiteNumbers for allies
+		assertEquals(6, galadriel.getBlueprint().getAllyHomeSiteNumbers()[0]);
 		assertEquals(SitesBlock.FELLOWSHIP, galadriel.getBlueprint().getAllyHomeSiteBlock());
 
 	}
@@ -123,7 +121,6 @@ public class Card_03_017_ErrataTests
 		var shadowSite2 = scn.GetShadowSite("site2");
 
 		scn.StartGame();
-
 
 		scn.FreepsPassCurrentPhaseAction();
 

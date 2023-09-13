@@ -55,7 +55,8 @@ public class Card_03_042_ErrataTests
          * Twilight Cost: 1
          * Type: Possession
          * Errata Game Text: Bearer must be Boromir.
-         * Maneuver: Exert Boromir and discard this possession to spot an ally.  Until the regroup phase, that ally is strength +3 and participates in archery fire and skirmishes.
+         * Maneuver: Exert Boromir and discard this possession to spot an ally.  Until the regroup phase,
+         * that ally is strength +3 and participates in archery fire and skirmishes.
          */
 
         //Pre-game setup

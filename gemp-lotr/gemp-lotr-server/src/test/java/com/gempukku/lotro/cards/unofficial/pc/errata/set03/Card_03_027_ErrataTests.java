@@ -46,7 +46,8 @@ public class Card_03_027_ErrataTests
 		* Subtype: Ring
 		* Vitality: 1
 		* Game Text: Bearer must be Elrond.
-		* 	<b>Maneuver:</b> Exert Elrond and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a vilya from hand.  Return Vilya to your hand.
+		* 	<b>Maneuver:</b> Exert Elrond and spot a Shadow condition to return that condition to its owner's hand.
+		 * 	That player may discard a card from hand.  Return Vilya to your hand.
 		*/
 
 		//Pre-game setup

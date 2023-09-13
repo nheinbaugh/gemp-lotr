@@ -1,9 +1,7 @@
 package com.gempukku.lotro.cards.unofficial.pc.errata.set03;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
-import com.gempukku.lotro.common.Keyword;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Signet;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.game.CardNotFoundException;
 import com.gempukku.lotro.game.PhysicalCardImpl;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -29,16 +27,6 @@ public class Card_03_038_ErrataTests
     }
 
     @Test
-    public void AragornHasRanger() throws DecisionResultInvalidException, CardNotFoundException {
-        //Pre-game setup
-        GenericCardTestHelper scn = GetScenario();
-
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
-
-
-    }
-
-    @Test
     public void AragornStatsAndKeywordsAreCorrect() throws DecisionResultInvalidException, CardNotFoundException {
 
         /**
@@ -59,13 +47,17 @@ public class Card_03_038_ErrataTests
         //Pre-game setup
         GenericCardTestHelper scn = GetScenario();
 
-        PhysicalCardImpl aragorn = scn.GetFreepsCard("aragorn");
+        var aragorn = scn.GetFreepsCard("aragorn");
 
         assertTrue(aragorn.getBlueprint().isUnique());
+        assertEquals(Side.FREE_PEOPLE, aragorn.getBlueprint().getSide());
+        assertEquals(Culture.GONDOR, aragorn.getBlueprint().getCulture());
+        assertEquals(CardType.COMPANION, aragorn.getBlueprint().getCardType());
+        assertEquals(Race.MAN, aragorn.getBlueprint().getRace());
         assertEquals(4, aragorn.getBlueprint().getTwilightCost());
-
         assertEquals(8, aragorn.getBlueprint().getStrength());
         assertEquals(4, aragorn.getBlueprint().getVitality());
+        assertEquals(6, aragorn.getBlueprint().getResistance());
         assertEquals(Signet.FRODO, aragorn.getBlueprint().getSignet());
 
         assertTrue(scn.HasKeyword(aragorn, Keyword.RANGER));
