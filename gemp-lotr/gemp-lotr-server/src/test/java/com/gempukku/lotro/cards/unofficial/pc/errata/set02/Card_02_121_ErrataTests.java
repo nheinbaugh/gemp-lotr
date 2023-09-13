@@ -93,5 +93,24 @@ public class Card_02_121_ErrataTests
         assertEquals(3, scn.GetTwilight());
     }
 
+    @Test
+    public void GimliIsStrengthPlus1WhenUnderground() throws DecisionResultInvalidException, CardNotFoundException {
+        //Pre-game setup
+        GenericCardTestHelper scn = GetScenario();
+
+        PhysicalCardImpl gimli = scn.GetFreepsCard("gimli");
+        scn.FreepsMoveCharToTable(gimli);
+
+        scn.StartGame();
+
+        assertEquals(6, scn.GetStrength(gimli));
+
+        scn.ApplyAdHocModifier(new KeywordModifier(null, Filters.siteNumber(2), Keyword.UNDERGROUND));
+
+        scn.FreepsPassCurrentPhaseAction();
+
+        assertEquals(7, scn.GetStrength(gimli));
+    }
+
 
 }

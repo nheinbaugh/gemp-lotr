@@ -72,7 +72,7 @@ public class Card_02_059_ErrataTests
 
 		var things = scn.GetShadowCard("things");
 		scn.ShadowMoveCardToHand(things);
-		scn.ShadowMoveCardToDiscard("runner2", "armory", "host", "scimitar", "relentless");
+		scn.ShadowMoveCardToDiscard("runner2", "armory", "host", "scimitar", "terror1", "relentless");
 		scn.ShadowMoveCharToTable("runner");
 
 		scn.StartGame();
@@ -81,7 +81,7 @@ public class Card_02_059_ErrataTests
 
 		assertTrue(scn.ShadowPlayAvailable(things));
 		scn.ShadowPlayCard(things);
-		assertEquals(4, scn.GetShadowCardChoiceCount());
+		assertEquals(5, scn.GetShadowCardChoiceCount());
 	}
 
 	@Test
@@ -101,7 +101,7 @@ public class Card_02_059_ErrataTests
 	}
 
 	@Test
-	public void FoulThingsDoesNotErrorOutIfNoTwilightLeft() throws DecisionResultInvalidException, CardNotFoundException {
+	public void FoulThingsDoesNotErrorOutIfReponseEventIsOnlyOption() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		var scn = GetScenario();
 
@@ -109,11 +109,10 @@ public class Card_02_059_ErrataTests
 
 		var things = scn.GetShadowCard("things");
 		scn.ShadowMoveCardToHand(things);
-		scn.ShadowMoveCardToSupportArea("terror1");
-		scn.ShadowMoveCardToDiscard("relentless", "terror2");
+		scn.ShadowMoveCardToDiscard("relentless");
 
 		scn.StartGame();
-		scn.SetTwilight(-1);
+		//scn.SetTwilight(-1);
 		scn.FreepsPassCurrentPhaseAction();
 
 		// This bug makes no sense.  Failed in PlayCardFromDiscard, line 83, replays are p3hxkhpke89tfglf and caf19xis68ev71a1
@@ -121,8 +120,11 @@ public class Card_02_059_ErrataTests
 		// Nothing is playable, but FT determined that an event was the only choice and failed after auto-selecting it.
 		// Nevertheless, it is completely unreproducible here, no matter what I do.
 
-//		assertTrue(scn.ShadowPlayAvailable(things));
-//		scn.ShadowPlayCard(things);
-//		assertEquals(4, scn.GetShadowCardChoiceCount());
+		//I eventually figured it out! (with major help from Phallen). Turned out it had nothing to do with
+		// twilight and everything to do with the fact that play-from effects have to manually ensure that they
+		// filter out response events which will usually match the normal filter but will crash the game
+		// if attempted to "play".
+
+		assertFalse(scn.ShadowPlayAvailable(things));
 	}
 }
