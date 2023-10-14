@@ -16,7 +16,7 @@ public class Player {
         LEAGUE_ADMIN("l"),
         PLAY_TESTER("p"),
         //PLAY_TESTING_ADMIN("t"),
-        //COMMENTATOR("c"),
+        COMMENTATOR("c"),
         //COMMENTATOR_ADMIN("m"),
         UNBANNED("n"),
         USER("u");

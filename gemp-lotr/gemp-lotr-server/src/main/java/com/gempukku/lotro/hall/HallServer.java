@@ -546,7 +546,9 @@ public class HallServer extends AbstractServer {
     }
 
     protected void processHall(Player player, HallInfoVisitor visitor) {
-        final boolean isAdmin = player.getType().contains("a");
+        //Commentators are users permitted to watch tournament matches for the purposes of stream broadcasting.
+        //TODO: enhance this logic to not apply to tournaments that the commentator is themselves participating in
+        final boolean isAdmin = player.hasType(Player.Type.ADMIN) || player.hasType(Player.Type.COMMENTATOR);
 
         _hallDataAccessLock.readLock().lock();
         try {
