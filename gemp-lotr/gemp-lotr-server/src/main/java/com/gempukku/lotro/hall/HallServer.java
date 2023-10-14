@@ -805,7 +805,7 @@ public class HallServer extends AbstractServer {
                     null, null, true, false, false, false, GameTimer.TOURNAMENT_TIMER, null);
 
             wcGameSettings  = new GameSettings(null, _formatLibrary.getFormat(_tournament.getFormat()),
-                    null, null, true, false, false, false, GameTimer.EXPANDED_CHAMPIONSHIP_TIMER, null);
+                    null, null, true, false, false, false, GameTimer.CHAMPIONSHIP_TIMER, null);
         }
 
         @Override

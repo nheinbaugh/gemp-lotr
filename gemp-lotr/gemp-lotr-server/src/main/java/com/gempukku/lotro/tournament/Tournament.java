@@ -18,6 +18,7 @@ public interface Tournament {
         DRAFT("Drafting"),
         DECK_BUILDING("Deck building"),
         AWAITING_KICKOFF("Awaiting kickoff"),
+        PAUSED("Paused"),
         PREPARING("Preparing"),
         PLAYING_GAMES("Playing games"),
         FINISHED("Finished");
@@ -59,6 +60,8 @@ public interface Tournament {
             return new SwissPairingMechanism("swiss");
         if (pairingType.equals("swiss-3"))
             return new SwissPairingMechanism("swiss-3", 3);
+        if (pairingType.equals("wc-swiss"))
+            return new ChampionshipSwissPairingMechanism("wc-swiss", 8);
 
         return null;
     }

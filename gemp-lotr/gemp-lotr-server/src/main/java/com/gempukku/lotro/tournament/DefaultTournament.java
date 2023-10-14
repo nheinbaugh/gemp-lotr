@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class DefaultTournament implements Tournament {
     // 10 minutes
     private final int _deckBuildTime = 10 * 60 * 1000;
-    private long _waitForPairingsTime = 1000 * 60 * 2;
+    private long _waitForPairingsTime = 1000 * 60 * 1;
 
     private final PairingMechanism _pairingMechanism;
     private final TournamentPrizes _tournamentPrizes;
@@ -107,7 +107,7 @@ public class DefaultTournament implements Tournament {
                     _players);
         } else if (_tournamentStage == Stage.DECK_BUILDING) {
             _deckBuildStartTime = System.currentTimeMillis();
-        } else if (_tournamentStage == Stage.AWAITING_KICKOFF) {
+        } else if (_tournamentStage == Stage.AWAITING_KICKOFF || _tournamentStage == Stage.PAUSED) {
 
         } else if (_tournamentStage == Stage.FINISHED) {
             _finishedTournamentMatches.addAll(_tournamentService.getMatches(_tournamentId));
@@ -313,7 +313,7 @@ public class DefaultTournament implements Tournament {
                         result = true;
                     }
                 }
-                if (_tournamentStage == Stage.AWAITING_KICKOFF) {
+                if (_tournamentStage == Stage.AWAITING_KICKOFF || _tournamentStage == Stage.PAUSED) {
 
                 }
                 else if (_tournamentStage == Stage.PREPARING) {
@@ -325,7 +325,7 @@ public class DefaultTournament implements Tournament {
                         if (_pairingMechanism.isFinished(_tournamentRound, _players, _droppedPlayers)) {
                             finishTournament(tournamentCallback, collectionsManager);
                         } else {
-                            tournamentCallback.broadcastMessage("Tournament " + _tournamentName + " will start round "+(_tournamentRound+1)+" in 2 minutes");
+                            tournamentCallback.broadcastMessage("Tournament " + _tournamentName + " will start round "+(_tournamentRound+1)+" in 1 minute.");
                             _nextTask = new PairPlayers();
                         }
                         result = true;
@@ -482,7 +482,7 @@ public class DefaultTournament implements Tournament {
 
             if(game == null)
                 continue;
-            
+
             var gameStart = game.GetUTCStartDate();
             var gameEnd = game.GetUTCEndDate();
 
