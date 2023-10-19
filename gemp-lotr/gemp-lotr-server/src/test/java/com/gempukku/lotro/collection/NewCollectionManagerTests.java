@@ -27,7 +27,7 @@ public class NewCollectionManagerTests
     //@Test
     public void ConvertAllPlayerCollectionsTest() throws IOException, SQLException {
         var collDAO = new DbCollectionDAO(dbAccess, new CollectionSerializer());
-        var playerDAO = new DbPlayerDAO(dbAccess);
+        var playerDAO = new DbPlayerDAO(dbAccess, collDAO);
 
         var players = playerDAO.getAllPlayers();
 

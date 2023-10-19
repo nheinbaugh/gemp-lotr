@@ -4,22 +4,35 @@ SELECT *
 FROM scheduled_tournament st 
 
 UPDATE scheduled_tournament 
-SET start_date = '2023-08-28 05:29:00', started = false
-WHERE id = 9
+SET start_date = '2023-10-14 20:35:00'#playoff = 'wc-swiss' #start_date = '2023-10-14 20:30:00', started = false
+WHERE id IN (17)
 
 INSERT INTO gemp_db.scheduled_tournament
 (tournament_id, name, format, start_date, cost, playoff, tiebreaker, prizes, minimum_players, manual_kickoff, started)
-VALUES('2023-wc-am-pc-expanded-walk-on', 'AM PC-Expanded Walk-on Qualifier', 'pc_expanded', '2023-09-23 17:00:00', 0, 'swiss', 'owr', 'daily', 2, true, false);
+VALUES('2023-wc-group-stage-pc-fotr-backup', '2023 WC Backup Registration', 'pc_fotr_block', '2023-10-14 20:00:00', 0, 'swiss', 'owr', 'daily', 2, true, false);
+VALUES('2023-wc-group-stage-pc-movie', '2023 WC PC-Movie Group Stage', 'pc_movie', '2023-10-14 17:00:00', 0, 'swiss', 'owr', 'daily', 2, true, false);
+
+DELETE 
+FROM scheduled_tournament st 
+WHERE id = 18
+
 
 
 SELECT *
 FROM player p 
-WHERE name LIKE 'Chad%'
+WHERE name IN ('ketura', 'Tunadan', 'Ringbearer', 'johnec', 'stephan77', 'GeriGeli', 'Tonio', 'thedast7', 'Pokec', 'Beezey', 'balrog69', 'sempolPL', 'neergreve', 'dstaley', 'thefaker', 'Chadwick537', 'scyld', 'bign19', 'Pizdec', 'Axter', 'LukasSchor', 'talial', 'rbranco', 'Raelag', 'olga06', 'Yk1030', 'enolen', 'Aaron_Brutcher', 'MockingbirdME', 'basmelis', 'fnlgroove', 'Icarus')
+
+UPDATE player 
+SET type = 'upca'
+WHERE id = 31537
+
 
 SELECT *
 FROM deck d 
-where player_id = 29802
-AND name = 'Rohan/Uruk Towers standard'
+where player_id = 20214
+AND name LIKE 'Nine Walkers%'
+
+#Nine Walkers fotr pc
 
 
 SELECT *
@@ -50,8 +63,12 @@ FROM tournament t
 WHERE name IS NULL
 
 UPDATE tournament 
-SET stage = 'Preparing'
-WHERE id = 1422
+SET stage = 'Playing games'
+WHERE id = 1423
+
+UPDATE tournament 
+SET start_date = '2023-10-01 20:35:00.000'
+WHERE id = 1423
 
 
 UPDATE tournament 
@@ -65,7 +82,7 @@ ORDER BY ID DESC
 
 UPDATE tournament_player 
 SET dropped = 1
-WHERE id = 11284
+WHERE id = 11304
 
 SELECT *
 FROM tournament_match tm 
@@ -74,7 +91,11 @@ ORDER BY id DESC
 
 INSERT INTO gemp_db.tournament_player
 (tournament_id, player, deck_name, deck, dropped)
-VALUES('2023-wc-towers-standard-format-championship', 'Pokec', 'Rohan/Uruk Towers standard', '4_302|4_1|4_325,4_336,4_339,4_344,4_347,4_353,4_357,6_119,4_361|1_50,1_89,4_265,6_95,4_267,4_270,2_114,4_281,4_285,1_127,1_127,1_127,4_160,4_160,4_160,4_173,4_173,3_69,3_69,4_176,4_176,4_176,4_181,4_181,4_181,4_181,4_188,4_193,4_193,4_193,1_231,4_263,4_268,4_274,4_287,4_288,4_288,5_88,5_116,4_142,4_142,4_196,4_196,4_196,4_174,4_174,3_67,4_282,4_282,4_289,4_289,4_289,4_289,1_136,5_80,5_80,5_80,4_276,4_276,5_94,5_94,5_94,6_97,4_213', '0');
+VALUES('2023-wc-group-stage-pc-fotr', 'Raelag', 'Nine Walkers / Uruk', '2_102*|1_1|1_324,1_331,1_341,2_119,1_349,1_352,1_354,3_117,1_361|1_13,1_50,2_122*,1_89*,1_97*,1_302,1_307,2_114,1_27,3_10,1_34*,51_40,51_40,51_40,51_45,51_45,1_56,1_57,1_286,1_127,3_66,53_68,53_68,53_68,1_143,1_143,1_143,2_46,2_46,1_148,1_148,1_148,3_75,3_75,3_75,1_156,1_156,1_156,1_156,2_93,51_313,51_313,1_318,2_105,1_44*,1_44*,2_20,2_20,1_296,1_296,1_296,1_298,1_298,1_298,1_298,2_39,1_121*,1_121*,1_136,51_139,51_139,51_139,51_139,52_108,1_133,1_133,1_133,1_133,1_127,1_148', '0');
+
+UPDATE gemp_db.tournament_player
+SET deck_name= 'Nine Walkers / Uruk', deck='2_102*|1_1|1_324,1_331,1_341,2_119,1_349,1_352,1_354,3_117,1_361|1_13,1_50,2_122*,1_89*,1_97*,1_302,1_307,2_114,1_27,3_10,1_34*,51_40,51_40,51_40,51_45,51_45,1_56,1_57,1_286,1_127,3_66,53_68,53_68,53_68,1_143,1_143,1_143,2_46,2_46,1_148,1_148,1_148,3_75,3_75,3_75,1_156,1_156,1_156,1_156,2_93,51_313,51_313,1_318,2_105,1_44*,1_44*,2_20,2_20,1_296,1_296,1_296,1_298,1_298,1_298,1_298,2_39,1_121*,1_121*,1_136,51_139,51_139,51_139,51_139,52_108,1_133,1_133,1_133,1_133,1_127,1_148'
+WHERE id = 11317
 
 
 
@@ -85,6 +106,7 @@ ORDER BY id DESC
 
 SELECT *
 FROM game_history gh 
+WHERE tournament IN ('2023 WC PC-FOTR Group Stage', '2023 WC Group Stage')
 ORDER BY id DESC
 
 

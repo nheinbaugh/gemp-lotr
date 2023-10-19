@@ -1,5 +1,6 @@
 package com.gempukku.lotro.async.handler;
 
+import com.alibaba.fastjson.JSON;
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
 import com.gempukku.lotro.collection.CollectionsManager;
@@ -56,12 +57,32 @@ public class CollectionRequestHandler extends LotroServerRequestHandler implemen
             getCollectionTypes(request, responseWriter);
         } else if (uri.startsWith("/import/") && request.method() == HttpMethod.GET) {
             importCollection(request, responseWriter);
+        } else if (uri.startsWith("/migrate") && request.method() == HttpMethod.POST) {
+            migrateTrophies(request, responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.POST) {
             openPack(request, uri.substring(1), responseWriter);
         } else if (uri.startsWith("/") && request.method() == HttpMethod.GET) {
             getCollection(request, uri.substring(1), responseWriter);
         } else {
             throw new HttpProcessingException(404);
+        }
+    }
+
+    private void migrateTrophies(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String participantId = getFormParameterSafely(postDecoder, "participantId");
+
+            Player player = getResourceOwnerSafely(request, participantId);
+
+            if(!_collectionsManager.playerCollectionAvailableForMigration(player))
+                throw new HttpProcessingException(410);
+
+            _collectionsManager.migratePlayerCollection(player);
+
+            responseWriter.writeJsonResponse(JSON.toJSONString(player.GetUserInfo()));
+        } finally {
+            postDecoder.destroy();
         }
     }
     

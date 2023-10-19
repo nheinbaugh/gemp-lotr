@@ -8,10 +8,7 @@ import com.gempukku.lotro.packs.ProductLibrary;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class CollectionsManager {
@@ -24,6 +21,7 @@ public class CollectionsManager {
     private final ProductLibrary _productLibrary;
 
     private CardCollection _defaultCollection;
+    private CardCollection _overwriteCollection;
 
     public CollectionsManager(PlayerDAO playerDAO, CollectionDAO collectionDAO, TransferDAO transferDAO, final LotroCardBlueprintLibrary lotroCardBlueprintLibrary,
                               final ProductLibrary productLibrary) {
@@ -34,6 +32,11 @@ public class CollectionsManager {
         _productLibrary = productLibrary;
 
         _defaultCollection = new CompleteCardCollection(_cardLibrary);
+        var replacement = new DefaultCardCollection();
+        //Hack to get a 0-quantity collection entry
+        replacement.addItem("1_1", 1);
+        replacement.removeItem("1_1", 1);
+        _overwriteCollection = replacement;
 
         _cardLibrary.SubscribeToRefreshes(new ICallback() {
             @Override
@@ -71,6 +74,39 @@ public class CollectionsManager {
         } finally {
             _readWriteLock.readLock().unlock();
         }
+    }
+
+    public void migratePlayerCollection(Player player) {
+        _readWriteLock.readLock().lock();
+        try {
+            if(!playerCollectionAvailableForMigration(player))
+                return;
+
+            var combined = createSumCollection(player,
+                    new String[] {CollectionType.MY_CARDS.getCode(), CollectionType.TROPHY.getCode()});
+
+            _collectionDAO.overwriteCollectionContents(player.getId(), CollectionType.MY_CARDS.getCode(),
+                    combined, "Player requested trophy -> My Cards migration.");
+            _collectionDAO.removeFromCollectionContents(player.getId(), CollectionType.TROPHY.getCode(),
+                    combined, "Removing as part of migration.");
+            _collectionDAO.removeFromCollectionContents(player.getId(), CollectionType.TROPHY.getCode(),
+                    combined, "Removing as part of migration.");
+            _collectionDAO.overwriteCollectionContents(player.getId(), CollectionType.TROPHY.getCode(),
+                    _overwriteCollection, "Player requested trophy -> My Cards migration.");
+
+            player.setHasTrophies(false);
+        }
+        catch(SQLException | IOException ex) {
+            throw new RuntimeException("Unable to migrate player collection", ex);
+        }
+        finally {
+            _readWriteLock.readLock().unlock();
+        }
+    }
+
+    //Used to see if the migrate collection button should be available on the player's dashboard.
+    public boolean playerCollectionAvailableForMigration(Player player) {
+        return _collectionDAO.doesPlayerHaveCardsInCollection(player.getId(), CollectionType.TROPHY.getCode());
     }
 
     private CardCollection createSumCollection(Player player, String[] collectionTypes) {

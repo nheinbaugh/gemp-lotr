@@ -27,7 +27,7 @@ public class SealedLeagueDataTest extends AbstractAtTest {
         CollectionType collectionType = new CollectionType("test", "Test Collection");
         for (int i = 20120101; i < 20120108; i++) {
             CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
-            Player player = new Player(1, "Test", "pass", "u", null, null, null, null);
+            Player player = new Player(1, "Test", "pass", "u", null, null, null, null, false);
             data.joinLeague(collectionsManager, player, i);
             Mockito.verify(collectionsManager, new Times(1))
                 .addPlayerCollection(Mockito.anyBoolean(), Mockito.anyString(), Mockito.eq(player), Mockito.eq(collectionType), Mockito.argThat(
@@ -61,7 +61,7 @@ public class SealedLeagueDataTest extends AbstractAtTest {
         CollectionType collectionType = new CollectionType("test", "Test Collection");
         for (int i = 20120108; i < 20120115; i++) {
             CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
-            Player player = new Player(1, "Test", "pass", "u", null, null, null, null);
+            Player player = new Player(1, "Test", "pass", "u", null, null, null, null, false);
             data.joinLeague(collectionsManager, player, i);
             Mockito.verify(collectionsManager, new Times(1)).addPlayerCollection(Mockito.anyBoolean(), Mockito.anyString(), Mockito.eq(player), Mockito.eq(collectionType), Mockito.argThat(
                     new ArgumentMatcher<>() {
@@ -126,7 +126,7 @@ public class SealedLeagueDataTest extends AbstractAtTest {
         for (int i = 20120108; i < 20120115; i++) {
             CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
             Map<Player, CardCollection> playersInLeague = new HashMap<>();
-            Player player = new Player(1, "Test", "pass", "u", null, null, null, null);
+            Player player = new Player(1, "Test", "pass", "u", null, null, null, null, false);
             playersInLeague.put(player, new DefaultCardCollection());
             Mockito.when(collectionsManager.getPlayersCollection("test")).thenReturn(playersInLeague);
             int result = data.process(collectionsManager, null, 1, i);

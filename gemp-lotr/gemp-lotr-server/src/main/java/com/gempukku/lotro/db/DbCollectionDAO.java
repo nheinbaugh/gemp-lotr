@@ -96,6 +96,32 @@ public class DbCollectionDAO implements CollectionDAO {
         public int ID;
     }
 
+    public boolean doesPlayerHaveCardsInCollection(int playerId, String type) {
+        try {
+            Sql2o db = new Sql2o(_dbAccess.getDataSource());
+
+            try (org.sql2o.Connection conn = db.open()) {
+                String sql = """
+                        SELECT COUNT(*)
+                        FROM collection_entries ce
+                        INNER JOIN collection c
+                        	ON c.id = ce.collection_id
+                        WHERE c.player_id = :playerID
+                            AND c.type = :type
+                        	AND ce.quantity > 0
+                        """;
+                Integer result = conn.createQuery(sql)
+                        .addParameter("playerID", playerId)
+                        .addParameter("type", type)
+                        .executeScalar(Integer.class);
+
+                return result > 0;
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Unable to check if player has any cards in collection.", ex);
+        }
+    }
+
     @Override
     public List<DBDefs.Collection> getAllCollectionsForPlayer(int playerId) {
 

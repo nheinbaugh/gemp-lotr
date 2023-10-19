@@ -3,6 +3,7 @@ package com.gempukku.lotro.collection;
 import com.gempukku.lotro.cache.Cached;
 import com.gempukku.lotro.common.DBDefs;
 import com.gempukku.lotro.db.CollectionDAO;
+import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.CardCollection;
 import org.apache.commons.collections.map.LRUMap;
 
@@ -41,6 +42,21 @@ public class CachedCollectionDAO implements CollectionDAO, Cached {
         return collection;
     }
 
+    @Override
+    public boolean doesPlayerHaveCardsInCollection(int playerId, String type) {
+        String key = constructCacheKey(playerId, type);
+
+        if(_playerCollections.containsKey(key)) {
+            for (CardCollection.Item item : _playerCollections.get(key).getAll()) {
+                if (item.getCount() > 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return _delegate.doesPlayerHaveCardsInCollection(playerId, type);
+    }
+
     private String constructCacheKey(int playerId, String type) {
         return playerId +"-"+type;
     }
@@ -49,6 +65,8 @@ public class CachedCollectionDAO implements CollectionDAO, Cached {
     public Map<Integer, CardCollection> getPlayerCollectionsByType(String type) throws SQLException, IOException {
         return _delegate.getPlayerCollectionsByType(type);
     }
+
+
 
     @Override
     public void overwriteCollectionContents(int playerId, String type, CardCollection collection, String reason) throws SQLException, IOException {

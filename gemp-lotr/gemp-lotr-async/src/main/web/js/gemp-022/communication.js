@@ -735,6 +735,19 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    migrateTrophies:function (callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/collection/migrate",
+            cache:false,
+            data:{
+                participantId:getUrlParam("participantId")},
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"json"
+        });
+    },
+    
     getRecentReplays:function (format, count, callback, errorMap) {
         $.ajax({
             type:"POST",

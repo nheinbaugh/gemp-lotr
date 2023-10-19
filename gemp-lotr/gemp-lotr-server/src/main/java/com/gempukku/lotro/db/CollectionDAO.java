@@ -10,6 +10,7 @@ import java.util.Map;
 
 public interface CollectionDAO {
     public Map<Integer, CardCollection> getPlayerCollectionsByType(String type) throws SQLException, IOException;
+    public boolean doesPlayerHaveCardsInCollection(int playerId, String type);
 
     public CardCollection getPlayerCollection(int playerId, String type) throws SQLException, IOException;
 

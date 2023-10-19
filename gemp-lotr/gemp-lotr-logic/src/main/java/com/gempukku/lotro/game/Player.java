@@ -64,12 +64,14 @@ public class Player {
     private final Date _bannedUntil;
     private final String _createIp;
     private final String _lastIp;
+    private boolean _hasTrophies;
 
-    public Player(DBDefs.Player def) {
-        this(def.id, def.name, def.password, def.type, def.last_login_reward, def.GetBannedUntilDate(), def.create_ip, def.last_ip);
+    public Player(DBDefs.Player def, boolean hasTrophies) {
+        this(def.id, def.name, def.password, def.type, def.last_login_reward, def.GetBannedUntilDate(), def.create_ip, def.last_ip, hasTrophies);
     }
 
-    public Player(int id, String name, String password, String type, Integer lastLoginReward, Date bannedUntil, String createIp, String lastIp) {
+    public Player(int id, String name, String password, String type, Integer lastLoginReward,
+            Date bannedUntil, String createIp, String lastIp, boolean hasTrophies) {
         _id = id;
         _name = name;
         _password = password;
@@ -78,6 +80,7 @@ public class Player {
         _bannedUntil = bannedUntil;
         _createIp = createIp;
         _lastIp = lastIp;
+        _hasTrophies = hasTrophies;
     }
 
     public int getId() {
@@ -120,6 +123,9 @@ public class Player {
         return _lastIp;
     }
 
+    public boolean hasTrophies() { return _hasTrophies; }
+    public void setHasTrophies(boolean value) { _hasTrophies = value; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -138,16 +144,18 @@ public class Player {
     }
 
     public PlayerInfo GetUserInfo() {
-        return new PlayerInfo(_name, _type);
+        return new PlayerInfo(_name, _type, _hasTrophies);
     }
 
     public class PlayerInfo {
         public String name;
         public String type;
+        public boolean hasTrophies;
 
-        public PlayerInfo(String name, String info) {
+        public PlayerInfo(String name, String info, boolean trophies) {
             this.name = name;
             type = info;
+            hasTrophies = trophies;
         }
     }
 }

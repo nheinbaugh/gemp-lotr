@@ -341,6 +341,14 @@ var GempLotrHallUI = Class.extend({
 			window.location.reload(true);
 		});
 	},
+	
+	MigrateTrophies: function() {
+		var that = this;
+		
+		that.comm.migrateTrophies(function () {
+			window.location.reload(true);
+		});
+	},
 
 	processHall:function (xml) {
 		var that = this;

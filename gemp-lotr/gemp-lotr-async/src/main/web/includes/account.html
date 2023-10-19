@@ -1,13 +1,29 @@
 <script type="text/javascript">
 	$("accountMain").ready(
 		function () {
+			console.log("aasdf");
+			$("#trophyMigrate").hide();
+			
 			$("#accountMain").tabs().addClass("ui-tabs-vertical ui-helper-clearfix");
 			$("#account-tabs > ol > li").removeClass("ui-corner-top").addClass("ui-corner-left");
 			
 			$("#accountName").html(chat.userName);
 			$("#pocketDiv").html(formatPrice(hall.pocketValue));
+			
+			debugger;
+			if(chat.userInfo.hasTrophies) {
+				$("#trophyMigrate").show();
+			}
 		});
 	
+	function migrate() {
+		let execute = confirm("This will permanently migrate all of your cards from 'Trophies' to 'My Cards' THIS CANNOT BE UNDONE, EVEN MANUALLY.  Are you sure you want to continue?");
+					
+		if(!execute)
+			return;
+					
+		hall.MigrateTrophies();
+	};
 </script>
 
 <div id="accountMain" class="hall-tab flex-horiz">
@@ -22,5 +38,10 @@
 	<div id="account">
 		<h1>Account Settings for <span id="accountName"></span></h1>
 		<div id="pocketDiv" class='pocket' style="float:right; width:95; height:18;"></div>
+		<div id="trophyMigrate">
+			<button id="migrate-button" class="toolbar-button" onclick="migrate()">
+				<span>Migrate Trophies to My Cards</span>
+			</button>
+		</div>
 	</div>
 </div>

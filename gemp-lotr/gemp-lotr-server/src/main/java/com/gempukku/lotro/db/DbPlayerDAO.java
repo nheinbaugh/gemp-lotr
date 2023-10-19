@@ -1,6 +1,7 @@
 package com.gempukku.lotro.db;
 
 import com.gempukku.lotro.common.DBDefs;
+import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.game.Player;
 import org.sql2o.Sql2o;
 
@@ -28,9 +29,11 @@ public class DbPlayerDAO implements PlayerDAO {
 
 
     private final DbAccess _dbAccess;
+    private final CollectionDAO _collectionDAO;
 
-    public DbPlayerDAO(DbAccess dbAccess) {
+    public DbPlayerDAO(DbAccess dbAccess, CollectionDAO colldao) {
         _dbAccess = dbAccess;
+        _collectionDAO = colldao;
     }
 
     @Override
@@ -233,11 +236,15 @@ public class DbPlayerDAO implements PlayerDAO {
                 if(def == null)
                     return null;
 
-                return new Player(def);
+                return new Player(def, doesPlayerHaveTrophies(def.id));
             }
         } catch (Exception ex) {
             throw new RuntimeException("Unable to retrieve login entries", ex);
         }
+    }
+
+    private boolean doesPlayerHaveTrophies(int playerId) {
+        return _collectionDAO.doesPlayerHaveCardsInCollection(playerId, CollectionType.TROPHY.getCode());
     }
 
     private Player getPlayerFromResultSet(ResultSet rs) throws SQLException {
@@ -258,7 +265,9 @@ public class DbPlayerDAO implements PlayerDAO {
         String createIp = rs.getString(7);
         String lastIp = rs.getString(8);
 
-        return new Player(id, name, password, type, lastLoginReward, bannedUntil, createIp, lastIp);
+        boolean hasTrophies = doesPlayerHaveTrophies(id);
+
+        return new Player(id, name, password, type, lastLoginReward, bannedUntil, createIp, lastIp, hasTrophies);
     }
 
     @Override

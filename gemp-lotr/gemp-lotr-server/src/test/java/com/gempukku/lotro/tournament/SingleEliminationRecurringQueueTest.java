@@ -25,7 +25,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
         ImmediateRecurringQueue queue = new ImmediateRecurringQueue("test", 10, "format", CollectionType.MY_CARDS,
                 "id-", "name-", 2, false, tournamentService, new NoPrizes(), new SingleEliminationPairing("singleElimination"));
 
-        Player player = new Player(1, "p1", "pass", "u", null, null, null, null);
+        Player player = new Player(1, "p1", "pass", "u", null, null, null, null, false);
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
         Mockito.when(collectionsManager.removeCurrencyFromPlayerCollection(Mockito.anyString(), Mockito.eq(player), Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(10)))
@@ -47,7 +47,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
         ImmediateRecurringQueue queue = new ImmediateRecurringQueue("test", 10, "format", CollectionType.MY_CARDS,
                 "id-", "name-", 2, false, tournamentService, new NoPrizes(), new SingleEliminationPairing("singleElimination"));
 
-        Player player = new Player(1, "p1", "pass", "u", null, null, null, null);
+        Player player = new Player(1, "p1", "pass", "u", null, null, null, null, false);
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
         Mockito.when(collectionsManager.removeCurrencyFromPlayerCollection(Mockito.anyString(), Mockito.eq(player), Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(10)))
@@ -72,7 +72,7 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
         ImmediateRecurringQueue queue = new ImmediateRecurringQueue("test", 10, "format", CollectionType.MY_CARDS,
                 "id-", "name-", 2, false, tournamentService, new NoPrizes(), new SingleEliminationPairing("singleElimination"));
 
-        Player player = new Player(1, "p1", "pass", "u", null, null, null, null);
+        Player player = new Player(1, "p1", "pass", "u", null, null, null, null, false);
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
         Mockito.when(collectionsManager.removeCurrencyFromPlayerCollection(Mockito.anyString(), Mockito.eq(player), Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(10)))
@@ -115,8 +115,8 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
 
 
 
-        Player player1 = new Player(1, "p1", "pass", "u", null, null, null, null);
-        Player player2 = new Player(2, "p2", "pass", "u", null, null, null, null);
+        Player player1 = new Player(1, "p1", "pass", "u", null, null, null, null, false);
+        Player player2 = new Player(2, "p2", "pass", "u", null, null, null, null, false);
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
         Mockito.when(collectionsManager.removeCurrencyFromPlayerCollection(Mockito.anyString(), Mockito.any(), Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(10)))
@@ -164,9 +164,9 @@ public class SingleEliminationRecurringQueueTest extends AbstractAtTest {
         ImmediateRecurringQueue queue = new ImmediateRecurringQueue("test", 10, "format", CollectionType.MY_CARDS,
                 "id-", "name-", 2, false, tournamentService, new NoPrizes(), new SingleEliminationPairing("singleElimination"));
 
-        Player player1 = new Player(1, "p1", "pass", "u", null, null, null, null);
-        Player player2 = new Player(2, "p2", "pass", "u", null, null, null, null);
-        Player player3 = new Player(3, "p3", "pass", "u", null, null, null, null);
+        Player player1 = new Player(1, "p1", "pass", "u", null, null, null, null, false);
+        Player player2 = new Player(2, "p2", "pass", "u", null, null, null, null, false);
+        Player player3 = new Player(3, "p3", "pass", "u", null, null, null, null, false);
 
         CollectionsManager collectionsManager = Mockito.mock(CollectionsManager.class);
         Mockito.when(collectionsManager.removeCurrencyFromPlayerCollection(Mockito.anyString(), Mockito.any(), Mockito.eq(CollectionType.MY_CARDS), Mockito.eq(10)))

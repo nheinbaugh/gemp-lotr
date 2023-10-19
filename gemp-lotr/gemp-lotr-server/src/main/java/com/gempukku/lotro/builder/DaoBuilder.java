@@ -45,7 +45,7 @@ public class DaoBuilder {
         CachedCollectionDAO collectionDao = new CachedCollectionDAO(dbCollectionDao);
         objectMap.put(CollectionDAO.class, collectionDao);
 
-        PlayerDAO dbPlayerDao = LoggingProxy.createLoggingProxy(PlayerDAO.class, new DbPlayerDAO(dbAccess));
+        PlayerDAO dbPlayerDao = LoggingProxy.createLoggingProxy(PlayerDAO.class, new DbPlayerDAO(dbAccess, collectionDao));
         CachedPlayerDAO playerDao = new CachedPlayerDAO(dbPlayerDao);
         objectMap.put(PlayerDAO.class, playerDao);
 

@@ -36,9 +36,9 @@ public class SumCardCollection implements CardCollection {
             Iterable<Item> inCollection = cardCollection.getAll();
             for (Item cardCount : inCollection) {
                 String cardId = cardCount.getBlueprintId();
-                Integer count = sum.get(cardId).getCount();
-                if (count != null)
-                    sum.put(cardId, Item.createItem(cardId, count + cardCount.getCount()));
+                var item = sum.get(cardId);
+                if (item != null)
+                    sum.put(cardId, Item.createItem(cardId, item.getCount() + cardCount.getCount()));
                 else
                     sum.put(cardId, Item.createItem(cardId, cardCount.getCount()));
             }

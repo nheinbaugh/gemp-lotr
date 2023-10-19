@@ -189,7 +189,7 @@ var ChatBoxUI = Class.extend({
     
     initPlayerInfo:function (playerInfo) {
         this.userInfo = playerInfo;
-        this.userName = this.userInfo.name; 
+        this.userName = this.userInfo.name;
         this.pingRegex = new RegExp("@" + this.userName + "\\b");
         this.mentionRegex = new RegExp("(?<!<b>)\\b" + this.userName + "\\b");
     },
