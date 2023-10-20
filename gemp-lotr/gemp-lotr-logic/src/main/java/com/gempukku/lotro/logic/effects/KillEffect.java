@@ -16,18 +16,29 @@ import java.util.*;
 
 public class KillEffect extends AbstractSuccessfulEffect {
     private final Collection<? extends PhysicalCard> _cards;
+
+    private final Collection<? extends PhysicalCard> _killers;
     private final Cause _cause;
 
     public enum Cause {
         WOUNDS, OVERWHELM, CARD_EFFECT
     }
 
-    public KillEffect(PhysicalCard card, Cause cause) {
-        this(Collections.singleton(card), cause);
+    public KillEffect(PhysicalCard card, PhysicalCard killer, Cause cause) {
+        this(Collections.singleton(card), Collections.singleton(killer), cause);
     }
 
-    public KillEffect(Collection<? extends PhysicalCard> cards, Cause cause) {
+    public KillEffect(PhysicalCard card, Collection<? extends PhysicalCard> killers, Cause cause) {
+        this(Collections.singleton(card), killers, cause);
+    }
+
+    public KillEffect(Collection<? extends PhysicalCard> cards, PhysicalCard killer, Cause cause) {
+        this(cards, Collections.singleton(killer), cause);
+    }
+
+    public KillEffect(Collection<? extends PhysicalCard> cards, Collection<? extends PhysicalCard> killers, Cause cause) {
         _cards = cards;
+        _killers = killers;
         _cause = cause;
     }
 
@@ -48,6 +59,10 @@ public class KillEffect extends AbstractSuccessfulEffect {
         }
 
         return result;
+    }
+
+    public Collection<? extends PhysicalCard> getKillers() {
+        return _killers;
     }
 
     @Override
@@ -99,9 +114,9 @@ public class KillEffect extends AbstractSuccessfulEffect {
             gameState.addCardToZone(game, discardedCard, Zone.DISCARD);
 
         if (killedCards.size() > 0)
-            game.getActionsEnvironment().emitEffectResult(new KilledResult(killedCards, _cause));
+            game.getActionsEnvironment().emitEffectResult(new KilledResult(killedCards, new HashSet<>(_killers), _cause));
         for (PhysicalCard killedCard : killedCards)
-            game.getActionsEnvironment().emitEffectResult(new ForEachKilledResult(killedCard, _cause));
+            game.getActionsEnvironment().emitEffectResult(new ForEachKilledResult(killedCard, _killers, _cause));
         for (PhysicalCard discardedCard : discardedCards)
             game.getActionsEnvironment().emitEffectResult(new DiscardCardsFromPlayResult(null, null, discardedCard));
 

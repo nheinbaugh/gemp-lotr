@@ -35,7 +35,7 @@ public class CharacterDeathRule {
                             RequiredTriggerAction action = new RequiredTriggerAction(null);
                             action.setText("Character death");
                             action.appendEffect(
-                                    new KillEffect(characters, KillEffect.Cause.WOUNDS));
+                                    new KillEffect(characters, (PhysicalCard) null, KillEffect.Cause.WOUNDS));
                             action.appendEffect(
                                     new UnrespondableEffect() {
                                         @Override

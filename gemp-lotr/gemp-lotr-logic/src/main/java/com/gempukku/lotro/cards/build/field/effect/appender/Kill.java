@@ -16,6 +16,7 @@ import com.gempukku.lotro.logic.timing.Effect;
 import org.json.simple.JSONObject;
 
 import java.util.Collection;
+import java.util.Collections;
 
 public class Kill implements EffectAppenderProducer {
     @Override
@@ -34,7 +35,7 @@ public class Kill implements EffectAppenderProducer {
                     @Override
                     protected Effect createEffect(boolean cost, CostToEffectAction action, ActionContext actionContext) {
                         final Collection<? extends PhysicalCard> cardsFromMemory = actionContext.getCardsFromMemory("_temp");
-                        return new KillEffect(cardsFromMemory, KillEffect.Cause.CARD_EFFECT);
+                        return new KillEffect(cardsFromMemory, Collections.singleton(action.getActionSource()), KillEffect.Cause.CARD_EFFECT);
                     }
                 });
 

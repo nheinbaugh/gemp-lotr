@@ -40,7 +40,7 @@ public class ResolveSkirmishRule {
 
                             RequiredTriggerAction action = new RequiredTriggerAction(null);
                             action.setText("Resolve skirmish overwhelm");
-                            action.appendEffect(new KillEffect(losers, KillEffect.Cause.OVERWHELM));
+                            action.appendEffect(new KillEffect(losers, skirmishResult.getWinners(), KillEffect.Cause.OVERWHELM));
 
                             return Collections.singletonList(action);
                         }

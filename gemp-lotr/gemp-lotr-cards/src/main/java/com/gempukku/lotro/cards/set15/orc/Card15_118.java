@@ -54,7 +54,7 @@ return Collections.singletonList(new MinionSiteNumberModifier(self, Filters.and(
                         @Override
                         protected void cardSelected(LotroGame game, PhysicalCard card) {
                             action.insertEffect(
-                                    new KillEffect(card, KillEffect.Cause.CARD_EFFECT));
+                                    new KillEffect(card, self, KillEffect.Cause.CARD_EFFECT));
                         }
                     });
             action.appendEffect(

@@ -43,7 +43,7 @@ public class Card13_060 extends AbstractPermanent {
                         @Override
                         protected void cardSelected(LotroGame game, PhysicalCard card) {
                             action.appendCost(
-                                    new KillEffect(card, KillEffect.Cause.CARD_EFFECT));
+                                    new KillEffect(card, self, KillEffect.Cause.CARD_EFFECT));
                         }
                     });
             PhysicalCard faramir = Filters.findFirstActive(game, Filters.name("Faramir"));

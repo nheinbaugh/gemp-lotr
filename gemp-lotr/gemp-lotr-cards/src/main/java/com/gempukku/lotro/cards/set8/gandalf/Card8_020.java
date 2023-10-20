@@ -42,7 +42,7 @@ public class Card8_020 extends AbstractEvent {
                     @Override
                     protected void cardSelected(LotroGame game, final PhysicalCard card) {
                         action.insertCost(
-                                new KillEffect(card, KillEffect.Cause.CARD_EFFECT));
+                                new KillEffect(card, self, KillEffect.Cause.CARD_EFFECT));
                         for (int i = 0; i < 3; i++)
                             action.appendEffect(
                                     new ChooseAndPutCardFromDeckIntoHandEffect(action, playerId, 0, 1, card.getBlueprint().getCulture()));

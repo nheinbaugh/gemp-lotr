@@ -50,7 +50,7 @@ public class Card7_152 extends AbstractMinion {
             final Collection<PhysicalCard> losingCompanion = Filters.filter(skirmishResult.getInvolving(), game, CardType.COMPANION);
             RequiredTriggerAction action = new RequiredTriggerAction(self);
             action.appendEffect(
-                    new KillEffect(losingCompanion, KillEffect.Cause.CARD_EFFECT));
+                    new KillEffect(losingCompanion, self, KillEffect.Cause.CARD_EFFECT));
             return Collections.singletonList(action);
         }
         return null;

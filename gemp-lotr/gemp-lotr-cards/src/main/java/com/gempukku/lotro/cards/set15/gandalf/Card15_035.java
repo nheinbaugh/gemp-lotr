@@ -43,7 +43,7 @@ public class Card15_035 extends AbstractCompanion {
         if (PlayConditions.canUseFPCardDuringPhase(game, Phase.FELLOWSHIP, self)) {
             ActivateCardAction action = new ActivateCardAction(self);
             action.appendCost(
-                    new KillEffect(self, KillEffect.Cause.CARD_EFFECT));
+                    new KillEffect(self, self, KillEffect.Cause.CARD_EFFECT));
             action.appendEffect(
                     new RemoveTwilightEffect(5));
             return Collections.singletonList(action);

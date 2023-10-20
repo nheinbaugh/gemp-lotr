@@ -54,7 +54,7 @@ public class Card13_071 extends AbstractCompanion {
                 && game.getModifiersQuerying().getResistance(game, self) == 0) {
             RequiredTriggerAction action = new RequiredTriggerAction(self);
             action.appendEffect(
-                    new KillEffect(self, KillEffect.Cause.CARD_EFFECT));
+                    new KillEffect(self, self, KillEffect.Cause.CARD_EFFECT));
             return Collections.singletonList(action);
         }
         return null;

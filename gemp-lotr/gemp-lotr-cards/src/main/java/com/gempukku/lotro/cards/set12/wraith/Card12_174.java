@@ -49,7 +49,7 @@ public class Card12_174 extends AbstractMinion {
                         @Override
                         protected void cardSelected(LotroGame game, PhysicalCard card) {
                             action.appendEffect(
-                                    new KillEffect(card, KillEffect.Cause.CARD_EFFECT));
+                                    new KillEffect(card, self, KillEffect.Cause.CARD_EFFECT));
                         }
                     });
             return Collections.singletonList(action);

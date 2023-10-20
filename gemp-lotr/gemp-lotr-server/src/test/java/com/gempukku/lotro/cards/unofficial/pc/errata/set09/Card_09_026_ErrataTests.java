@@ -5,6 +5,7 @@ import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.AbstractActionProxy;
 import com.gempukku.lotro.game.CardNotFoundException;
+import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
 import com.gempukku.lotro.logic.actions.ActivateCardAction;
 import com.gempukku.lotro.logic.decisions.DecisionResultInvalidException;
@@ -107,7 +108,7 @@ public class Card_09_026_ErrataTests
 			@Override
 			public List<? extends Action> getPhaseActions(String playerId, LotroGame game) {
 				ActivateCardAction action = new ActivateCardAction(frodo);
-				action.appendEffect(new KillEffect(radagast, KillEffect.Cause.CARD_EFFECT));
+				action.appendEffect(new KillEffect(radagast, (PhysicalCard) null, KillEffect.Cause.CARD_EFFECT));
 				return Collections.singletonList(action);
 			}
 		});

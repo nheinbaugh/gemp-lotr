@@ -1,9 +1,6 @@
 package com.gempukku.lotro.logic.timing;
 
-import com.gempukku.lotro.common.Filterable;
-import com.gempukku.lotro.common.Phase;
-import com.gempukku.lotro.common.Side;
-import com.gempukku.lotro.common.Zone;
+import com.gempukku.lotro.common.*;
 import com.gempukku.lotro.filters.Filters;
 import com.gempukku.lotro.game.PhysicalCard;
 import com.gempukku.lotro.game.state.LotroGame;
@@ -12,6 +9,8 @@ import com.gempukku.lotro.logic.effects.KillEffect;
 import com.gempukku.lotro.logic.effects.PreventableCardEffect;
 import com.gempukku.lotro.logic.effects.WoundCharactersEffect;
 import com.gempukku.lotro.logic.timing.results.*;
+
+import java.util.Objects;
 
 public class TriggerConditions {
     public static boolean losesInitiative(EffectResult effectResult, Side side) {
@@ -213,6 +212,33 @@ public class TriggerConditions {
         return false;
     }
 
+    public static boolean forEachWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+            var woundResult = (WoundResult)effectResult;
+
+            return Filters.filter(woundResult.getSources(), game, woundedBy).size() > 0 &&
+                    Filters.and(filters).accepts(game, woundResult.getWoundedCard());
+        }
+        return false;
+    }
+
+    public static boolean forEachMortallyWoundedBy(LotroGame game, EffectResult effectResult, Filterable woundedBy, Filterable... filters) {
+        if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+            var woundResult = (WoundResult)effectResult;
+            var wounded = woundResult.getWoundedCard();
+
+            return Filters.filter(woundResult.getSources(), game, woundedBy).size() > 0 &&
+                    Filters.and(filters).accepts(game, woundResult.getWoundedCard()) &&
+                    (
+                        ( Filters.or(CardType.ALLY, CardType.COMPANION).accepts(game, wounded) &&
+                            wounded.getZone() == Zone.DEAD ) ||
+                        ( Filters.and(CardType.MINION).accepts(game, wounded) &&
+                            wounded.getZone() != Zone.SHADOW_CHARACTERS)
+                    );
+        }
+        return false;
+    }
+
     public static boolean forEachWounded(LotroGame game, EffectResult effectResult, Filterable... filters) {
         if (effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED)
             return Filters.and(filters).accepts(game, ((WoundResult) effectResult).getWoundedCard());
@@ -321,7 +347,23 @@ public class TriggerConditions {
     }
 
     public static boolean forEachKilledBy(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
-        return forEachKilledInASkirmish(game, effectResult, killedBy, killed);
+        if(effectResult.getType() == EffectResult.Type.FOR_EACH_WOUNDED) {
+            return forEachMortallyWoundedBy(game, effectResult, killedBy, killed);
+        }
+        else if (effectResult.getType() == EffectResult.Type.FOR_EACH_KILLED) {
+            if(forEachKilledInASkirmish(game, effectResult, killedBy, killed))
+                return true;
+
+            ForEachKilledResult killResult = (ForEachKilledResult) effectResult;
+            var killers = killResult.getKillers();
+
+            if(killers == null || killers.isEmpty() || killers.stream().allMatch(Objects::isNull))
+                return false;
+
+            return Filters.filter(killResult.getKillers(), game, killedBy).size() > 0 &&
+                    Filters.and(killed).accepts(game, killResult.getKilledCard());
+        }
+        return false;
     }
 
     public static boolean forEachKilledInASkirmish(LotroGame game, EffectResult effectResult, Filterable killedBy, Filterable... killed) {
