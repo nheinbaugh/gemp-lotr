@@ -47,7 +47,11 @@ public class CachedCollectionDAO implements CollectionDAO, Cached {
         String key = constructCacheKey(playerId, type);
 
         if(_playerCollections.containsKey(key)) {
-            for (CardCollection.Item item : _playerCollections.get(key).getAll()) {
+            var coll = _playerCollections.get(key);
+            if(coll == null)
+                return _delegate.doesPlayerHaveCardsInCollection(playerId, type);;
+
+            for (CardCollection.Item item : coll.getAll()) {
                 if (item.getCount() > 0) {
                     return true;
                 }
