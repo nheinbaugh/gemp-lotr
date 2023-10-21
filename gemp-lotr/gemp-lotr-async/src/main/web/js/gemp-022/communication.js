@@ -1045,6 +1045,25 @@ var GempLotrCommunication = Class.extend({
         });
     },
     
+    addTables:function (name, tournament, format, timer, playerones, playertwos, callback, errorMap) {
+        $.ajax({
+            type:"POST",
+            url:this.url + "/admin/addTables",
+            cache:false,
+            data:{
+                name:name,
+                tournament:tournament,
+                format:format,
+                timer:timer,
+                playerones:playerones,
+                playertwos:playertwos
+            },
+            success:this.deliveryCheck(callback),
+            error:this.errorCheck(errorMap),
+            dataType:"html"
+        });
+    },
+    
     
     
     //NEVER EVER EVER use this for actual authentication

@@ -4,6 +4,7 @@ function gatherData(formElem) {
 
 	var inputs = $("input[type='text'], option:selected", formElem).each(
 		function () {
+			
 			var input = $(this);
 			var name = null;
 			var value = null;
@@ -221,6 +222,32 @@ $(document).ready(
 					$(".serieData").last().clone().appendTo(".series");
 				});
 		
+		$("#add-additional-table-button").button().click(
+				function () {
+					$(".tabledata").last().clone().appendTo(".tablesgroup");
+				});
+		
+		$("#add-tables-button").button().click(
+			function () {
+				let resultdiv = $("#tables-result");
+				resultdiv.html("Processing...");
+				
+				var data = gatherData($(".tablesgroup"))
+				
+				console.log(data);
+				
+				hall.comm.addTables(
+			   		$("#table-name").val(), 
+			   		$("#table-tournament").val(),
+			   		$("#table-format").val(),
+			   		$("#table-timer").val(),
+			   		data.playerone,
+			   		data.playertwo,
+					function (xml) {
+						resultdiv.html("OK");
+					}, leagueErrorMap(resultdiv));
+				});
+		
 		
 		hall.comm.getFormats(true,
 			function (json) 
@@ -282,6 +309,30 @@ $(document).ready(
 					}
 				}
 				sortOptionsByName("#sealed-format");
+				
+				for (var prop in formats) {
+					if (Object.prototype.hasOwnProperty.call(formats, prop)) {
+						//console.log(prop);
+						
+						if(formats[prop].name.includes("Limited"))
+							continue;
+						
+						let num = ("0000" + formats[prop].order).substr(-4);
+						
+						var item = $("<option/>")
+							.attr("value", prop)
+							.text("" + num + " - " + formats[prop].name);
+						$("#table-format").append(item);
+					}
+				}
+				sortOptionsByName("#table-format");
+				
+				$("#table-format option").each(function(index) {
+					//console.log(this);
+					let newText = $(this).text().replace(/\d+ - /, '');
+					//console.log(newText);
+					$(this).text(newText);
+				});
 			}, 
 			{
 				"400":function () 
@@ -306,8 +357,14 @@ function leagueErrorMap(outputControl, callback=null) {
 			if(callback!=null)
 				callback();
 		},
-		"400":function() {
-			outputControl.html("400: One of the provided parameters was malformed.  Double-check your input and try again.");
+		"400":function(xhr, status, request) {
+			var message = xhr.getResponseHeader("message");
+			if(message != null) {
+				outputControl.html("400; malformed input: " + message);
+			}
+			else {
+				outputControl.html("400: One of the provided parameters was malformed.  Double-check your input and try again.");
+			}
 			if(callback!=null)
 				callback();
 		},
@@ -412,46 +469,6 @@ function leagueErrorMap(outputControl, callback=null) {
 				<b>Series definition:</b><br/>
 				Format:
 				<select id="constructed-format" name="format">
-					<!-- <option value="fotr_block">Fellowship block</option>
-					<option value="pc_fotr_block">Fellowship block (PC)</option>
-					<option value="fotr1_block">Fellowship block - Set 1</option>
-					<option value="fotr2_block">Fellowship block - Sets 1&2</option>
-					<option value="fotr_poorman">Fellowship block - Poorman</option>
-					<option value="fotr_highlander">Fellowship block - Highlander</option>
-					<option value="ttt_block">Towers block</option>
-					<option value="ttt1_block">Towers block - Set 4</option>
-					<option value="ttt2_block">Towers block - Sets 4&5</option>
-					<option value="towers_standard">Towers standard</option>
-					<option value="ttt_standard">Towers standard - Sets 1-4</option>
-					<option value="bohd_standard">Towers standard - Sets 1-5</option>
-					<option value="ts_no_fotr">Towers standard - Sets 2-6</option>
-					<option value="ts_reflections">Towers standard - Sets 1-6,9,14&16</option>
-					<option value="king_block">King block</option>
-					<option value="king1_block">King block - Set 7</option>
-					<option value="king2_block">King block - Sets 7-8</option>
-					<option value="movie">Movie block</option>
-					<option value="pc_movie">Movie block (PC)</option>
-					<option value="movie_exp">Movie block, no GLR (10R11)</option>
-					<option value="movie7">Movie block - Sets 1-7</option>
-					<option value="movie8">Movie block - Sets 1-8</option>
-					<option value="movie9">Movie block - Sets 1-9</option>
-					<option value="movie_sans9">Movie block - Sets 1-8,10</option>
-					<option value="movie_highlander">Movie block - Highlander</option>
-					<option value="war_block">War of the Ring block</option>
-					<option value="war_block11">War of the Ring block - Set 11</option>
-					<option value="war_block12">War of the Ring block - Sets 11-12</option>
-					<option value="war_block14">War of the Ring block - Sets 10-14</option>
-					<option value="hunter_block">Hunters block</option>
-					<option value="war_standard">War of the Ring standard</option>
-					<option value="standard">Standard</option>
-					<option value="open">Open</option>
-					<option value="open_legacy">Open - Sets 1-4</option>
-					<option value="expanded">Expanded</option>
-					<option value="pc_expanded">Expanded (PC)</option>
-					<option value="test_pc_fotr_block">PLAYTEST FOTR (PC)</option>
-					<option value="test_pc_movie">PLAYTEST Movie (PC)</option>
-					<option value="test_pc_expanded">PLAYTEST Expanded (PC)</option>
-					<option value="french">French</option> -->
 				</select><br/>
 				Serie duration in days: <input type="text" name="serieDuration" value="7"><br/>
 				Maximum matches per serie: <input type="text" name="maxMatches" value="5"><br/>
@@ -470,6 +487,41 @@ function leagueErrorMap(outputControl, callback=null) {
 		<button id="add-constructed-league-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
 			Add Constructed League
 		</button> <span id="constructed-league-result" style="display:inline-block;">Ready.</span>
+	</div>
+	
+	<h1>Manually Add Elimination Tables</h1>
+	<div>
+		Series Name: 
+			<input type="text" id="table-name"><br/>
+		Tournament (for decks): 
+			<input type="text" id="table-tournament"><br/>
+		Format:
+			<select id="table-format" name="format">
+			</select><br/>
+		Timer (player clock / timeout):
+			<select id="table-timer">
+				<option value="Competitive">Competitive (40/5)</option>
+				<option value="WC">Championship (20/10)</option>
+				<option value="WC_Expanded">Championship Expanded (25/10)</option>
+				<option value="Blitz!">Blitz (30/5)</option>
+				<option value="Default">Default (80/5)</option>
+				<option value="Slow">Slow (120/10)</option>
+			</select><br/>
+		<div class="tablesgroup">
+			<div class="tabledata">
+				<br/><b>Table definition:</b><br/>
+				Player 1: <input type="text" name="playerone" ><br/>
+				Player 2: <input type="text" name="playertwo" ><br/>
+			</div>
+		</div>
+		
+		<button id="add-additional-table-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
+			Add Another Table
+		</button>
+				
+		<button id="add-tables-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" style="padding:4px;">
+			Add Tables
+		</button> <span id="tables-result" style="display:inline-block;">Ready.</span>
 	</div>
 </div>
 

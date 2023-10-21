@@ -106,7 +106,7 @@ public class LotroServer extends AbstractServer {
             if(gameSettings.getLeague() != null) {
                 spectate = true;
             }
-            else if(gameSettings.isCompetitive() || gameSettings.isPrivateGame() || gameSettings.isHiddenGame()) {
+            else if(gameSettings.isPrivateGame() || gameSettings.isHiddenGame()) {
                 spectate = false;
             }
 

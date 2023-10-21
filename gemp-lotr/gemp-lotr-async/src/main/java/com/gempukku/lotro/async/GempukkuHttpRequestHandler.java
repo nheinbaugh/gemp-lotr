@@ -103,7 +103,12 @@ public class GempukkuHttpRequestHandler extends SimpleChannelInboundHandler<Full
                 _log.error("HTTP code " + code + " response for " + requestInformation.remoteIp + ": " + requestInformation.uri, exp);
             }
 
-            responseSender.writeError(exp.getStatus());
+            if(exp.getMessage() != null) {
+                responseSender.writeError(exp.getStatus(), Collections.singletonMap("message", exp.getMessage()));
+            }
+            else {
+                responseSender.writeError(exp.getStatus());
+            }
         } catch (Exception exp) {
             _log.error("Error response for " + uri, exp);
             responseSender.writeError(500);

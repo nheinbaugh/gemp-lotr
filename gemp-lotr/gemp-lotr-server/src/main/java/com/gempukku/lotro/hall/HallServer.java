@@ -802,10 +802,10 @@ public class HallServer extends AbstractServer {
         private HallTournamentCallback(Tournament tournament) {
             _tournament = tournament;
             tournamentGameSettings = new GameSettings(null, _formatLibrary.getFormat(_tournament.getFormat()),
-                    null, null, true, false, false, false, GameTimer.TOURNAMENT_TIMER, null);
+                    null, null, true, true, false, false, GameTimer.TOURNAMENT_TIMER, null);
 
             wcGameSettings  = new GameSettings(null, _formatLibrary.getFormat(_tournament.getFormat()),
-                    null, null, true, false, false, false, GameTimer.CHAMPIONSHIP_TIMER, null);
+                    null, null, true, true, false, false, GameTimer.CHAMPIONSHIP_TIMER, null);
         }
 
         @Override
@@ -837,6 +837,55 @@ public class HallServer extends AbstractServer {
                                     createGameInternal(participants);
                                 }
                             }, _tournament.getTournamentName(), settings);
+                    gameTable.startGame(mediator);
+                }
+            } finally {
+                _hallDataAccessLock.writeLock().unlock();
+            }
+        }
+
+        @Override
+        public void broadcastMessage(String message) {
+            try {
+                //check-in callback
+                _hallChat.sendMessage("TournamentSystem", message, true);
+            } catch (PrivateInformationException exp) {
+                // Ignore, sent as admin
+            } catch (ChatCommandErrorException e) {
+                // Ignore, no command
+            }
+        }
+    }
+
+    public ManualGameSpawner GetManualGameSpawner(Tournament tournament, LotroFormat format,  GameTimer timer,  String description) {
+        return new ManualGameSpawner(tournament, format, timer, description);
+    }
+    public class ManualGameSpawner implements TournamentCallback {
+        private final Tournament _tournament;
+        private final GameSettings _settings;
+
+        private ManualGameSpawner(Tournament tournament, LotroFormat format,  GameTimer timer,  String description) {
+            _tournament = tournament;
+            _settings = new GameSettings(null, format,
+                    null, null, true, false, false, false, timer, description);
+        }
+
+        @Override
+        public void createGame(String playerOne, LotroDeck deckOne, String playerTwo, LotroDeck deckTwo) {
+            final LotroGameParticipant[] participants = new LotroGameParticipant[2];
+            participants[0] = new LotroGameParticipant(playerOne, deckOne);
+            participants[1] = new LotroGameParticipant(playerTwo, deckTwo);
+            createGameInternal(participants);
+        }
+
+        private void createGameInternal(final LotroGameParticipant[] participants) {
+            _hallDataAccessLock.writeLock().lock();
+            try {
+                if (!_shutdown) {
+
+                    final GameTable gameTable = tableHolder.setupTournamentTable(_settings, participants);
+                    final LotroGameMediator mediator = createGameMediator(participants,
+                            _notifyHallListeners, _tournament.getTournamentName(), _settings);
                     gameTable.startGame(mediator);
                 }
             } finally {

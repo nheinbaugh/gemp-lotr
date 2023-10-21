@@ -14,8 +14,10 @@ import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.LotroCardBlueprintLibrary;
 import com.gempukku.lotro.game.Player;
 import com.gempukku.lotro.game.formats.LotroFormatLibrary;
+import com.gempukku.lotro.hall.GameTimer;
 import com.gempukku.lotro.hall.HallServer;
 import com.gempukku.lotro.league.*;
+import com.gempukku.lotro.logic.vo.LotroDeck;
 import com.gempukku.lotro.packs.ProductLibrary;
 import com.gempukku.lotro.service.AdminService;
 import com.gempukku.lotro.tournament.TournamentService;
@@ -32,10 +34,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class AdminRequestHandler extends LotroServerRequestHandler implements UriRequestHandler {
     private final LotroCardBlueprintLibrary _cardLibrary;
@@ -91,6 +91,8 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             previewConstructedLeague(request, responseWriter);
         } else if (uri.equals("/addConstructedLeague") && request.method() == HttpMethod.POST) {
             addConstructedLeague(request, responseWriter);
+        } else if (uri.equals("/addTables") && request.method() == HttpMethod.POST) {
+            addTables(request, responseWriter);
         } else if (uri.equals("/previewSoloDraftLeague") && request.method() == HttpMethod.POST) {
             previewSoloDraftLeague(request, responseWriter);
         } else if (uri.equals("/addSoloDraftLeague") && request.method() == HttpMethod.POST) {
@@ -332,6 +334,65 @@ public class AdminRequestHandler extends LotroServerRequestHandler implements Ur
             return result;
 
         return _leagueService.getCollectionTypeByCode(collectionType);
+    }
+
+    private void addTables(HttpRequest request, ResponseWriter responseWriter) throws Exception {
+        validateLeagueAdmin(request);
+
+        HttpPostRequestDecoder postDecoder = new HttpPostRequestDecoder(request);
+        try {
+            String name = getFormParameterSafely(postDecoder, "name");
+            String tournamentID = getFormParameterSafely(postDecoder, "tournament");
+            String formatCode = getFormParameterSafely(postDecoder, "format");
+            String timerCode = getFormParameterSafely(postDecoder, "timer");
+            List<String> playerones = getFormMultipleParametersSafely(postDecoder, "playerones[]");
+            List<String> playertwos = getFormMultipleParametersSafely(postDecoder, "playertwos[]");
+
+            var tournament = _tournamentService.getTournamentById(tournamentID);
+
+            if(tournament == null) {
+                throw new HttpProcessingException(400, "Tournament '" + tournamentID + "' not found.");
+            }
+
+            var formats = _formatLibrary.getAllFormats();
+            if(!formats.containsKey(formatCode)) {
+                throw new HttpProcessingException(400, "Format code '" + formatCode + "' not found.");
+            }
+
+            var format = formats.get(formatCode);
+
+            var timer = GameTimer.ResolveTimer(timerCode);
+
+            var submittedPlayers = Stream.concat(playerones.stream(), playertwos.stream()).toList();
+            var decks = new HashMap<String, LotroDeck>();
+
+            for(String playerName : submittedPlayers) {
+                var player = _playerDAO.getPlayer(playerName);
+                if(player == null)
+                    throw new HttpProcessingException(400, "Player '" + playerName + "' does not exist.");
+
+                var deck = _tournamentService.getPlayerDeck(tournament.getTournamentId(), player.getName(), format.getName());
+                if(deck == null)
+                    throw new HttpProcessingException(400, "Player '" + playerName + "' has no deck registered for '" + tournamentID + "'.");
+
+                if(decks.containsKey(player.getName())) {
+                    throw new HttpProcessingException(400, "Player '" + playerName + "' was listed twice.");
+                }
+                decks.put(player.getName(), deck);
+            }
+
+
+            var spawner = _hallServer.GetManualGameSpawner(tournament, format, timer, name);
+            for(int i = 0; i < playerones.size(); i++) {
+                String p1 = playerones.get(i);
+                String p2 = playertwos.get(i);
+                spawner.createGame(p1, decks.get(p1), p2, decks.get(p2));
+            }
+
+            responseWriter.writeHtmlResponse("OK");
+        } finally {
+            postDecoder.destroy();
+        }
     }
 
     private void addConstructedLeague(HttpRequest request, ResponseWriter responseWriter) throws Exception {

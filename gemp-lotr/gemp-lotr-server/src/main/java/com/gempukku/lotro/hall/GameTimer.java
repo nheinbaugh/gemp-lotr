@@ -21,6 +21,14 @@ public record GameTimer(boolean longGame, String name, int maxSecondsPerPlayer, 
                     return GameTimer.SLOW_TIMER;
                 case "glacial":
                     return GameTimer.GLACIAL_TIMER;
+                case "competitive":
+                    return GameTimer.COMPETITIVE_TIMER;
+                case "wc":
+                    return GameTimer.CHAMPIONSHIP_TIMER;
+                case "wc_expanded":
+                    return GameTimer.EXPANDED_CHAMPIONSHIP_TIMER;
+                case "tournament":
+                    return GameTimer.TOURNAMENT_TIMER;
             }
         }
         return GameTimer.DEFAULT_TIMER;
