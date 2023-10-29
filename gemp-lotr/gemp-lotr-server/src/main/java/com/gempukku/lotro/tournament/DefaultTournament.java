@@ -2,6 +2,7 @@ package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.DateUtils;
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.collection.DeckRenderer;
 import com.gempukku.lotro.competitive.BestOfOneStandingsProducer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
@@ -464,8 +465,12 @@ public class DefaultTournament implements Tournament {
         }
     }
 
+    private Map.Entry<String, String> createEntry(String label, String url) {
+        return new AbstractMap.SimpleEntry<>(label, url);
+    }
+
     @Override
-    public String produceReport(LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,  SortAndFilterCards cardFilter) throws CardNotFoundException {
+    public String produceReport(DeckRenderer renderer) throws CardNotFoundException {
         if(_tournamentReport != null)
             return _tournamentReport;
 
@@ -495,8 +500,8 @@ public class DefaultTournament implements Tournament {
             }
         }
 
-        StringBuilder result = new StringBuilder();
-        result.append("<html><body>")
+        StringBuilder summary = new StringBuilder();
+        summary.append("<html><body>")
                 .append("<h1>").append(StringEscapeUtils.escapeHtml(_tournamentName)).append("</h1>")
                 .append("<ul>")
                 .append("<li>Format: ").append(_format).append("</li>")
@@ -506,19 +511,20 @@ public class DefaultTournament implements Tournament {
                 .append("<li>End: ").append(DateUtils.FormatStandardDateTime(end)).append("</li>")
                 .append("</ul><br/><br/><hr>");
 
+        var decks = new ArrayList<String>();
+        decks.add(summary.toString());
+
         for(var standing : getCurrentStandings()) {
             var playerName = standing.playerName();
-            result.append("<h2>by ").append(playerName).append("</h2><br/>")
-                    .append("<h3>Round Replays</h3>");
 
-            var rounds = new ArrayList<String>();
+            var rounds = new ArrayList<Map.Entry<String, String>>();
 
             var playerRounds = _finishedTournamentMatches.stream()
                     .filter((x) -> x.getPlayerOne().equals(playerName) || x.getPlayerTwo().equals(playerName))
                     .toList();
             for(int i = 1; i <= _tournamentRound; i++) {
                 if(_playerByes.containsKey(playerName) && _playerByes.get(playerName) == i) {
-                    rounds.add("[bye]");
+                    rounds.add(createEntry("[bye]", ""));
                     continue;
                 }
 
@@ -527,7 +533,7 @@ public class DefaultTournament implements Tournament {
                         .findFirst().orElse(null);
 
                 if(match == null) {
-                    rounds.add("[dropped]");
+                    rounds.add(createEntry("[dropped]", ""));
                     continue;
                 }
 
@@ -541,67 +547,20 @@ public class DefaultTournament implements Tournament {
                     replayId = game.lose_recording_id;
                 }
 
-                rounds.add("<a href='https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=" +
-                        playerName.replace("_", "%5F") + "$" + replayId +
-                        "' target='_blank'>Round " + i + "</a>");
+                String label = "Round " + i;
+                String url = "https://play.lotrtcgpc.net/gemp-lotr/game.html?replayId=" +
+                playerName.replace("_", "%5F") + "$" + replayId;
+
+                rounds.add(createEntry(label, url));
             }
-
-            result.append(String.join(" • ", rounds));
-
-            result.append("<h3>Deck</h3>");
 
             LotroDeck deck = _tournamentService.getPlayerDeck(_tournamentId, playerName, _format);
 
-            String ringBearer = deck.getRingBearer();
-            if (ringBearer != null) {
-                result.append("<b>Ring-bearer:</b> ")
-                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(ringBearer)))
-                    .append("<br/>");
-            }
+            var fragment = renderer.convertDeckToForumFragment(deck, playerName, rounds);
+            decks.add(fragment);
 
-            String ring = deck.getRing();
-            if (ring != null) {
-                result.append("<b>Ring:</b> ")
-                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(ring)))
-                    .append("<br/>");
-            }
-
-            DefaultCardCollection deckCards = new DefaultCardCollection();
-            for (String card : deck.getAdventureCards()) {
-                deckCards.addItem(bpLibrary.getBaseBlueprintId(card), 1);
-            }
-            for (String site : deck.getSites()) {
-                deckCards.addItem(bpLibrary.getBaseBlueprintId(site), 1);
-            }
-
-            result.append("<br/>");
-            result.append("<b>Adventure deck:</b><br/>");
-            for (CardCollection.Item item : cardFilter.process("cardType:SITE sort:siteNumber,twilight", deckCards.getAll(), bpLibrary, formatLibrary)) {
-                result.append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
-                    .append("<br/>");
-            }
-
-            result.append("<br/>");
-            result.append("<b>Free Peoples Draw Deck:</b><br/>");
-            for (CardCollection.Item item : cardFilter.process("side:FREE_PEOPLE sort:cardType,culture,name", deckCards.getAll(), bpLibrary, formatLibrary)) {
-                result.append(item.getCount()).append("x ")
-                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
-                    .append("<br/>");
-            }
-
-            result.append("<br/>");
-            result.append("<b>Shadow Draw Deck:</b><br/>");
-            for (CardCollection.Item item : cardFilter.process("side:SHADOW sort:cardType,culture,name", deckCards.getAll(), bpLibrary, formatLibrary)) {
-                result.append(item.getCount()).append("x ")
-                    .append(GameUtils.getFullName(bpLibrary.getLotroCardBlueprint(item.getBlueprintId())))
-                    .append("<br/>");
-            }
-
-            result.append("<br/><br/><hr>");
         }
 
-        result.append("</body></html>");
-
-        return result.toString();
+        return renderer.AddDeckReadoutHeaderAndFooter(decks);
     }
 }

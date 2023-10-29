@@ -43,6 +43,9 @@ public class ReplayMetadata {
 
     public HashSet<Integer> PlayedCards = new HashSet<>();
 
+    public ReplayMetadata() {
+
+    }
     public ReplayMetadata(DBDefs.GameHistory game, Map<String, LotroDeck> decks) {
         GameReplayInfo = game;
 

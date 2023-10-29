@@ -28,6 +28,11 @@ public final class JsonUtils {
         return JSON.parseObject(json, clazz);
     }
 
+    public static <T> T Convert(String jsonText, Class<T> clazz) throws IOException {
+        String json = JsonValue.readHjson(jsonText).toString();
+        return JSON.parseObject(json, clazz);
+    }
+
     public static <T> List<T> ConvertArray(Reader reader, Class<T> clazz) throws IOException {
         final String json = ReadJson(reader);
         try {

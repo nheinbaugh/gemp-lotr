@@ -272,4 +272,18 @@ public class GameRecorder {
 
         return new InflaterInputStream(new FileInputStream(recordingFile));
     }
+
+    public InputStream getRecordedSummary(String recordId) throws IOException {
+        var history = _gameHistoryService.getGameHistory(recordId);
+
+        if(history == null)
+            return null;
+
+        File recordingFile = getSummaryFile(history);
+
+        if (recordingFile == null || !recordingFile.exists() || !recordingFile.isFile())
+            return null;
+
+        return new FileInputStream(recordingFile);
+    }
 }

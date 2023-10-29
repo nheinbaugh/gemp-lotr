@@ -1,6 +1,7 @@
 package com.gempukku.lotro.tournament;
 
 import com.gempukku.lotro.collection.CollectionsManager;
+import com.gempukku.lotro.collection.DeckRenderer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.db.vo.CollectionType;
 import com.gempukku.lotro.draft.Draft;
@@ -92,5 +93,5 @@ public interface Tournament {
 
     public boolean isPlayerInCompetition(String player);
 
-    public String produceReport(LotroCardBlueprintLibrary bpLibrary, LotroFormatLibrary formatLibrary,  SortAndFilterCards cardFilter) throws CardNotFoundException;
+    public String produceReport(DeckRenderer renderer) throws CardNotFoundException;
 }

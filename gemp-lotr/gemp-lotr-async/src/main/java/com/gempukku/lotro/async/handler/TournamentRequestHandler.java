@@ -2,6 +2,7 @@ package com.gempukku.lotro.async.handler;
 
 import com.gempukku.lotro.async.HttpProcessingException;
 import com.gempukku.lotro.async.ResponseWriter;
+import com.gempukku.lotro.collection.DeckRenderer;
 import com.gempukku.lotro.competitive.PlayerStanding;
 import com.gempukku.lotro.game.CardCollection;
 import com.gempukku.lotro.game.DefaultCardCollection;
@@ -36,6 +37,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
     private final LotroFormatLibrary _formatLibrary;
     private final LotroCardBlueprintLibrary _library;
     private final SortAndFilterCards _sortAndFilterCards;
+    private final DeckRenderer _deckRenderer;
 
     private static final Logger _log = Logger.getLogger(TournamentRequestHandler.class);
 
@@ -46,6 +48,8 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         _formatLibrary = extractObject(context, LotroFormatLibrary.class);
         _library = extractObject(context, LotroCardBlueprintLibrary.class);
         _sortAndFilterCards = new SortAndFilterCards();
+
+        _deckRenderer = new DeckRenderer(_library, _formatLibrary, _sortAndFilterCards);
     }
 
     @Override
@@ -117,41 +121,9 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         if (deck == null)
             throw new HttpProcessingException(404);
 
-        StringBuilder result = new StringBuilder();
-        result.append("<html><body>");
-        result.append("<h1>" + StringEscapeUtils.escapeHtml(deck.getDeckName()) + "</h1>");
-        result.append("<h2>by " + playerName + "</h2>");
-        String ringBearer = deck.getRingBearer();
-        if (ringBearer != null)
-            result.append("<b>Ring-bearer:</b> " + GameUtils.getFullName(_library.getLotroCardBlueprint(ringBearer)) + "<br/>");
-        String ring = deck.getRing();
-        if (ring != null)
-            result.append("<b>Ring:</b> " + GameUtils.getFullName(_library.getLotroCardBlueprint(ring)) + "<br/>");
+        String fragment = _deckRenderer.convertDeckToHTMLFragment(deck, playerName);
 
-        DefaultCardCollection deckCards = new DefaultCardCollection();
-        for (String card : deck.getAdventureCards())
-            deckCards.addItem(_library.getBaseBlueprintId(card), 1);
-        for (String site : deck.getSites())
-            deckCards.addItem(_library.getBaseBlueprintId(site), 1);
-
-        result.append("<br/>");
-        result.append("<b>Adventure deck:</b><br/>");
-        for (CardCollection.Item item : _sortAndFilterCards.process("cardType:SITE sort:siteNumber,twilight", deckCards.getAll(), _library, _formatLibrary))
-            result.append(GameUtils.getFullName(_library.getLotroCardBlueprint(item.getBlueprintId())) + "<br/>");
-
-        result.append("<br/>");
-        result.append("<b>Free Peoples Draw Deck:</b><br/>");
-        for (CardCollection.Item item : _sortAndFilterCards.process("side:FREE_PEOPLE sort:cardType,culture,name", deckCards.getAll(), _library, _formatLibrary))
-            result.append(item.getCount() + "x " + GameUtils.getFullName(_library.getLotroCardBlueprint(item.getBlueprintId())) + "<br/>");
-
-        result.append("<br/>");
-        result.append("<b>Shadow Draw Deck:</b><br/>");
-        for (CardCollection.Item item : _sortAndFilterCards.process("side:SHADOW sort:cardType,culture,name", deckCards.getAll(), _library, _formatLibrary))
-            result.append(item.getCount() + "x " + GameUtils.getFullName(_library.getLotroCardBlueprint(item.getBlueprintId())) + "<br/>");
-
-        result.append("</body></html>");
-
-        responseWriter.writeHtmlResponse(result.toString());
+        responseWriter.writeHtmlResponse(_deckRenderer.AddDeckReadoutHeaderAndFooter(fragment));
     }
 
     private void getTournamentReport(HttpRequest request, String tournamentId, String playerName, ResponseWriter responseWriter) throws Exception {
@@ -162,7 +134,7 @@ public class TournamentRequestHandler extends LotroServerRequestHandler implemen
         if (tournament.getTournamentStage() != Tournament.Stage.FINISHED)
             throw new HttpProcessingException(403);
 
-        var result = tournament.produceReport(_library, _formatLibrary, _sortAndFilterCards);
+        var result = tournament.produceReport(_deckRenderer);
 
         responseWriter.writeHtmlResponse(result);
     }

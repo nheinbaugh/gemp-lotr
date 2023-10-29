@@ -30,4 +30,13 @@ public class Names {
                 .replaceAll("_", "")
                 .toLowerCase();
     }
+
+    public static String SanitizeDisplayName(String name) {
+        return Normalizer.normalize(name, Normalizer.Form.NFD)
+                .replaceAll("’", "'")
+                .replaceAll("‘", "'")
+                .replaceAll("”", "\"")
+                .replaceAll("“", "\"")
+                .replaceAll("\\p{M}", "");
+    }
 }
