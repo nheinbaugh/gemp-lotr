@@ -62,6 +62,7 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     private List<ModifierSource> stackedOnModifiers;
     private List<ModifierSource> inDiscardModifiers;
     private List<ModifierSource> controlledSiteModifiers;
+    private List<ModifierSource> permanentSiteModifiers;
 
     private List<TwilightCostModifierSource> twilightCostModifiers;
 
@@ -198,6 +199,12 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
         if (controlledSiteModifiers == null)
             controlledSiteModifiers = new LinkedList<>();
         controlledSiteModifiers.add(modifierSource);
+    }
+
+    public void appendPermanentSiteModifier(ModifierSource modifierSource) {
+        if (permanentSiteModifiers == null)
+            permanentSiteModifiers = new LinkedList<>();
+        permanentSiteModifiers.add(modifierSource);
     }
 
     public void appendTargetFilter(FilterableSource targetFilter) {
@@ -507,6 +514,11 @@ public class BuiltLotroCardBlueprint implements LotroCardBlueprint {
     @Override
     public List<? extends Modifier> getControlledSiteModifiers(LotroGame game, PhysicalCard self) {
         return getModifiers(game, self, controlledSiteModifiers);
+    }
+
+    @Override
+    public List<? extends Modifier> getPermanentSiteModifiers(LotroGame game, PhysicalCard self) {
+        return getModifiers(game, self, permanentSiteModifiers);
     }
 
     @Override

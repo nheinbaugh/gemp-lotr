@@ -929,6 +929,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
 
     public void FreepsChooseToMove() throws DecisionResultInvalidException { playerDecided(P1, "0"); }
     public void FreepsChooseToStay() throws DecisionResultInvalidException { playerDecided(P1, "1"); }
+    public void ShadowChooseToMove() throws DecisionResultInvalidException { playerDecided(P2, "0"); }
     public void ShadowChooseToStay() throws DecisionResultInvalidException { playerDecided(P2, "1"); }
 
     public boolean FreepsHasOptionalTriggerAvailable() { return FreepsDecisionAvailable("Optional"); }

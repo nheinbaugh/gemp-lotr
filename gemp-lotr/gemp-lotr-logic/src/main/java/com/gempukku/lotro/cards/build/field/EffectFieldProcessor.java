@@ -7,6 +7,7 @@ import com.gempukku.lotro.cards.build.InvalidCardDefinitionException;
 import com.gempukku.lotro.cards.build.field.effect.*;
 import com.gempukku.lotro.cards.build.field.effect.modifier.Modifier;
 import com.gempukku.lotro.cards.build.field.effect.modifier.ModifyOwnCost;
+import com.gempukku.lotro.cards.build.field.effect.modifier.PermanentSiteModifier;
 import org.json.simple.JSONObject;
 
 import java.util.HashMap;
@@ -29,6 +30,7 @@ public class EffectFieldProcessor implements FieldProcessor {
         effectProcessors.put("inhandtrigger", new InHandTriggerEffectProcessor());
         effectProcessors.put("killedtrigger", new KilledTriggerEffectProcessor());
         effectProcessors.put("modifier", new Modifier());
+        effectProcessors.put("permanentsitemodifier", new PermanentSiteModifier());
         effectProcessors.put("modifyowncost", new ModifyOwnCost());
         effectProcessors.put("playedinotherphase", new PlayedInOtherPhase());
         effectProcessors.put("responseevent", new ResponseEventEffectProcessor());

@@ -55,7 +55,7 @@
 				]
 			}
 			{
-				type: modifier
+				type: PermanentSiteModifier
 				modifier: {
 					type: CantReplaceSite
 					filter: self

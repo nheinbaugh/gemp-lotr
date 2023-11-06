@@ -62,6 +62,7 @@ public interface LotroCardBlueprint {
     List<? extends Modifier> getInDiscardModifiers(LotroGame game, PhysicalCard self);
 
     List<? extends Modifier> getControlledSiteModifiers(LotroGame game, PhysicalCard self);
+    List<? extends Modifier> getPermanentSiteModifiers(LotroGame game, PhysicalCard self);
 
     boolean checkPlayRequirements(LotroGame game, PhysicalCard self);
 

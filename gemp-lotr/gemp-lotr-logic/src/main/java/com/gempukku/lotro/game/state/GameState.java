@@ -524,17 +524,23 @@ public class GameState {
         ((PhysicalCardImpl) card).setZone(zone);
 
         if (zone == Zone.ADVENTURE_PATH) {
-            for (GameStateListener listener : getAllGameStateListeners())
+            for (GameStateListener listener : getAllGameStateListeners()) {
                 listener.setSite(card);
+            }
+
+            ((PhysicalCardImpl) card).startAffectingGamePermanentSite(game);
         } else {
-            for (GameStateListener listener : getAllGameStateListeners())
+            for (GameStateListener listener : getAllGameStateListeners()) {
                 listener.cardCreated(card);
+            }
         }
 
         if (_currentPhase.isCardsAffectGame()) {
-            if (zone.isInPlay())
-                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card))
+            if (zone.isInPlay()) {
+                if (card.getBlueprint().getCardType() != CardType.SITE || (getCurrentPhase() != Phase.PLAY_STARTING_FELLOWSHIP && getCurrentSite() == card)) {
                     startAffecting(game, card);
+                }
+            }
 
             if (zone == Zone.STACKED)
                 startAffectingStacked(game, card);
