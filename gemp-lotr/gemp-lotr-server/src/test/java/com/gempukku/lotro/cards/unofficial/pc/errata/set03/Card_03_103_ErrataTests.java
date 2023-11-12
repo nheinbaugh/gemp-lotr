@@ -65,7 +65,9 @@ public class Card_03_103_ErrataTests
 		* Twilight Cost: 0
 		* Type: event
 		* Subtype: 
-		* Game Text: <b>Maneuver:</b> Spot a [sauron] minion to wound Galadriel 3 times.  The Free Peoples player may discard 2 Elves to prevent this.  If Galadriel is Ring-bound, 2 burdens may be added instead.
+		* Game Text: <b>Maneuver:</b> Spot a [sauron] minion to wound Galadriel 3 times.
+		 * The Free Peoples player may discard 2 Elves to prevent this.  If Galadriel is
+		 * Ring-bound, 2 burdens may be added instead.
 		*/
 
 		//Pre-game setup

@@ -637,6 +637,16 @@ public class GenericCardTestHelper extends AbstractAtTest {
         SkipToPhase(Phase.ASSIGNMENT);
         PassCurrentPhaseActions();
     }
+    public void SkipToMovementDecision() throws DecisionResultInvalidException {
+        SkipToPhase(Phase.REGROUP);
+        PassCurrentPhaseActions();
+        if(ShadowDecisionAvailable("reconcile")) {
+            ShadowDeclineReconciliation();
+        }
+        while(ShadowDecisionAvailable("discard down")) {
+            ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
+        }
+    }
     public void SkipToPhase(Phase target) throws DecisionResultInvalidException {
         for(int attempts = 1; attempts <= 20; attempts++)
         {
@@ -1040,7 +1050,7 @@ public class GenericCardTestHelper extends AbstractAtTest {
         {
             ShadowDeclineReconciliation();
         }
-        if(ShadowDecisionAvailable("discard down"))
+        while(ShadowDecisionAvailable("discard down"))
         {
             ShadowChooseCard((PhysicalCardImpl) GetShadowHand().get(0));
         }
