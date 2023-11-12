@@ -28,7 +28,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("cancelevent", new CancelEvent());
         effectAppenderProducers.put("cancelskirmish", new CancelSkirmish());
         effectAppenderProducers.put("cantbeassignedtoskirmish", new CantBeAssignedToSkirmish());
-        effectAppenderProducers.put("cantbeoverwhelmedmultiplier", new CantBeOverwhelmedMultiplier());
+        effectAppenderProducers.put("alteroverwhelmmultiplier", new AlterOverwhelmMultiplier());
         effectAppenderProducers.put("canttakemorewoundsthan", new CantTakeMoreWoundsThan());
         effectAppenderProducers.put("canttakewounds", new CantTakeWounds());
         effectAppenderProducers.put("choice", new Choice());

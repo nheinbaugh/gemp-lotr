@@ -74,6 +74,6 @@ public class AssignFpCharacterToSkirmish implements EffectAppenderProducer {
             return environment.getFilterFactory().generateFilter(filter.substring(filter.indexOf("(") + 1, filter.lastIndexOf(")")), environment);
         if (filter.equals("self"))
             return ActionContext::getSource;
-        throw new InvalidCardDefinitionException("The filters for this effect have to be of 'choose' type or 'self'");
+        throw new InvalidCardDefinitionException("The selectors for this effect have to be of 'choose' type or 'self'");
     }
 }

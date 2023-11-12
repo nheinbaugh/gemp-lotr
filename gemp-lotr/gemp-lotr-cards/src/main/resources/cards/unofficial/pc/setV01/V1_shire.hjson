@@ -141,7 +141,7 @@
 				}
 				effect: [
 					{
-						type: cantBeOverwhelmedMultiplier
+						type: AlterOverwhelmMultiplier
 						filter: choose(culture(shire),companion,inSkirmish)
 						memorize: shireCompanion
 					}
