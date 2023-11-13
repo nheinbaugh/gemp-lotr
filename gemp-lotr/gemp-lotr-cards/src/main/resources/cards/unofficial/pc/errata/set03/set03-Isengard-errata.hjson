@@ -134,7 +134,7 @@
 	# 		{
 	# 			type: modifier
 	# 			modifier: {
-	# 				type: cantbeassignedtoskirmish
+	# 				type: DisableSkirmishAssignment
 	# 				filter: self
 	# 				requires: {
 	# 					type: sarumanfirstsentenceactive

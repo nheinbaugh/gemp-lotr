@@ -632,7 +632,7 @@
 					filter: choose(minion)
 				}
 				{
-					type: doesNotAddToArcheryTotal
+					type: DisableArcheryTotalContribution
 					filter: self
 				}
 			]
@@ -978,7 +978,7 @@
 					until: start(regroup)
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(exertedAlly)
 					until: start(regroup)
 				}
@@ -1006,7 +1006,7 @@
 					until: start(regroup)
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(exertedAlly)
 					until: start(regroup)
 				}

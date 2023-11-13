@@ -155,7 +155,7 @@
 							amount: 2
 						}
 						effect: {
-							type: cantBeAssignedToSkirmish
+							type: DisableSkirmishAssignment
 							filter: memory(chosenMinion)
 							until: start(regroup)
 						}

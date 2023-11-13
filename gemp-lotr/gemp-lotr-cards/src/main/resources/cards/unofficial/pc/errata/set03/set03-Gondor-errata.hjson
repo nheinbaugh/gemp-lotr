@@ -125,7 +125,7 @@
 					until: start(regroup)
 				}
 				{
-					type: allyCanParticipateInArcheryFireAndSkirmishes
+					type: EnableParticipationInArcheryFireAndSkirmishes
 					filter: memory(chosenAlly)
 					until: start(regroup)
 				}
