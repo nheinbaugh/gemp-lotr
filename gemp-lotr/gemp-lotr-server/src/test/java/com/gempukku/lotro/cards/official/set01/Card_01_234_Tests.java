@@ -1,4 +1,4 @@
-package com.gempukku.lotro.cards.unofficial.pc.errata.set01;
+package com.gempukku.lotro.cards.official.set01;
 
 import com.gempukku.lotro.cards.GenericCardTestHelper;
 import com.gempukku.lotro.common.*;
@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 import static org.junit.Assert.*;
 
-public class Card_01_234_ErrataTests
+public class Card_01_234_Tests
 {
 
 	protected GenericCardTestHelper GetScenario() throws CardNotFoundException, DecisionResultInvalidException {
@@ -25,7 +25,7 @@ public class Card_01_234_ErrataTests
 					put("comp5", "1_53");
 					put("comp6", "1_53");
 
-					put("nertea", "51_234");
+					put("nertea", "1_234");
 					put("runner", "1_178");
 					put("twk", "2_85");
 					put("attea", "1_229");
@@ -51,7 +51,7 @@ public class Card_01_234_ErrataTests
 		* Strength: 9
 		* Vitality: 2
 		* Site Number: 3
-		* Game Text: When you play Ulaire Nertea, for each companion over 4, you may play a unique [Wraith] minion from your discard pile.
+		* Game Text: When you play Úlairë Nertëa, for each companion over 4, you may play 1 minion from your discard pile.
 		*/
 
 		//Pre-game setup
@@ -90,7 +90,7 @@ public class Card_01_234_ErrataTests
 	}
 
 	@Test
-	public void NerteaPlaysUniqueWraithMinionIf5Companions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NerteaPlays1MinionIf5Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
@@ -108,19 +108,19 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
-		//twk and attea, but not rit or runner
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		//twk, attea, rit, and runner
+		assertEquals(4, scn.GetShadowCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
 
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
 	}
 
 	@Test
-	public void NerteaPlays2UniqueWraithMinionsIf6Companions() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NerteaPlays2MinionsIf6Companions() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
@@ -129,8 +129,9 @@ public class Card_01_234_ErrataTests
 		PhysicalCardImpl twk = scn.GetShadowCard("twk");
 		PhysicalCardImpl attea = scn.GetShadowCard("attea");
 		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToDiscard("runner", "rit", "twk", "attea");
-		scn.ShadowMoveCardToDiscard(twk);
+		PhysicalCardImpl runner = scn.GetShadowCard("runner");
+		scn.ShadowMoveCardToDiscard("rit", "twk", "attea");
+		scn.ShadowMoveCardToDiscard(twk, runner);
 		scn.ShadowMoveCardToHand(nertea);
 
 		scn.StartGame();
@@ -138,20 +139,21 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
-		//twk and attea, but not rit or runner
-		assertEquals(2, scn.GetShadowCardChoiceCount());
+		//twk, attea, rit, and runner
+		assertEquals(4, scn.GetShadowCardChoiceCount());
 		assertEquals(Zone.DISCARD, twk.getZone());
 		scn.ShadowChooseCardBPFromSelection(twk);
 		assertEquals(Zone.SHADOW_CHARACTERS, twk.getZone());
 
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
-		assertEquals(Zone.DISCARD, attea.getZone());
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseYes();
-		assertEquals(Zone.SHADOW_CHARACTERS, attea.getZone());
+		assertEquals(Zone.DISCARD, runner.getZone());
+		scn.ShadowChooseCardBPFromSelection(runner);
+		assertEquals(Zone.SHADOW_CHARACTERS, runner.getZone());
 
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
 	}
 
 	@Test
@@ -174,22 +176,21 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
-		assertTrue(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertTrue(scn.ShadowDecisionAvailable("play a minion"));
 		scn.ShadowChooseNo();
 
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
 	}
 
 	@Test
-	public void NerteaDoesNotPromptIfNoUniqueRingwraithMinionsInDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
+	public void NerteaDoesNotPromptIfNoMinionsInDiscardPile() throws DecisionResultInvalidException, CardNotFoundException {
 		//Pre-game setup
 		GenericCardTestHelper scn = GetScenario();
 
 		scn.FreepsMoveCharToTable("comp2", "comp3", "comp4", "comp5", "comp6");
 
 		PhysicalCardImpl nertea = scn.GetShadowCard("nertea");
-		scn.ShadowMoveCardToHand("twk", "attea");
-		scn.ShadowMoveCardToDiscard("rit", "runner");
+		scn.ShadowMoveCardToHand("rit", "twk", "attea", "runner");
 		scn.ShadowMoveCardToHand(nertea);
 
 		scn.StartGame();
@@ -197,7 +198,7 @@ public class Card_01_234_ErrataTests
 		scn.FreepsPassCurrentPhaseAction();
 
 		scn.ShadowPlayCard(nertea);
-		assertFalse(scn.ShadowDecisionAvailable("play a unique WRAITH minion"));
+		assertFalse(scn.ShadowDecisionAvailable("play a minion"));
 	}
 
 	//Imported from the at tests
@@ -222,12 +223,6 @@ public class Card_01_234_ErrataTests
 
 		final PhysicalCardImpl goblinRunner = scn.createCard(scn.P2, "1_178");
 		_game.getGameState().addCardToZone(_game, goblinRunner, Zone.DISCARD);
-
-		final PhysicalCardImpl ringwraithInTwilight = scn.createCard(scn.P2, "101_40");
-		_game.getGameState().addCardToZone(_game, ringwraithInTwilight, Zone.DISCARD);
-
-		final PhysicalCardImpl witchKing = scn.createCard(scn.P2, "2_85");
-		_game.getGameState().addCardToZone(_game, witchKing, Zone.DISCARD);
 
 		_game.getGameState().setTwilight(20);
 

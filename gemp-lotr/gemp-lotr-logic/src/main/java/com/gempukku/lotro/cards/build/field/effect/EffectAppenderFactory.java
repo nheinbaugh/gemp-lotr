@@ -79,6 +79,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("memorize", new MemorizeActive());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
+        effectAppenderProducers.put("memorizevalue", new MemorizeValue());
         effectAppenderProducers.put("modifyarcherytotal", new ModifyArcheryTotal());
         effectAppenderProducers.put("modifysitenumber", new ModifySiteNumber());
         effectAppenderProducers.put("modifystrength", new ModifyStrength());
