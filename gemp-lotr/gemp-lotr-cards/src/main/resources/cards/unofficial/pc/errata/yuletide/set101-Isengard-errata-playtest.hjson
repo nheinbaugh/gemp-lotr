@@ -1,0 +1,237 @@
+{
+
+	151_28: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/151_28.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 101_28
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: errata/pc
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 1?
+			collInfo: V1C28
+			rarity: C
+			setNum: "V1"
+			cardNum: 28
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Just a Wisp of Cloud
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 0
+		type: Event
+		keyword: Shadow
+		/*requires: [
+			
+		]
+		effects: {
+			type: event
+			cost: {
+				
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Spell. Weather. <br>Discard a Free Peoples card from hand to play Saruman from your draw deck or discard pile; his twilight cost is -1 for each Crow you can spot.
+		lore: "'It is moving fast...and against the wind.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	151_25: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/151_25.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 101_25
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: errata/pc
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 1?
+			collInfo: V1C25
+			rarity: C
+			setNum: "V1"
+			cardNum: 25
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Crebain Flock
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 2
+		type: Minion
+		race: Crow
+		#keyword: damage+1
+		strength: 2
+		vitality: 3
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: This minion is twilight cost -1 for each companion you can spot over 3.<br>Shadow: Spot 2 wounded companions (or spot Saruman) to take an [isengard] weather into hand from your draw deck or discard pile (limit once per phase).
+		lore: "'...one harsh croak was heard.'"
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	151_26: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/151_26.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 101_26
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: errata/pc
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 1?
+			collInfo: V1C26
+			rarity: C
+			setNum: "V1"
+			cardNum: 26
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Crows of Isengard
+		unique: false
+		side: Shadow
+		culture: Isengard
+		twilight: 3
+		type: Minion
+		race: Crow
+		#keyword: damage+1
+		strength: 3
+		vitality: 3
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: When you play this minion, spot a companion to add (1) for each Free Peoples card borne by that companion.<br>Shadow: Spot 2 Free Peoples items (or spot Saruman) to take an [isengard] item into hand from your draw deck or discard pile (limit once per phase).
+		lore: ""
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+
+	151_29: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: sets/151_29.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 101_29
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: errata/pc
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 1?
+			collInfo: V1R29
+			rarity: R
+			setNum: "V1"
+			cardNum: 29
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Murder of Crows
+		unique: true
+		side: Shadow
+		culture: Isengard
+		twilight: 4
+		type: Minion
+		race: Crow
+		#keyword: damage+1
+		strength: 4
+		vitality: 3
+		site: 4
+		/*requires: [
+			
+		]
+		effects: [
+			{
+				
+			}
+			{
+				
+			}
+		]*/
+		gametext: While you can spot 3 Free Peoples conditions, this minion is twilight cost -3. <br>Shadow: Spot 3 Free Peoples conditions (or spot Saruman) to take an [isengard] condition from your draw deck or discard pile into hand (limit once per phase).
+		lore: "...a whole regiment of birds had broken away..."
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+}
