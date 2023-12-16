@@ -545,11 +545,11 @@ var PCCards = {
 	// Barliman Butterbur A, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
 	'71_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.1_card.jpg',
 	// Barliman Butterbur B, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.2_card.jpg',
+	'71_402' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.2_card.jpg',
 	// Barliman Butterbur C, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.3_card.jpg',
+	'71_403' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.3_card.jpg',
 	// Barliman Butterbur D, Prancing Pony Proprietor (1U70) [Errata] [Playtest]
-	'71_70'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.4_card.jpg',
+	'71_404' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E070.4_card.jpg',
 	// A Wizard Is Never Late (1R87) [Errata] [Playtest]
 	'71_87'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E087.1_card.jpg',
 	// Armor (1C92) [Errata] [Playtest]
@@ -569,7 +569,7 @@ var PCCards = {
 	// Elrond A, Herald to Gil-galad (3R13) [Errata] [Playtest]
 	'73_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.1_card.jpg',
 	// Elrond B, Herald to Gil-galad (3R13) [Errata] [Playtest]
-	'73_13'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.2_card.jpg',
+	'73_401' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E013.2_card.jpg',
 	// Phial of Galadriel (3U24) [Errata] [Playtest]
 	'73_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E024.1_card.jpg',
 	// Can You Protect Me From Yourself? (3R50) [Errata] [Playtest]
@@ -579,7 +579,7 @@ var PCCards = {
 	// Too Great and Terrible (3R85) [Errata] [Playtest]
 	'73_85'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E085.1_card.jpg',
 	// Terrible as the Dawn (3R103) [Errata] [Playtest]
-	'73_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.1_card.jpg',
+	'73_103' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E103.2_card.jpg',
 	// Why Shouldn't I Keep It? (3R105) [Errata] [Playtest]
 	'73_105' : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E105.1_card.jpg',
 	// Forearmed (6U16) [Errata] [Playtest]
