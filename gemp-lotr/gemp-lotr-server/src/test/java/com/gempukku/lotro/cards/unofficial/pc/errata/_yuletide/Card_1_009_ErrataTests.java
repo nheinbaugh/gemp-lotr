@@ -39,11 +39,11 @@ public class Card_1_009_ErrataTests
 		* Unique: False
 		* Side: FREE_PEOPLE
 		* Culture: Dwarven
-		* Twilight Cost: 0
+		* Twilight Cost: 1
 		* Type: possession
 		* Subtype: Hand Weapon
 		* Strength: 2
-		* Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, make a minion strength -1 until the regroup phase.  The Shadow player may discard a minion to prevent this.
+		* Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, make a minion strength -1 until the regroup phase.  The Shadow player may discard 2 cards from the bottom of their draw deck to prevent this.
 		*/
 
 		//Pre-game setup
@@ -58,7 +58,7 @@ public class Card_1_009_ErrataTests
 		//assertEquals(Race.HAND WEAPON, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.HAND_WEAPON));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(0, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 		assertEquals(2, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
 		//assertEquals(, card.getBlueprint().getResistance());
@@ -77,6 +77,6 @@ public class Card_1_009_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(0, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

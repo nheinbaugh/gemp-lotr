@@ -41,8 +41,8 @@ public class Card_1_087_ErrataTests
 		* Culture: Gandalf
 		* Twilight Cost: 1
 		* Type: event
-		* Subtype: 
-		* Game Text: <b>Fellowship:</b> Play a Wizard or [gandalf] ally from your draw deck.
+		* Subtype: Fellowship
+		* Game Text: Play a Wizard or [gandalf] ally from your draw deck.
 		*/
 
 		//Pre-game setup
@@ -54,8 +54,8 @@ public class Card_1_087_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GANDALF, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
+		//assertEquals(Race.FELLOWSHIP, card.getBlueprint().getRace());
+		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.FELLOWSHIP));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());

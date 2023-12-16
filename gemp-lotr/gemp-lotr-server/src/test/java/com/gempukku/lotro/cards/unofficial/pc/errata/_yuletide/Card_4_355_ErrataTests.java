@@ -43,7 +43,7 @@ public class Card_4_355_ErrataTests
 		* Type: site
 		* Subtype: Standard
 		* Site Number: 7T
-		* Game Text: Skirmish events may not be played and skirmish special abilities may not be used.
+		* Game Text: At the start of each skirmish, you may exert your character in that skirmish to prevent special abilities being used.
 		*/
 
 		//Pre-game setup

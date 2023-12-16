@@ -33,7 +33,7 @@
 		type: Companion
 		race: Wizard
 		#keyword: damage+1
-		strength: 6
+		strength: 7
 		vitality: 4
 		signet: Gandalf
 		resistance: 6

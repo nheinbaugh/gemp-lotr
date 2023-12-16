@@ -28,7 +28,7 @@
 		unique: true
 		side: Free Peoples
 		culture: Elven
-		twilight: 2
+		twilight: 1
 		type: Artifact
 		itemclass: Ring
 		#target: name(Gimli)

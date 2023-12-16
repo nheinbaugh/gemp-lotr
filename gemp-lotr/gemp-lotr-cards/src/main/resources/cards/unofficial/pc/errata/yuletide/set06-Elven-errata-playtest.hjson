@@ -29,20 +29,23 @@
 		side: Free Peoples
 		culture: Elven
 		twilight: 1
-		type: Condition
-		#keyword: support area
+		type: Event
+		keyword: Skirmish
 		/*requires: [
 			
 		]
-		effects: [
-			{
+		effects: {
+			type: event
+			cost: {
 				
-			}
-			{
-				
-			}
-		]*/
-		gametext: <b>Skirmish:</b> Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
+			},
+			effect: [
+				{
+					
+				}
+			]
+		}*/
+		gametext: Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
 		lore: “‘Give them a volley.'”
 		promotext: ""
 		alts: {

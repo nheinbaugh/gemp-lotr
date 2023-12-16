@@ -270,7 +270,7 @@
 		culture: Gandalf
 		twilight: 1
 		type: Event
-		keyword: 
+		keyword: Fellowship
 		/*requires: [
 			
 		]
@@ -285,7 +285,7 @@
 				}
 			]
 		}*/
-		gametext: <b>Fellowship:</b> Play a Wizard or [gandalf] ally from your draw deck.
+		gametext: Play a Wizard or [gandalf] ally from your draw deck.
 		lore: “‘A wizard is never late, Frodo Baggins, nor is he early. He arrives precisely when he means to.'”
 		promotext: ""
 		alts: {

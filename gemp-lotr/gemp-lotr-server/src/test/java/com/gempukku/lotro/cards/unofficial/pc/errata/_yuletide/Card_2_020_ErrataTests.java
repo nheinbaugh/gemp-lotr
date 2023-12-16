@@ -41,8 +41,8 @@ public class Card_2_020_ErrataTests
 		* Culture: Elven
 		* Twilight Cost: 2
 		* Type: event
-		* Subtype: 
-		* Game Text: <b>Maneuver:</b> Exert an Elf ally to discard a condition.  If you can spot an Orc, you may exert another Elf ally to discard another condition.
+		* Subtype: Maneuver
+		* Game Text: Exert an Elf ally to discard a condition.  If you can spot an Orc, you may exert another Elf ally to discard another condition.
 		*/
 
 		//Pre-game setup
@@ -54,8 +54,8 @@ public class Card_2_020_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
+		//assertEquals(Race.MANEUVER, card.getBlueprint().getRace());
+		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.MANEUVER));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(2, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());

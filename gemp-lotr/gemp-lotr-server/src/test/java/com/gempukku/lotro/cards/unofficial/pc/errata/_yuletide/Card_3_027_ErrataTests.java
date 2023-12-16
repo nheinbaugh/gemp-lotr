@@ -39,7 +39,7 @@ public class Card_3_027_ErrataTests
 		* Unique: True
 		* Side: FREE_PEOPLE
 		* Culture: Elven
-		* Twilight Cost: 2
+		* Twilight Cost: 1
 		* Type: artifact
 		* Subtype: Ring
 		* Vitality: 1
@@ -59,7 +59,7 @@ public class Card_3_027_ErrataTests
 		//assertEquals(Race.RING, card.getBlueprint().getRace());
 		assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RING));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		assertEquals(1, card.getBlueprint().getVitality());
 		//assertEquals(, card.getBlueprint().getResistance());
@@ -78,6 +78,6 @@ public class Card_3_027_ErrataTests
 		scn.StartGame();
 		scn.FreepsPlayCard(card);
 
-		assertEquals(2, scn.GetTwilight());
+		assertEquals(1, scn.GetTwilight());
 	}
 }

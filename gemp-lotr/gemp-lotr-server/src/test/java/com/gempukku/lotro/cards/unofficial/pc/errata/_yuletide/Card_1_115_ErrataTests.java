@@ -41,8 +41,8 @@ public class Card_1_115_ErrataTests
 		* Culture: Gondor
 		* Twilight Cost: 0
 		* Type: event
-		* Subtype: 
-		* Game Text: <b>Response:</b> If a skirmish event is played during a skirmish involving a [gondor] companion, cancel that event.
+		* Subtype: Response
+		* Game Text: If a skirmish event is played during a skirmish involving a [gondor] companion, cancel that event.
 		*/
 
 		//Pre-game setup
@@ -54,8 +54,8 @@ public class Card_1_115_ErrataTests
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.GONDOR, card.getBlueprint().getCulture());
 		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
+		//assertEquals(Race.RESPONSE, card.getBlueprint().getRace());
+		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.RESPONSE));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(0, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());

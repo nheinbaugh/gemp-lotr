@@ -40,9 +40,9 @@ public class Card_6_016_ErrataTests
 		* Side: FREE_PEOPLE
 		* Culture: Elven
 		* Twilight Cost: 1
-		* Type: condition
-		* Subtype: 
-		* Game Text: <b>Skirmish:</b> Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
+		* Type: event
+		* Subtype: Skirmish
+		* Game Text: Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
 		*/
 
 		//Pre-game setup
@@ -53,9 +53,9 @@ public class Card_6_016_ErrataTests
 		assertFalse(card.getBlueprint().isUnique());
 		assertEquals(Side.FREE_PEOPLE, card.getBlueprint().getSide());
 		assertEquals(Culture.ELVEN, card.getBlueprint().getCulture());
-		assertEquals(CardType.CONDITION, card.getBlueprint().getCardType());
-		//assertEquals(Race., card.getBlueprint().getRace());
-		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
+		assertEquals(CardType.EVENT, card.getBlueprint().getCardType());
+		//assertEquals(Race.SKIRMISH, card.getBlueprint().getRace());
+		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.SKIRMISH));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(1, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());

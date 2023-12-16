@@ -42,7 +42,7 @@ public class Card_V1_014_ErrataTests
 		* Twilight Cost: 4
 		* Type: companion
 		* Subtype: Wizard
-		* Strength: 6
+		* Strength: 7
 		* Vitality: 4
 		* Signet: Gandalf
 		* Game Text: At the start of your fellowship phase, you may spot 3 [elven] allies and exert Gandalf to take a [Gandalf] or [elven] event from your discard pile into your hand.
@@ -62,7 +62,7 @@ public class Card_V1_014_ErrataTests
 		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.WIZARD));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
 		assertEquals(4, card.getBlueprint().getTwilightCost());
-		assertEquals(6, card.getBlueprint().getStrength());
+		assertEquals(7, card.getBlueprint().getStrength());
 		assertEquals(4, card.getBlueprint().getVitality());
 		//assertEquals(, card.getBlueprint().getResistance());
 		assertEquals(Signet.GANDALF, card.getBlueprint().getSignet()); 
