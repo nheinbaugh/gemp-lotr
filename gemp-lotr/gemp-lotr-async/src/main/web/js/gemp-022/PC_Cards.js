@@ -516,7 +516,7 @@ var PCCards = {
 	
 	//September 2023 World Championship Walk-ons
 	//Ulaire Enquea, Lieutenant of Mordor FA
-	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U231.0_card.jpg'
+	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U231.0_card.jpg',
 	
 	
 	//2023 Yuletide Errata
