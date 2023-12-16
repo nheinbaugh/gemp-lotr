@@ -599,6 +599,6 @@ var PCCards = {
 	// Cavern Entrance (4U355) [Errata] [Playtest]
 	'74_355' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E355.1_card.jpg',
 	// Cavern Entrance (11S232) [Errata] [Playtest]
-	'81_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg',
+	'81_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg'
 }
 
