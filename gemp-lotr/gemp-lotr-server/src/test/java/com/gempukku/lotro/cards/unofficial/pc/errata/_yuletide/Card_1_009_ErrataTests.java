@@ -43,7 +43,9 @@ public class Card_1_009_ErrataTests
 		* Type: possession
 		* Subtype: Hand Weapon
 		* Strength: 2
-		* Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, make a minion strength -1 until the regroup phase.  The Shadow player may discard 2 cards from the bottom of their draw deck to prevent this.
+		* Game Text: Bearer must be a Dwarf. <br>Each time a minion loses a skirmish to bearer, you may make a minion
+		 * strength -1 until the regroup phase.  The Shadow player may discard 2 cards from the bottom of their
+		 * draw deck to prevent this.
 		*/
 
 		//Pre-game setup

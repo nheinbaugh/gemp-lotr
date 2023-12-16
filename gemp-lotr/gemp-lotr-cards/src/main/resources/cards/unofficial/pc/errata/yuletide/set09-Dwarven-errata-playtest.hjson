@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 9R+4
 			rarity: R+
 			setNum: "9"
@@ -27,26 +27,59 @@
 		title: Gimli
 		subtitle: Bearer of Grudges
 		unique: true
-		side: Free Peoples
-		culture: Dwarven
+		culture: dwarven
 		twilight: 2
-		type: Companion
-		race: Dwarf
-		#keyword: damage+1
+		type: companion
+		race: dwarf
 		strength: 6
 		vitality: 3
 		resistance: 5
-		/*requires: [
-			
+		keyword: [
+			damage+1
+			can_start_with_ring
 		]
 		effects: [
 			{
-				
+				type: trigger
+				trigger: {
+					type: startOfPhase
+					phase: skirmish
+				}
+				requires: {
+					type: canSpot
+					filter: self,ring bearer,inSkirmish
+				}
+				effect: {
+					type: choice
+					texts: [
+						Add 2 burdens
+						Add 2 threats
+					]
+					effects: [
+						{
+							type: addBurdens
+							amount: 2
+						}
+						{
+							type: addThreats
+							amount: 2
+						}
+					]
+				}
 			}
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: self
+					amount: {
+						type: forEachKeyword
+						filter: self
+						keyword: damage
+					}
+				}
 			}
-		]*/
+		]
 		gametext: <b>Damage +1.</b> <br>While Gimli is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats. <br>While Gimli is damage +X, he is resistance +X.
 		lore: “‘Never trust an Elf.'”
 		promotext: ""

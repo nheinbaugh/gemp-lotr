@@ -46,7 +46,8 @@ public class Card_V1_029_ErrataTests
 		* Vitality: 3
 		* Site Number: 4
 		* Game Text: While you can spot 3 Free Peoples conditions, this minion is twilight cost -3. 
-		* 	Shadow: Spot 3 Free Peoples conditions (or spot Saruman) to take an [isengard] condition from your draw deck or discard pile into hand (limit once per phase).
+		* 	Shadow: Spot 3 Free Peoples conditions (or spot Saruman) to take an [isengard] condition into hand
+		 * 	from your draw deck or discard pile (limit once per phase).
 		*/
 
 		//Pre-game setup

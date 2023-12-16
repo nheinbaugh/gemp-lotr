@@ -74,7 +74,7 @@
 			}
 		]
 		gametext: At the start of each of your turns, you may add (2) to spot an ally whose home site is 3 and heal that ally twice. <br><b>Regroup:</b> Exert Elrond twice to heal a companion.
-		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
+		lore: "Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior...."
 		promotext: ""
 		alts: {
 			//These are just CardInfo objects
@@ -102,7 +102,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 3R17
 			rarity: R
 			setNum: "3"
@@ -191,7 +191,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 3R27
 			rarity: R
 			setNum: "3"

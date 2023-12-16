@@ -1,63 +1,4 @@
 {
-
-	73_27: {
-		cardInfo: {
-			//Either a full URL, or a subpath for the PC image server
-			imagePath: errata/LOTR-EN03E027.2_card.jpg
-			//If this is true, then all gameplay-related info outside this cardInfo definition
-			// will be ignored and the java class loaded instead.
-			javaClass: false
-			//This instructs the blueprint generator to insert this card as an alt of the listed
-			// parent blueprint. Can of course be ommitted if not an errata or promo.
-			parent: 3_27
-			//This is the tree path to use within the alts structure on the parent.
-			// Can of course be ommitted if parent is null. 
-			parentPath: errata/pc
-			//Versioning differentiates releases within a particular alt path, such as PC errata
-			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
-			//Top-level cards should always be version 0.
-			version: 1?
-			collInfo: 3R27
-			rarity: R
-			setNum: "3"
-			cardNum: 27
-			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
-			style: Standard
-		}
-		title: Vilya
-		unique: true
-		side: Free Peoples
-		culture: Elven
-		twilight: 1
-		type: Artifact
-		itemclass: Ring
-		#target: name(Gimli)
-		#keyword: support area
-		vitality: 1
-		/*requires: [
-			
-		]
-		effects: [
-			{
-				
-			}
-			{
-				
-			}
-		]*/
-		gametext: Bearer must be Elrond.<br>Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
-		lore: “Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
-		promotext: ""
-		alts: {
-			//These are just CardInfo objects
-			promos: {
-			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
-			errata: {
-			}
-		}
-	}
-
 	73_13: {
 		cardInfo: {
 			//Either a full URL, or a subpath for the PC image server
@@ -223,6 +164,92 @@
 		]*/
 		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
 		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
+		promotext: ""
+		alts: {
+			//These are just CardInfo objects
+			promos: {
+			}
+			//These are full card definitions, with redundant info that is the same as the original card ommitted
+			errata: {
+			}
+		}
+	}
+	
+	73_27: {
+		cardInfo: {
+			//Either a full URL, or a subpath for the PC image server
+			imagePath: errata/LOTR-EN03E027.2_card.jpg
+			//If this is true, then all gameplay-related info outside this cardInfo definition
+			// will be ignored and the java class loaded instead.
+			javaClass: false
+			//This instructs the blueprint generator to insert this card as an alt of the listed
+			// parent blueprint. Can of course be ommitted if not an errata or promo.
+			parent: 3_27
+			//This is the tree path to use within the alts structure on the parent.
+			// Can of course be ommitted if parent is null. 
+			parentPath: errata/pc
+			//Versioning differentiates releases within a particular alt path, such as PC errata
+			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
+			//Top-level cards should always be version 0.
+			version: 2
+			collInfo: 3R27
+			rarity: R
+			setNum: "3"
+			cardNum: 27
+			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
+			style: Standard
+		}
+		title: Vilya
+		unique: true
+		side: Free Peoples
+		culture: Elven
+		twilight: 1
+		type: Artifact
+		itemclass: Ring
+		target: name(Elrond)
+		#keyword: support area
+		vitality: 1
+		effects: [
+			{
+				type: Activated
+				phase: Maneuver
+				requires: {
+					type: CanSpot
+					filter: condition,side(shadow)
+				}
+				cost: {
+					type: exert
+					filter: self
+					times: 2
+				}
+				effect: [
+					{
+						type: ChooseActiveCards
+						filter: choose(condition,side(shadow))
+						memorize: chosenShadowCondition
+						text: Choose a Shadow condition to return to its owner's hand.
+					}
+					{
+						type: ReturnToHand
+						filter: memory(chosenShadowCondition)
+					}
+					{
+						type: optional
+						player: shadow
+						text: Would you like to discard a card from hand?
+						effect: {
+							type: DiscardFromHand
+							forced: false
+							player: OwnerFromMemory(chosenShadowCondition)
+							hand: OwnerFromMemory(chosenShadowCondition)
+							count: 1
+						}
+					}
+				]
+			}
+		]
+		gametext: Bearer must be Elrond.<br>Maneuver: Exert bearer twice and spot a Shadow condition to return that condition to its owner's hand.  That player may discard a card from hand.
+		lore: "Upon his finger was a ring of gold with a great blue stone, Vilya, mightiest of the Three."
 		promotext: ""
 		alts: {
 			//These are just CardInfo objects

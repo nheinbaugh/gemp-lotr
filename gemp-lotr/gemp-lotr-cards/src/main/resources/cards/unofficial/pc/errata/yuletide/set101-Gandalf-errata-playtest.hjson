@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: V1R14
 			rarity: R
 			setNum: "V1"
@@ -32,22 +32,44 @@
 		twilight: 4
 		type: Companion
 		race: Wizard
-		#keyword: damage+1
 		strength: 7
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		/*requires: [
-			
-		]
 		effects: [
 			{
-				
-			}
+				type: trigger
+				optional: true
+				trigger: {
+					type: startOfPhase
+					phase: fellowship
+				}
+				requires: {
+					type: canSpot
+					filter: culture(elven),ally
+					count: 3
+				}
+				cost: {
+					type: exert
+					filter: choose(name(Gandalf))
+				}
+				effect: {
+					type: shuffleCardsFromDiscardIntoDrawDeck
+					filter: choose(event,or(culture(gandalf),culture(elven)))
+				}
+			}			
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifyStrength
+					filter: self
+					amount: {
+						type: ForEachYouCanSpot
+						filter: or(name(Elrond),name(Galadriel),name(Celeborn),name(Saruman))
+					}
+				}
 			}
-		]*/
+		]
 		gametext: At the start of your fellowship phase, you may spot 3 [elven] allies and exert Gandalf to take a [Gandalf] or [elven] event from your discard pile into your hand.<br>Gandalf is strength +1 for each of these characters you can spot: Celeborn, Elrond, Galadriel, Saruman.
 		lore: ""
 		promotext: ""

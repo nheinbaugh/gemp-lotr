@@ -68,7 +68,7 @@ public class PreventableAppenderProducer implements EffectAppenderProducer {
 
                                                         @Override
                                                         public boolean wasCarriedOut() {
-                                                            // Cheating a bit, we need to check, if the preventing effect was carried out,
+                                                            // Cheating a bit, we need to check if the preventing effect was carried out,
                                                             // but have no way of doing this, as we can do that through subAction only,
                                                             // and this checking effect should be ALWAYS considered fine, even before it
                                                             // was done

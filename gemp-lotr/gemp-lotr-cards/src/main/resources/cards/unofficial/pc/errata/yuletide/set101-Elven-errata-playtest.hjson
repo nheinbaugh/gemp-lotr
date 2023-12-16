@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: V1R9
 			rarity: R
 			setNum: "V1"
@@ -32,22 +32,31 @@
 		twilight: 2
 		type: Companion
 		race: Elf
-		#keyword: damage+1
 		strength: 6
 		vitality: 3
 		signet: Gandalf
 		resistance: 6
-		/*requires: [
-			
+		keyword: [
+			archer
 		]
-		effects: [
-			{
-				
+		effects: {
+			type: Trigger
+			optional: false
+			requires: {
+				type: Phase
+				phase: Archery
 			}
-			{
-				
+			trigger: {
+				type: TakesWound
+				filter: minion
 			}
-		]*/
+			effect: {
+				type: ModifyStrength
+				amount: 1
+				filter: self
+				until: start(regroup)
+			}
+		}
 		gametext: Archer.<br>Each time a minion takes a wound during the archery phase, make Legolas strength +1 until the regroup phase.
 		lore: "He saw not a shadow, nor a blur, but the small figures of horsemen."
 		promotext: ""

@@ -13,13 +13,10 @@
 			{
 				type: modifyowncost
 				amount: {
-					type: multiply
+					type: ForEachYouCanSpot
+					filter: companion
+					over: 3
 					multiplier: -1
-					source: {
-						type: forEachYouCanSpot
-						filter: companion
-						over: 3
-					}
 				}
 			}
 			{

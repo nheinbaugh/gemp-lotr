@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: V1R19
 			rarity: R
 			setNum: "V1"
@@ -32,22 +32,63 @@
 		twilight: 4
 		type: Companion
 		race: Man
-		#keyword: damage+1
 		strength: 8
 		vitality: 4
 		signet: Gandalf
 		resistance: 6
-		/*requires: [
-			
-		]
 		effects: [
 			{
-				
+				type: trigger
+				optional: true
+				trigger: {
+					type: played
+					filter: self
+				}
+				effect: {
+					type: putCardsFromDeckIntoHand
+					filter: choose(elf,maxTwilight(2))
+				}
 			}
 			{
-				
+				type: activated
+				phase: maneuver
+				cost: {
+					type: discardFromHand
+					forced: false
+					filter: choose(culture(elven))
+				}
+				effect: {
+					type: Choice
+					texts: [
+						Make Aragorn damage +1
+						Make Aragorn defender +1
+						Make Aragorn strength +2
+					]
+					effects: [
+						{
+							type: AddKeyword
+							filter: self
+							keyword: damage
+							amount: 1
+							until: start(regroup)
+						}
+						{
+							type: AddKeyword
+							filter: self
+							keyword: defender
+							amount: 1
+							until: start(regroup)
+						}
+						{
+							type: ModifyStrength
+							filter: self
+							amount: 2
+							until: start(regroup)
+						}
+					]
+				}
 			}
-		]*/
+		]
 		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>defender +1</b>, or strength +2 until the regroup phase.
 		lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
 		promotext: ""

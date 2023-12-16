@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 2
 			collInfo: 8R51
 			rarity: R
 			setNum: "8"
@@ -31,21 +31,47 @@
 		twilight: 7
 		type: Minion
 		race: Man
-		#keyword: damage+1
 		strength: 14
 		vitality: 4
 		site: 4
-		/*requires: [
-			
+		keyword: [
+			Enduring
+			Corsair
 		]
 		effects: [
 			{
-				
+				type: modifier
+				modifier: {
+					type: addKeyword
+					filter: self
+					requires: {
+						type: Location
+						filter: RegionNumber(2-3)
+					}
+					keyword: fierce
+				}
 			}
 			{
-				
+				type: activated
+				phase: shadow
+				cost: [
+					{
+						type: exert
+						filter: self
+					}
+					{
+						type: play
+						filter: choose(corsair)
+					}
+				]
+				effect: {
+					type: addTokens
+					culture: raider
+					filter: choose(hasToken(raider))
+					amount: 2
+				}
 			}
-		]*/
+		]
 		gametext: <b>Corsair.</b> Enduring.<br>While in region 2 or 3, this minion is <b>fierce</b>.<br>Shadow: Exert Castamir of Umbar and play a corsair to reinforce a [raider] card twice.
 		lore: "'They have long ceased to fear the might of Gondor.'"
 		promotext: ""
