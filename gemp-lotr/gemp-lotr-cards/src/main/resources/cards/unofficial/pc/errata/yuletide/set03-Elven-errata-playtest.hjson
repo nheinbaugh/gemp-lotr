@@ -1,3 +1,4 @@
+
 {
 	73_13: {
 		cardInfo: {
@@ -15,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 3R13
 			rarity: R
 			setNum: "3"
@@ -32,20 +33,70 @@
 		type: Ally
 		allyHome: fellowship,3
 		race: Elf
-		#keyword: damage+1
 		strength: 8
 		vitality: 4
-		/*requires: [
-			
-		]
 		effects: [
 			{
-				
+				type: Trigger
+				optional: false
+				trigger: {
+					type: StartOfTurn
+				},
+				cost: {
+					type: ChooseActiveCards
+					count: 0-1
+					filter: choose(ally,allyHome(fellowship,3),wounded)
+					memorize: chosenAlly
+					text: Choose a home 3 ally to heal
+				}
+				effect: [
+					{
+						type: ChooseANumber
+						text: How many times to heal?
+						from: 0
+						to: {
+							type: Min
+							first: {
+								type: ForEachWound
+								filter: memory(chosenAlly)
+							}
+							second: 2
+						}
+						memorize: heals
+					}
+					{
+						type: Heal
+						count: 1
+						times: {
+							type: FromMemory
+							memory: heals
+						}
+						filter: memory(chosenAlly)
+					}
+					{
+						type: AddTwilight
+						amount: {
+							type: FromMemory
+							memory: heals
+						}
+					}
+				]
 			}
 			{
-				
+				type: Activated
+				phase: regroup
+				cost: {
+					type: exert
+					times: 2
+					filter: self
+				}
+				effect: {
+					type: heal
+					count: 1
+					filter: choose(companion)
+				}
 			}
-		]*/
+		]
 		gametext: At the start of each of your turns, you may spot an ally whose home is site 3 to heal that ally up to 2 times.  Add (1) per wound healed.<br>Regroup: Exert Elrond twice to heal a companion.
 		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
 		promotext: ""
@@ -59,7 +110,7 @@
 		}
 	}
 
-	73_13: {
+	73_401: {
 		cardInfo: {
 			//Either a full URL, or a subpath for the PC image server
 			imagePath: errata/LOTR-EN03E013.2_card.jpg
@@ -75,7 +126,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 2
 			collInfo: 3R13
 			rarity: R
 			setNum: "3"
@@ -95,17 +146,33 @@
 		#keyword: damage+1
 		strength: 8
 		vitality: 4
-		/*requires: [
-			
-		]
 		effects: [
 			{
-				
+				type: trigger
+				trigger: {
+					type: startOfTurn
+				}
+				effect: {
+					type: heal
+					filter: choose(ally,allyHome(fellowship,3))
+					count: 0-2
+				}
 			}
 			{
-				
+				type: Activated
+				phase: regroup
+				cost: {
+					type: exert
+					times: 2
+					filter: self
+				}
+				effect: {
+					type: heal
+					count: 1
+					filter: choose(companion)
+				}
 			}
-		]*/
+		]
 		gametext: At the start of each of your turns, you may heal up to 2 allies whose home is site 3.<br>Regroup: Exert Elrond twice to heal a companion.
 		lore: “Venerable he seemed as a king crowned with many winters, and yet hale as a tried warrior....”
 		promotext: ""
@@ -135,7 +202,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 3U24
 			rarity: U
 			setNum: "3"
@@ -149,19 +216,24 @@
 		culture: Elven
 		twilight: 0
 		type: Artifact
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
-			
-		]
+		target: Ring-bearer
 		effects: [
 			{
-				
+				type: ExtraCost
+				cost: {
+					type: exert
+					filter: choose(Elf)
+				}
 			}
 			{
-				
+				type: modifier
+				modifier: {
+					type: modifyResistance
+					filter: bearer
+					amount: 2
+				}
 			}
-		]*/
+		]
 		gametext: To play, exert an Elf.  Bearer must be the Ring-bearer. <br>Bearer’s resistance is +2.
 		lore: “‘May it be a light to you in dark places, when all other lights go out. Remember Galadriel and her Mirror!'”
 		promotext: ""

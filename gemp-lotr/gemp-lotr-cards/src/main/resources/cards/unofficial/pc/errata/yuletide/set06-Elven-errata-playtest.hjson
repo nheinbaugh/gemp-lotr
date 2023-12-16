@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 6U16
 			rarity: U
 			setNum: "6"
@@ -31,20 +31,42 @@
 		twilight: 1
 		type: Event
 		keyword: Skirmish
-		/*requires: [
-			
-		]
 		effects: {
 			type: event
-			cost: {
-				
-			},
 			effect: [
 				{
-					
+					type: RevealTopCardsOfDrawDeck
+					deck: you
+					count: 1
+					memorize: revealedCard
+				}
+				{
+					type: ModifyStrength
+					filter: choose(minion,InSkirmishAgainst(Elf))
+					amount: {
+						type: TwilightCostInMemory
+						memory: revealedCard
+						multiplier: -1
+					}
+					memorize: weakenedMinion
+				}
+				{
+					type: Conditional
+					requires: {
+						type: IsLessThanOrEqual
+						firstNumber: {
+							type: StrengthFromMemory
+							memory: weakenedMinion
+						}
+						secondNumber: 4
+					}
+					effect: {
+						type: DiscardCardsFromDrawDeck
+						filter: memory(revealedCard)
+					}
 				}
 			]
-		}*/
+		}
 		gametext: Reveal the top card of your draw deck to make a minion skirmishing an Elf strength –X, where X is the twilight cost of the revealed card.  If that minion is now 4 strength or less, discard the revealed card.
 		lore: “‘Give them a volley.'”
 		promotext: ""

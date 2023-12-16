@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 1C177
 			rarity: C
 			setNum: "1"
@@ -31,21 +31,23 @@
 		twilight: 6
 		type: Minion
 		race: Orc
-		#keyword: damage+1
 		strength: 13
 		vitality: 3
 		site: 4
-		/*requires: [
-			
-		]
-		effects: [
-			{
-				
+		effects: {
+			type: Activated
+			phase: Shadow
+			cost: {
+				type: exert
+				filter: choose(culture(moria),orc)
+				count: 1
+				times: 1
 			}
-			{
-				
+			effect: {
+				type: DrawCards
+				count: 1
 			}
-		]*/
+		}
 		gametext: Shadow: Exert a [moria] Orc to draw a card.
 		lore: “As they ran they heard the beat and echo of many hurrying feet behind. A shrill yell went up: they had been seen. There was a ring and clash of steel.”
 		promotext: ""

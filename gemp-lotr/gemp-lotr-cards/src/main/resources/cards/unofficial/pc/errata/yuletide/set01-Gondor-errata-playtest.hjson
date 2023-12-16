@@ -16,7 +16,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 1C92
 			rarity: C
 			setNum: "1"
@@ -31,19 +31,16 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
-			
-		]
-		effects: [
-			{
-				
+		target: or(man,and(culture(gondor),companion))
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantTakeMoreWoundsThan
+				amount: 1
+				filter: bearer
+				phase: skirmish
 			}
-			{
-				
-			}
-		]*/
+		}
 		gametext: Bearer must be a Man or [gondor] companion. <br>Bearer takes no more than 1 wound during each skirmish phase.
 		lore: “Then Elendil the Tall and his mighty sons, Isildur and Anárion, became great lords; and the North-realm they made in Arnor, and the South-realm in Gondor....”
 		promotext: ""
@@ -73,7 +70,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 1C101
 			rarity: C
 			setNum: "1"
@@ -88,19 +85,14 @@
 		twilight: 1
 		type: Possession
 		itemclass: Armor
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
-			
-		]
-		effects: [
-			{
-				
+		target: or(man,and(culture(gondor),companion))
+		effects: {
+			type: modifier
+			modifier: {
+				type: cantBeOverwhelmedMultiplier
+				filter: bearer
 			}
-			{
-				
-			}
-		]*/
+		}
 		gametext: Bearer must be a Man or [gondor] companion. <br>Bearer may not be overwhelmed unless his or her strength is tripled.
 		lore: Soldiers of the White Tower have long appreciated the craftsmanship of the Gondorian metalsmiths.
 		promotext: ""
@@ -130,7 +122,7 @@
 			//Versioning differentiates releases within a particular alt path, such as PC errata
 			// version 1 vs version 2.  PC version 2 will not conflict with, say, Decipher version 2.
 			//Top-level cards should always be version 0.
-			version: 1?
+			version: 1
 			collInfo: 1C107
 			rarity: C
 			setNum: "1"
@@ -145,19 +137,15 @@
 		twilight: 1
 		type: Possession
 		itemclass: Shield
-		#target: name(Gimli)
-		#keyword: support area
-		/*requires: [
-			
-		]
-		effects: [
-			{
-				
+		target: or(man,and(culture(gondor),companion))
+		effects: {
+			type: modifier
+			modifier: {
+				type: modifyArcheryTotal
+				side: shadow
+				amount: -1
 			}
-			{
-				
-			}
-		]*/
+		}
 		gametext: Bearer must be a Man or [gondor] companion. <br>The minion archery total is -1.
 		lore: The Kingdom of Gondor has smiths much practiced in creating strong tools of war.
 		promotext: ""
@@ -202,23 +190,20 @@
 		twilight: 0
 		type: Event
 		keyword: Response
-		/*requires: [
-			
-		]
+		requires: {
+			type: canSpot
+			filter: culture(gondor),companion,inSkirmish
+		}
 		effects: {
 			type: responseEvent
 			trigger: {
-				
+				type: played
+				filter: skirmish,event
 			}
-			cost: {
-				
+			effect: {
+				type: cancelEvent
 			}
-			effect: [
-				{
-					
-				}
-			]
-		]*/
+		}
 		gametext: If a skirmish event is played during a skirmish involving a [gondor] companion, cancel that event.
 		lore: “‘Believe not that in the land of Gondor the blood of Númenor is spent, nor all its pride and dignity forgotten.'”
 		promotext: ""

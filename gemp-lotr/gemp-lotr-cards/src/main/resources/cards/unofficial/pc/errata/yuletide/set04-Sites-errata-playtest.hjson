@@ -28,7 +28,7 @@
 		unique: false
 		twilight: 7
 		type: Site
-		site: 7T		
+		site: 7
 		block: Towers
 		direction: Right
 		effects: {
