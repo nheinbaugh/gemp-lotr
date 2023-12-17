@@ -42,9 +42,9 @@ public class Card_3_080_ErrataTests
 		* Twilight Cost: 0
 		* Type: condition
 		* Subtype: 
-		* Game Text: To play, spot a [moria] minion.  Bearer must be an unbound companion.
-		* 	At the start of each skirmish involving bearer, the Free Peoples player must discard an item borne by bearer or wound bearer.
-		* 	At the start of the regroup phase, the Free Peoples player may exert 2 other companions to discard this condition.
+		* Game Text: Bearer must be an unbound companion. Limit 1 per bearer.
+		* 	At the start of each skirmish involving bearer, the Free Peoples player must discard an item borne by
+		 * 	bearer or wound bearer.
 		*/
 
 		//Pre-game setup

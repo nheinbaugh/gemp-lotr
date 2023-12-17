@@ -43,8 +43,8 @@ public class Card_3_103_ErrataTests
 		* Type: condition
 		* Subtype: 
 		* Game Text: To play, exert a [sauron] Orc.  Bearer must be a companion or ally.
-		* 	Bearer's special abilities gain this cost: "Add 2 burdens or discard another Free Peoples character of the same race."
-		* 	At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
+		 * Each time one of bearer's special abilities are used, the Free Peoples player must
+		 * add discard a Free Peoples character or wound bearer.
 		*/
 
 		//Pre-game setup

@@ -43,8 +43,8 @@ public class Card_3_105_ErrataTests
 		* Type: condition
 		* Subtype: 
 		* Game Text: To play, spot a [sauron] minion (or Gollum).  Bearer must be a companion or ally.
-		* 	Bearer's special abilities gain this cost: "Discard 2 of your conditions or wound this character."
-		* 	At the start of the regroup phase, the Free Peoples player may discard a Free Peoples character to discard this condition.
+		* Each time one of bearer's special abilities are used, the Free Peoples player must discard
+		* a Free Peoples condition or add a burden.
 		*/
 
 		//Pre-game setup
@@ -59,7 +59,7 @@ public class Card_3_105_ErrataTests
 		//assertEquals(Race., card.getBlueprint().getRace());
 		//assertTrue(card.getBlueprint().getPossessionClasses().contains(PossessionClass.));
 		assertTrue(scn.HasKeyword(card, Keyword.SUPPORT_AREA));
-		assertEquals(2, card.getBlueprint().getTwilightCost());
+		assertEquals(1, card.getBlueprint().getTwilightCost());
 		//assertEquals(, card.getBlueprint().getStrength());
 		//assertEquals(, card.getBlueprint().getVitality());
 		//assertEquals(, card.getBlueprint().getResistance());

@@ -77,6 +77,7 @@ public class EffectAppenderFactory {
         effectAppenderProducers.put("lookattopcardsofdrawdeck", new LookAtTopCardsOfDrawDeck());
         effectAppenderProducers.put("makeselfringbearer", new MakeSelfRingBearer());
         effectAppenderProducers.put("memorize", new MemorizeActive());
+        effectAppenderProducers.put("memorizeactive", new MemorizeActive());
         effectAppenderProducers.put("memorizenumber", new MemorizeNumber());
         effectAppenderProducers.put("memorizestacked", new MemorizeStacked());
         effectAppenderProducers.put("memorizevalue", new MemorizeValue());
