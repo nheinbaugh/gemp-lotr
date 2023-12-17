@@ -519,6 +519,12 @@ var PCCards = {
 	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U231.0_card.jpg',
 	
 	
+	//2023 World Championship promos
+	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.1_card.jpg',
+	'1_383': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.2_card.jpg',
+	'1_384': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.3_card.jpg',
+	'1_385': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.4_card.jpg',
+	
 	//2023 Yuletide Errata
 	// Legolas, Keen-eyed (V1R9) [Errata] [Playtest]
 	'151_9'  : 'https://i.lotrtcgpc.net/sets/vset1/LOTR-ENV1S009.1_card.jpg',
@@ -600,5 +606,7 @@ var PCCards = {
 	'74_355' : 'https://i.lotrtcgpc.net/errata/LOTR-EN04E355.1_card.jpg',
 	// Cavern Entrance (11S232) [Errata] [Playtest]
 	'81_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg'
+	
+	
 }
 
