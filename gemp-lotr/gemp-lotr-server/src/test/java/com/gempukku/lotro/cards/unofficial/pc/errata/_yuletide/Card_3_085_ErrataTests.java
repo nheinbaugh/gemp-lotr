@@ -42,9 +42,10 @@ public class Card_3_085_ErrataTests
 		* Twilight Cost: 1
 		* Type: condition
 		* Subtype: 
-		* Game Text: To play, exert a [ringwraith] minion.  Bearer must
-		* 	be a companion. Bearer cannot be exerted by Free Peoples cards.
-		* 	At the start of the regroup phase, the Free Peoples player may discard 2 cards from hand of bearer's culture to discard this condition.
+		* Game Text: To play, exert a [ringwraith] minion.  Bearer must be a companion.
+		 * Bearer cannot be exerted by Free Peoples cards.
+		* 	At the start of the regroup phase, the Free Peoples player may discard 2
+		 * 	cards from hand of bearer's culture to discard this condition.
 		*/
 
 		//Pre-game setup

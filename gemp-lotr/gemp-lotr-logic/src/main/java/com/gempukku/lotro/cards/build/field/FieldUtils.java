@@ -43,6 +43,8 @@ public class FieldUtils {
     public static String getString(Object value, String key, String defaultValue) throws InvalidCardDefinitionException {
         if (value == null)
             return defaultValue;
+        if ((value instanceof Number))
+            return value.toString();
         if (!(value instanceof String))
             throw new InvalidCardDefinitionException("Unknown type in " + key + " field");
         return (String) value;

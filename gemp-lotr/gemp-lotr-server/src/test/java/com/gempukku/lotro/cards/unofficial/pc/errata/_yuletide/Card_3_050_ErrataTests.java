@@ -42,8 +42,8 @@ public class Card_3_050_ErrataTests
 		* Twilight Cost: 1
 		* Type: condition
 		* Subtype: 
-		* Game Text: To play, spot an [isengard] minion.  Bearer must be a companion.
-		* 	Each time bearer wins a skirmish, add a burden.
+		* Game Text: Bearer must be a companion or ally.
+		* 	Each time bearer wins a skirmish against an [isengard] minion, add a burden.
 		* 	At the start of the regroup phase, the Free Peoples player may exert bearer twice to discard this condition.
 		*/
 

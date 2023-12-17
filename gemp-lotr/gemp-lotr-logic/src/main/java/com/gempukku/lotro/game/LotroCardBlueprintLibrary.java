@@ -325,12 +325,20 @@ public class LotroCardBlueprintLibrary {
                         card = errataMappings.get(base);
                     }
                     else {
+                        var basecard = _blueprints.get(base);
+
+                        //This should only really happen when errata IDs are made
+                        //that do not line up with their official counterparts, such
+                        //as when making multiple errata candidates.
+                        if(basecard == null)
+                            continue;
                         card = new JSONDefs.ErrataInfo();
                         card.BaseID = base;
-                        card.Name = GameUtils.getFullName(_blueprints.get(base));
-                        card.LinkText = GameUtils.getDeluxeCardLink(id, _blueprints.get(base));
+                        card.Name = GameUtils.getFullName(basecard);
+                        card.LinkText = GameUtils.getDeluxeCardLink(id, basecard);
                         card.ErrataIDs = new HashMap<>();
                         errataMappings.put(base, card);
+
                     }
 
                     card.ErrataIDs.put(JSONDefs.ErrataInfo.PC_Errata, id);

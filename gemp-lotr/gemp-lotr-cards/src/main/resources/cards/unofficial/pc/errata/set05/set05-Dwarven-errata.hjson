@@ -73,16 +73,16 @@
 	# 		}
 	# 	]
 
-		gametext: While you can spot your Man, Elf, and Dwarf, the number of Free Peoples cultures that can be spotted is -1.\<b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all damage bonuses until the regroup phase.
-		lore: "...the sound of the great horn of Helm rang out."
-		promotext: ""
-		alts: {
-			//These are just CardInfo objects
-			promos: {
-			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
-			errata: {
-			}
-		}
-	}
+	# 	gametext: While you can spot your Man, Elf, and Dwarf, the number of Free Peoples cultures that can be spotted is -1.\<b>Maneuver:</b> Exert a Dwarf companion to make each minion at a battleground lose all damage bonuses until the regroup phase.
+	# 	lore: "...the sound of the great horn of Helm rang out."
+	# 	promotext: ""
+	# 	alts: {
+	# 		//These are just CardInfo objects
+	# 		promos: {
+	# 		}
+	# 		//These are full card definitions, with redundant info that is the same as the original card ommitted
+	# 		errata: {
+	# 		}
+	# 	}
+	# }
 }

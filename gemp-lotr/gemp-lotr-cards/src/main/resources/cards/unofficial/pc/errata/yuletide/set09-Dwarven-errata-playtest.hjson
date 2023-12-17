@@ -80,16 +80,5 @@
 				}
 			}
 		]
-		gametext: <b>Damage +1.</b> <br>While Gimli is the Ring-bearer, at the start of each skirmish involving him, add 2 burdens or 2 threats. <br>While Gimli is damage +X, he is resistance +X.
-		lore: “‘Never trust an Elf.'”
-		promotext: ""
-		alts: {
-			//These are just CardInfo objects
-			promos: {
-			}
-			//These are full card definitions, with redundant info that is the same as the original card ommitted
-			errata: {
-			}
-		}
 	}
 }
