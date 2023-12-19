@@ -24,8 +24,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Elrond A
-		subtitle: Herald to Gil-galad
+		title: Elrond
+		subtitle: Herald to Gil-galad A
 		unique: true
 		side: Free Peoples
 		culture: Elven
@@ -134,8 +134,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Elrond B
-		subtitle: Herald to Gil-galad
+		title: Elrond
+		subtitle: Herald to Gil-galad B
 		unique: true
 		side: Free Peoples
 		culture: Elven

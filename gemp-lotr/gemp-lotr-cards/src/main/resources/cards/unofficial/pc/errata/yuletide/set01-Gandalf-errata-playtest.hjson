@@ -24,8 +24,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Barliman Butterbur A
-		subtitle: Prancing Pony Proprietor
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor A
 		unique: true
 		side: Free Peoples
 		culture: Gandalf
@@ -114,8 +114,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Barliman Butterbur B
-		subtitle: Prancing Pony Proprietor
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor B
 		unique: true
 		side: Free Peoples
 		culture: Gandalf
@@ -174,8 +174,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Barliman Butterbur C
-		subtitle: Prancing Pony Proprietor
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor C
 		unique: true
 		side: Free Peoples
 		culture: Gandalf
@@ -235,8 +235,8 @@
 			// Standard, Masterwork, Tengwar, FullArt, etc.  Top-level cards are always Standard.
 			style: Standard
 		}
-		title: Barliman Butterbur D
-		subtitle: Prancing Pony Proprietor
+		title: Barliman Butterbur
+		subtitle: Prancing Pony Proprietor D
 		unique: true
 		side: Free Peoples
 		culture: Gandalf
