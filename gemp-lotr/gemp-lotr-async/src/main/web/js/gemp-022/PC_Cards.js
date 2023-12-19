@@ -520,7 +520,7 @@ var PCCards = {
 	
 	
 	//2023 World Championship promos
-	'1_382': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.1_card.jpg',
+	'1_386': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.1_card.jpg',
 	'1_383': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.2_card.jpg',
 	'1_384': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.3_card.jpg',
 	'1_385': 'https://i.lotrtcgpc.net/promos/LOTR-EN01U178.4_card.jpg',
