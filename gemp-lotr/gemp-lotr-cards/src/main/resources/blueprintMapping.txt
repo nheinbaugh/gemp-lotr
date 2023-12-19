@@ -361,7 +361,7 @@ gl_theOneRing,1_2
 #Gollum, Dark as Darkness FA
 9_59,9_28
 #2023 WC - Goblin Runner FA
-1_382,1_178
+1_386,1_178
 #2023 WC Top 8 - Goblin Runner FA
 1_383,1_178
 #2023 WC World Challenger - Goblin Runner FA
