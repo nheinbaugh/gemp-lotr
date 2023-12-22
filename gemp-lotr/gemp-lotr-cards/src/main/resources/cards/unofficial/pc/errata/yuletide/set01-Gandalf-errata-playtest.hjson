@@ -42,40 +42,33 @@
 				type: exert
 				filter: self
 			}
-			effect: {
-				type: CostToEffect
-				cost: {
-					type: exert
-					filter: self
+			effect: [
+				{
+					type: ChooseCardsFromDiscard
+					count: 1
+					filter: choose(culture(gandalf),event)
+					memorize: firstEvent
+					text: Choose first {gandalf} event from discard
 				}
-				effect: [
-					{
-						type: ChooseCardsFromDiscard
-						count: 1
-						filter: choose(culture(gandalf),event)
-						memorize: firstEvent
-						text: Choose first {gandalf} event from discard
-					}
-					{
-						type: ChooseCardsFromDiscard
-						count: 1
-						filter: choose(culture(gandalf),event,not(NameFromMemory(firstEvent)))
-						memorize: secondEvent
-						text: Choose second {gandalf} event from discard
-					}
-					{
-						type: PutCardsFromDiscardIntoHand
-						count: 1
-						filter: choose(or(memory(firstEvent),memory(secondEvent)))
-						memorize: retrievedEvent
-					}
-					{
-						type: RemoveCardsInDiscardFromGame
-						count: 1
-						filter: choose(not(memory(retrievedEvent)),or(memory(firstEvent),memory(secondEvent)))
-					}
-				]
-			}
+				{
+					type: ChooseCardsFromDiscard
+					count: 1
+					filter: choose(culture(gandalf),event,not(NameFromMemory(firstEvent)))
+					memorize: secondEvent
+					text: Choose second {gandalf} event from discard
+				}
+				{
+					type: PutCardsFromDiscardIntoHand
+					count: 1
+					filter: choose(or(memory(firstEvent),memory(secondEvent)))
+					memorize: retrievedEvent
+				}
+				{
+					type: RemoveCardsInDiscardFromGame
+					count: 1
+					filter: choose(not(memory(retrievedEvent)),or(memory(firstEvent),memory(secondEvent)))
+				}
+			]
 		}
 		gametext: <b>Fellowship:</b> Exert Barliman Butterbur to reveal 2 [gandalf] events of different titles from your discard pile.  Take 1 into hand and remove the other from the game.
 		lore: “‘You don't know much even about them, if you think old Barliman is stupid,' said Gandalf. ‘He is wise enough on his own ground.'”

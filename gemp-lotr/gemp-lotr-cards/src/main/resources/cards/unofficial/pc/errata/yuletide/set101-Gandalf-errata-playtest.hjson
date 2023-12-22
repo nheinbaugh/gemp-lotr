@@ -51,10 +51,10 @@
 				}
 				cost: {
 					type: exert
-					filter: choose(name(Gandalf))
+					filter: self
 				}
 				effect: {
-					type: shuffleCardsFromDiscardIntoDrawDeck
+					type: PutCardsFromDiscardIntoHand
 					filter: choose(event,or(culture(gandalf),culture(elven)))
 				}
 			}			
