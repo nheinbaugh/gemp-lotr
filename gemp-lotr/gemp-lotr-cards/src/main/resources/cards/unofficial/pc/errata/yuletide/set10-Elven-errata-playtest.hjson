@@ -51,10 +51,6 @@
 					}
 				cost: [
 					{
-						type: Exert
-						filter: self
-					}
-					{
 						type: discardFromHand
 						count: 1
 						forced: false
