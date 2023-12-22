@@ -25,7 +25,7 @@
 			style: Standard
 		}
 		title: Terrible as the Dawn
-		unique: false
+		unique: true
 		side: Shadow
 		culture: Sauron
 		twilight: 2
@@ -116,7 +116,7 @@
 		unique: false
 		side: Shadow
 		culture: Sauron
-		twilight: 2
+		twilight: 1
 		type: Condition
 		target: or(companion,ally)
 		requires: {
@@ -141,7 +141,7 @@
 						effects: [
 							{
 								type: Discard
-								player: freeps
+								player: shadow
 								filter: choose(side(freeps),condition)
 							}
 							{

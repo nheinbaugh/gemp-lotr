@@ -35,7 +35,7 @@
 			{
 				type: modifier
 				modifier: {
-					type: DisableGameText
+					type: cantUseSpecialAbilities
 					filter: bearer
 				}
 			}
@@ -44,7 +44,7 @@
 				phase: maneuver
 				cost: {
 					type: exert
-					filter: choose(Nazgul)
+					filter: choose(Nazgul,not(enduring))
 				}
 				effect: {
 					type: Transfer

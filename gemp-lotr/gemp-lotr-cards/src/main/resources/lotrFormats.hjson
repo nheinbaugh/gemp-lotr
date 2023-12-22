@@ -2,7 +2,7 @@
 	{
 		name: Debug
 		code: debug
-		sites: SPECIAL
+		sites: MULTIPATH
 		maximumSameName: 100
 		set: [
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 101, 151
@@ -368,7 +368,7 @@
 		name: Pre-Shadows Multipath
 		code: multipath
 		order: 27
-		sites: SPECIAL
+		sites: MULTIPATH
 		banned: [
 			"1_138", "1_311", "1_316", "1_331", "1_338", "1_354", "1_355", "1_360", 
 			"2_14", "2_75", "3_1", "3_113", "4_73", "4_338", "4_355", "4_357", "7_190", 
@@ -503,7 +503,7 @@
 		name: Anything Goes
 		code: rev_tow_sta
 		order: 37
-		sites: SPECIAL
+		sites: MULTIPATH
 		cancelRingBearerSkirmish: true
 		set: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 			30, 31, 32, 33
@@ -592,7 +592,7 @@
 		name: PLAYTEST - Movie Block (PC)
 		code: test_pc_movie
 		order: 42
-		sites: KING
+		sites: MULTIPATH
 		winAtEndOfRegroup: true
 		discardPileIsPublic: true
 		hall: true
@@ -748,7 +748,7 @@
 	{
 		name: Limited - Multipath Movie
 		code: limited_multipath
-		sites: SPECIAL
+		sites: MULTIPATH
 		cancelRingBearerSkirmish: false
 		maximumSameName: 100
 		set: [

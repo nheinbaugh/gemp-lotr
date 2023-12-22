@@ -360,14 +360,14 @@ gl_theOneRing,1_2
 9_58,9_35
 #Gollum, Dark as Darkness FA
 9_59,9_28
-#2023 WC - Goblin Runner FA
-1_386,1_178
 #2023 WC Top 8 - Goblin Runner FA
 1_383,1_178
 #2023 WC World Challenger - Goblin Runner FA
 1_384,1_178
 #2023 WC World Champion- Goblin Runner FA
 1_385,1_178
+#2023 WC - Goblin Runner FA
+1_386,1_178
 #Aragorn,Elessar Telcontar FA
 #10_127,10_25
 #Arwen, Queen of Elves and Men FA

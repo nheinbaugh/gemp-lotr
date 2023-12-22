@@ -41,7 +41,7 @@ public class DefaultLotroFormat implements LotroFormat {
     private final Map<String,String> _errataCardMap = new TreeMap<>();
 
     public DefaultLotroFormat(AdventureLibrary adventureLibrary, LotroCardBlueprintLibrary library, JSONDefs.Format def) throws InvalidPropertiesFormatException{
-        this(library, adventureLibrary.getAdventure(def.adventure), def.name, def.code, def.order, def.surveyUrl, SitesBlock.valueOf(def.sites),
+        this(library, adventureLibrary.getAdventure(def.adventure), def.name, def.code, def.order, def.surveyUrl, SitesBlock.findBlock(def.sites),
                 def.validateShadowFPCount, def.minimumDeckSize, def.maximumSameName, def.mulliganRule, def.cancelRingBearerSkirmish,
                 def.ruleOfFour, def.winAtEndOfRegroup, def.discardPileIsPublic, def.winOnControlling5Sites, def.playtest, def.hall);
 
@@ -611,10 +611,10 @@ public class DefaultLotroFormat implements LotroFormat {
                 if (siteBlueprint.getCardType() != CardType.SITE) {
                     result += "Card assigned as Site is not really a site.\n";
                 }
-                else if (siteBlueprint.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.SPECIAL) {
+                else if (siteBlueprint.getSiteBlock() != _siteBlock && _siteBlock != SitesBlock.MULTIPATH) {
                     result += "Site does not match block: " + GameUtils.getFullName(siteBlueprint) + "\n";
                 }
-                else if (_siteBlock == SitesBlock.SPECIAL && siteBlueprint.getSiteBlock() == SitesBlock.SHADOWS) {
+                else if (_siteBlock == SitesBlock.MULTIPATH && siteBlueprint.getSiteBlock() == SitesBlock.SHADOWS) {
                     result += "Post-Shadows site not allowed: " + GameUtils.getFullName(siteBlueprint) + "\n";
                 }
                 else {
@@ -630,7 +630,7 @@ public class DefaultLotroFormat implements LotroFormat {
             }
 
         }
-        if (_siteBlock == SitesBlock.SPECIAL) {
+        if (_siteBlock == SitesBlock.MULTIPATH) {
             SitesBlock usedBlock = null;
             for (String site : deck.getSites()) {
                 try {
