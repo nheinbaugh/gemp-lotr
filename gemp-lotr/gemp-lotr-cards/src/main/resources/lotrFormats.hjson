@@ -576,6 +576,8 @@
 		order: 41
 		sites: FELLOWSHIP
 		cancelRingBearerSkirmish: true
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
 		hall: true
 		playtest: true
 		set: [
@@ -591,6 +593,8 @@
 		code: test_pc_movie
 		order: 42
 		sites: KING
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
 		hall: true
 		playtest: true
 		set: [
@@ -606,6 +610,8 @@
 		code: test_pc_expanded
 		sites: SHADOWS
 		order: 43
+		winAtEndOfRegroup: true
+		discardPileIsPublic: true
 		hall: true
 		playtest: true
 		set: [
