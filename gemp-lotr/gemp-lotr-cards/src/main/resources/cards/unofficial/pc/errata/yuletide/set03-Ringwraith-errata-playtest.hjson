@@ -30,7 +30,7 @@
 		culture: Wraith
 		twilight: 1
 		type: Condition
-		target: companion
+		target: or(companion,ally)
 		effects: [
 			{
 				type: ExtraCost
