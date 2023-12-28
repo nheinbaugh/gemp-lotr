@@ -62,25 +62,35 @@
 						memory: bearer
 					}
 					{
-						type: Optional
-						player: freeps
-						text: Would you like to discard 2 cards from hand matching {bearer}'s culture to discard Too Great and Terrible?
+						type: Conditional
+						requires: {
+							type: HasCardInHand
+							player: freeps
+							count: 2
+							filter: CultureFromMemory(bearer)
+						}
 						effect: {
-							type: CostToEffect
-							cost: {
-								type: DiscardFromHand
-								player: freeps
-								hand: freeps
-								forced: false
-								count: 2
-								filter: choose(CultureFromMemory(bearer))
-							}
+							type: Optional
+							player: freeps
+							text: Would you like to discard 2 cards from hand matching {bearer}'s culture to discard Too Great and Terrible?
 							effect: {
-								type: Discard
-								filter: self
+								type: CostToEffect
+								cost: {
+									type: DiscardFromHand
+									player: freeps
+									hand: freeps
+									forced: false
+									count: 2
+									filter: choose(CultureFromMemory(bearer))
+								}
+								effect: {
+									type: Discard
+									filter: self
+								}
 							}
 						}
 					}
+					
 				]
 			}
 		]
