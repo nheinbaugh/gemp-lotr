@@ -77,8 +77,9 @@
 								filter: choose(item,side(freeps),not(memory(chosenPoss)))
 							}
 							{
-								type: SendMessage
-								text: "{freeps} chooses to not prevent {chosenPoss} getting discarded."
+								type: Discard
+								player: shadow
+								filter: memory(chosenPoss)
 							}
 						]
 					}
