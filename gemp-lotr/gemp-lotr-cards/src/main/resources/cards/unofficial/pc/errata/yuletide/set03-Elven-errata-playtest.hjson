@@ -291,7 +291,7 @@
 				}
 				cost: {
 					type: exert
-					filter: self
+					filter: bearer
 					times: 2
 				}
 				effect: [
