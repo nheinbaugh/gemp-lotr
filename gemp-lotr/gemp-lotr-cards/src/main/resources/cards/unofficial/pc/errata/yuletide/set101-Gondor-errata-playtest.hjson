@@ -61,7 +61,7 @@
 					type: Choice
 					texts: [
 						Make Aragorn damage +1
-						Make Aragorn defender +1
+						Make Aragorn an archer
 						Make Aragorn strength +2
 					]
 					effects: [
@@ -75,8 +75,7 @@
 						{
 							type: AddKeyword
 							filter: self
-							keyword: defender
-							amount: 1
+							keyword: archer
 							until: start(regroup)
 						}
 						{
@@ -89,7 +88,7 @@
 				}
 			}
 		]
-		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>defender +1</b>, or strength +2 until the regroup phase.
+		gametext: When you play Aragorn, you may take an Elf with a twilight cost of 2 or less into hand from your draw deck.<br>Maneuver: Discard an [elven] card from hand to make Aragorn <b>damage +1</b>, <b>archer</b>, or strength +2 until the regroup phase.
 		lore: "'I gave Hope to the Dúnedain, I have kept no hope for myself.'"
 		promotext: ""
 		alts: {
