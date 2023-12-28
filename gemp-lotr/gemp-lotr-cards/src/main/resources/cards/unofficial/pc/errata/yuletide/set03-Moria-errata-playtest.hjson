@@ -41,7 +41,7 @@
 				}
 				requires: {
 					type: CanSpot
-					filter: bearer,InSkirmishAgainst(culture(moria),minion)
+					filter: bearer,InSkirmishAgainst(culture(moria),minion),HasAttached(possession)
 				}
 				effect: [
 					{

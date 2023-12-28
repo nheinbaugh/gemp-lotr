@@ -64,7 +64,7 @@
 					{
 						type: Optional
 						player: freeps
-						text: Would you like to exert 2 cards from hand matching {bearer}'s culture to discard Too Great and Terrible?
+						text: Would you like to discard 2 cards from hand matching {bearer}'s culture to discard Too Great and Terrible?
 						effect: {
 							type: CostToEffect
 							cost: {
