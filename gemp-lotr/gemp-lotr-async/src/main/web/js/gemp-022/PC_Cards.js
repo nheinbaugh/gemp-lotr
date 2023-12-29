@@ -611,8 +611,12 @@ var PCCards = {
 	// Gondor Bowmen (3R41) [Errata] [Playtest]
 	'73_41'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E041.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata] [Playtest]
-	'87_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.1_card.jpg'
+	'87_24'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN17E024.1_card.jpg',
 	
-	
+	//Yuletide 2023
+	//Pippin Holiday Promo
+	'1_387'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN01H307.1_card.jpg',
+	//Merry, Holiday Promo
+	'1_388'  : 'https://i.lotrtcgpc.net/promos/LOTR-EN01H302.1_card.jpg'
 }
 

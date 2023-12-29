@@ -372,7 +372,7 @@ gl_theOneRing,1_2
 #10_127,10_25
 #Arwen, Queen of Elves and Men FA
 #10_128,10_6
-#Merry, Holiday Promo
-#
 #Pippin Holiday Promo
-#
+1_387,1_307
+#Merry, Holiday Promo
+1_388,1_302
