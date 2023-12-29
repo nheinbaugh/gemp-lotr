@@ -607,7 +607,7 @@ var PCCards = {
 	// Cavern Entrance (11S232) [Errata] [Playtest]
 	'81_232' : 'https://i.lotrtcgpc.net/errata/LOTR-EN11E232.2_card.jpg',
 	// Savagery to Match\Their Numbers (1R139) [Errata] [Playtest]
-	'71_139' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E139.2_card.jpg',
+	'71_139' : 'https://i.lotrtcgpc.net/errata/LOTR-EN01E139.3_card.jpg',
 	// Gondor Bowmen (3R41) [Errata] [Playtest]
 	'73_41'  : 'https://i.lotrtcgpc.net/errata/LOTR-EN03E041.1_card.jpg',
 	// Shadowfax, Greatest of the Mearas (17R24) [Errata] [Playtest]
