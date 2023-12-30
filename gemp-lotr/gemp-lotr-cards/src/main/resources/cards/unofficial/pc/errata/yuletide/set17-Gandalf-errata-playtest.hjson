@@ -46,7 +46,7 @@
 				}
 				effect: {
 					type: Discard
-					filter: all(attachedTo(bearer),or(possession,weapon))
+					filter: all(attachedTo(bearer),or(possession,weapon),another)
 				}
 			}
 			{
