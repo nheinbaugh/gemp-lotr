@@ -11,7 +11,9 @@ import { getLoginErrorMessage, loginValidation } from './types';
 // axios.defaults.baseURL = `http://${import.meta.env.VITE_API}:17001/gemp-lotr-server`;
 // axios.defaults.baseURL = `http://${import.meta.env.VITE_API}:17001/`;
 // axios.defaults.baseURL = `http://0.0.0.0:17001/gemp-lotr-server`;
-axios.defaults.baseURL = `http://${import.meta.env.VITE_API}:17001/gemp-lotr-server`;
+// axios.defaults.baseURL = `http://${import.meta.env.VITE_API}:17001/gemp-lotr-server`;
+// axios.defaults.baseURL = `http://localhost:17001/gemp-lotr-server`;
+// axios.defaults.headers['Origin'] = `http://localhost:17001/`;
 
 
 function Login() {
@@ -23,7 +25,7 @@ function Login() {
     { response: loginResponse, loading: isLoginLoading, error: loginError },
     executeLogin,
   ] = useAxios<string, LoginRequestInterface, Error>(
-    `/login`,
+    `/gemp-lotr-server/login`,
     { manual: true }
   );
 
@@ -50,7 +52,7 @@ function Login() {
 
   return (
     <>
-    <span>FOOBAR2</span>
+    <span>FOOBAR3</span>
       <FormControl>
         <FormLabel>Username</FormLabel>
         <Input value={login} onChange={onLoginUpdate} />

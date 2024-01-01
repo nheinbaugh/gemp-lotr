@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [react()],
   base: '/', // this may need to change when i move into the gemp-lotr repo
   preview: {
-    port: 8080,
+    port: 17001,
     strictPort: true,
   },  
   resolve: {
@@ -23,20 +23,20 @@ export default defineConfig({
     ],
   },
   server: {
-    port: 8080,
+    port: 17001,
     strictPort: true,
     host: true,
     watch: {
       usePolling: true,
-    }
-    // origin: "http://0.0.0.0:8080",
-    // cors: false,
-    // proxy: {
-    //   '/gemp-lotr-server': {
-    //     changeOrigin: true,
-    //     target: 'http://localhost:17001/',
-    //   },
-    // },
+    },
+    origin: "http://0.0.0.0:17001",
+    cors: false,
+    proxy: {
+      '/gemp-lotr-server': {
+        changeOrigin: true,
+        target: 'http://build/',
+      },
+    },
   },
   test: {
     globals: true,
